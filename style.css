@@ -445,4 +445,66 @@ body {
 .hidden {
     display: none !important;
    }
-   
+
+
+
+// =============================
+// carrousel paj echanj 
+// ================≠============
+
+body{
+
+margin:0;
+background:#0d0f14;
+font-family:Arial;
+
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+
+}
+
+/* container */
+
+.carousel{
+
+width:92%;
+max-width:900px;
+
+overflow:hidden;
+
+border-radius:20px;
+
+background:#111;
+
+box-shadow:
+0 15px 40px rgba(0,0,0,0.8),
+0 0 20px rgba(255,255,255,0.05) inset;
+
+border:1px solid rgba(255,255,255,0.1);
+
+}
+
+/* slides */
+
+.slides{
+
+display:flex;
+
+transition:transform 0.8s ease-in-out;
+
+}
+
+/* image */
+
+.slides img{
+
+width:100%;
+flex:0 0 100%;
+
+aspect-ratio:16/9;
+
+object-fit:cover;
+
+       }
