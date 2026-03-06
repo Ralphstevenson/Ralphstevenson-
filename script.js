@@ -507,31 +507,3 @@ window.filterHistory = function(kategori, btn) {
             
 
 
-// ======≠================
-carrousel paj echanj 
-// =≠==================={=
-
-
-let index = 0;
-
-const slides = document.querySelector(".slides");
-const images = document.querySelectorAll(".slides img");
-
-function autoSlide(){
-
-index++;
-
-if(index >= images.length){
-
-index = 0;
-
-}
-
-slides.style.transform = "translateX(-" + (index * 100) + "%)";
-
-}
-
-/* otomatik */
-
-setInterval(autoSlide,3500);
-
