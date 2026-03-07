@@ -272,3 +272,82 @@ setInterval(() => {
     }
 }, 3500);
     
+
+
+
+// ==========================================
+// A. CAROUSEL AKÈY OTOMATIK (FIX)
+// ==========================================
+let currentIdx = 0;
+const runCarousel = () => {
+    const slider = document.getElementById('carousel-slider');
+    const slides = document.querySelectorAll('#carousel-slider .slide');
+    if (!slider || slides.length === 0) return;
+
+    setInterval(() => {
+        currentIdx = (currentIdx + 1) % slides.length;
+        slider.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+        slider.style.transform = `translateX(-${currentIdx * 100}%)`;
+    }, 3500);
+};
+runCarousel();
+
+// ==========================================
+// B. ISTORIK NAN TABLO PWOFESYONÈL
+// ==========================================
+function renderHistoryList(list) {
+    const listContainer = document.getElementById('transaction-list');
+    if (!listContainer) return;
+
+    if (list.length === 0) {
+        listContainer.innerHTML = `<div class="no-data" style="text-align:center; padding:50px;">Poko gen tranzaksyon.</div>`;
+        return;
+    }
+
+    // Kreye Estrikti Tablo a
+    let tableHTML = `
+        <div class="history-table-wrapper">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Dat / Tip</th>
+                        <th>Montan</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+
+    list.forEach(tr => {
+        const statusClass = (tr.status || "en-attente").toLowerCase().replace(/\s+/g, '-');
+        const datFoma = tr.timestamp ? new Date(tr.timestamp).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : 'Jodi a';
+        
+        tableHTML += `
+            <tr onclick="showTransactionDetail('${tr.id}')">
+                <td>
+                    <div style="font-weight:700;">${tr.type}</div>
+                    <div style="font-size:11px; color:#6b778c;">${datFoma}</div>
+                </td>
+                <td style="font-weight:700; color:#0052cc;">
+                    ${(tr.amount || tr.montan || 0).toFixed(2)}
+                </td>
+                <td>
+                    <span class="status-badge status-${statusClass}">${tr.status || 'En attente'}</span>
+                </td>
+            </tr>
+        `;
+    });
+
+    tableHTML += `</tbody></table></div>`;
+    listContainer.innerHTML = tableHTML;
+}
+
+// Fonksyon pou klike sou yon liy nan tablo a pou wè detay (Opsyonèl)
+window.showTransactionDetail = (id) => {
+    const tr = cacheTransactions.find(t => t.id === id);
+    if(!tr) return;
+    
+    // Ou ka kreye yon alert pwofesyonèl oswa yon modal isit la
+    alert(`Detay Tranzaksyon:\n------------------\nID: ${id}\nTip: ${tr.type}\nMontan: ${tr.amount || tr.montan} HTG\nStatus: ${tr.status}`);
+};
+            
