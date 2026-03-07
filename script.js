@@ -274,32 +274,37 @@ setInterval(() => {
     
 
 
-
 // ==========================================
-// A. CAROUSEL AKÈY OTOMATIK (FIX)
+// CAROUSEL OTOMATIK (ECHANJ PLUS 2026)
 // ==========================================
-let currentIdx = 0;
-const runCarousel = () => {
+function komanseCarousel() {
     const slider = document.getElementById('carousel-slider');
     const slides = document.querySelectorAll('#carousel-slider .slide');
+    
+    // Si slider a pa egziste nan paj la, pa fè anyen
     if (!slider || slides.length === 0) return;
 
-    setInterval(() => {
-        currentIdx = (currentIdx + 1) % slides.length;
+    let index = 0;
+    const totalSlides = slides.length;
+
+    // Fonksyon pou deplase imaj yo
+    function gliseImaj() {
+        index++;
+        
+        // Si nou rive nan dènye imaj la, tounen nan premye a
+        if (index >= totalSlides) {
+            index = 0;
+        }
+
+        // Aplike tranzisyon an (100% vle di deplase yon foto konplè)
         slider.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
-        slider.style.transform = `translateX(-${currentIdx * 100}%)`;
-    }, 3500);
-};
-runCarousel();
+        slider.style.transform = `translateX(-${index * 100}%)`;
+    }
 
+    // Chanje foto chak 3.5 segonn (3500ms)
+    setInterval(gliseImaj, 3500);
+}
 
-
-// Fonksyon pou klike sou yon liy nan tablo a pou wè detay (Opsyonèl)
-window.showTransactionDetail = (id) => {
-    const tr = cacheTransactions.find(t => t.id === id);
-    if(!tr) return;
-    
-    // Ou ka kreye yon alert pwofesyonèl oswa yon modal isit la
-    alert(`Detay Tranzaksyon:\n------------------\nID: ${id}\nTip: ${tr.type}\nMontan: ${tr.amount || tr.montan} HTG\nStatus: ${tr.status}`);
-};
-            
+// Lanse carousel la depi paj la chaje
+document.addEventListener('DOMContentLoaded', komanseCarousel);
+        
