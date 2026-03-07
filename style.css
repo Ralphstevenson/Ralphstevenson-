@@ -510,3 +510,26 @@ object-fit:cover;
        }
 
 
+//===============================
+// carrousel akey 2026
+// ==============================
+/* Asire slider a se yon liy dwat */
+#carousel-slider {
+    display: flex;
+    width: 100%;
+    transition: transform 0.8s ease-in-out;
+}
+
+/* Chak imaj dwe pran tout lajè bwat la */
+#carousel-slider .slide {
+    min-width: 100%;
+    width: 100%;
+}
+
+/* Bwat ki kenbe slider a dwe kache sa k ap depase yo */
+.carousel-container {
+    overflow: hidden;
+    width: 100%;
+    border-radius: 15px; /* Opsyonèl */
+   }
+       
