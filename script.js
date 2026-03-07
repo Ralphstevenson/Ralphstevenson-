@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getDatabase, ref, set, get, onValue, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getDatabase, ref, set, onValue, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // 1. CONFIGURATION FIREBASE
 const firebaseConfig = {
@@ -10,104 +10,36 @@ const firebaseConfig = {
     projectId: "echanj-plus-778cd",
     storageBucket: "echanj-plus-778cd.firebasestorage.app",
     messagingSenderId: "111144762929",
-    appId: "1:111144762929:web:e64ce9a6da65781c289f10",
-    measurementId: "G-J1BQRF32ZW"
+    appId: "1:111144762929:web:e64ce9a6da65781c289f10"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 
-// Global State
 let userData = null;
 let cacheTransactions = [];
 
 // ==========================================
-// I. OTANTIFIKASYON & SEKIRITE
+// 2. OTANTIFIKASYON & DONE
 // ==========================================
-
-const generateArsID = () => "ARS-" + Math.floor(100000 + Math.random() * 900000);
-const clean = (val) => val.trim();
-
-window.handleSignup = async () => {
-    const name = clean(document.getElementById('sign-name').value);
-    const email = clean(document.getElementById('sign-email').value);
-    const pass = document.getElementById('sign-pass').value;
-    const phone = clean(document.getElementById('sign-phone').value);
-    const terms = document.getElementById('accept-terms').checked;
-
-    if (!/^[A-Z]/.test(pass)) return alert("Modpas la dwe kòmanse ak yon lèt Majiskil!");
-    if (pass.length < 6) return alert("Modpas la dwe gen omwen 6 karaktè.");
-    if (!terms) return alert("Ou dwe asepte kondisyon yo.");
-
-    try {
-        const userCred = await createUserWithEmailAndPassword(auth, email, pass);
-        await sendEmailVerification(userCred.user);
-        
-        await set(ref(db, `users/${userCred.user.uid}`), {
-            fullname: name, email: email, phone: phone,
-            arsID: generateArsID(), balance: 0, points: 0,
-            status: "Inactif", lastLogin: serverTimestamp()
-        });
-        
-        alert("Kont kreye! Tanpri verifye email ou anvan ou konekte.");
-        toggleAuth('login');
-    } catch (e) { alert("Erè: " + e.message); }
-};
-
-window.handleLogin = async () => {
-    const email = clean(document.getElementById('login-email').value);
-    const pass = document.getElementById('login-pass').value;
-    try {
-        const userCred = await signInWithEmailAndPassword(auth, email, pass);
-        if (!userCred.user.emailVerified) {
-            alert("Email ou poko verifye!");
-            await signOut(auth);
-        }
-    } catch (e) { alert("Email oswa Modpas enkòrèk!"); }
-};
-
-// Auto-Logout apre 30 minit
-let timer;
-const resetTimer = () => {
-    clearTimeout(timer);
-    timer = setTimeout(() => { if(auth.currentUser) signOut(auth); }, 1800000);
-};
-window.onmousemove = resetTimer;
-window.onkeypress = resetTimer;
-
-// ==========================================
-// II. GESTYON DONE DIRÈK & ISTORIK
-// ==========================================
-
 onAuthStateChanged(auth, (user) => {
     const authPage = document.getElementById('auth-page');
     const homePage = document.getElementById('home-page');
 
-    if (user && user.emailVerified) {
+    if (user) {
         authPage.classList.add('hidden');
         homePage.classList.remove('hidden');
-
-        // LANSE ISTORIK LA
         setupHistoryListener(user.uid);
 
-        const userRef = ref(db, `users/${user.uid}`);
-        onValue(userRef, (snap) => {
+        onValue(ref(db, `users/${user.uid}`), (snap) => {
             userData = snap.val();
             if (userData) {
-                if (!userData.arsID) { update(userRef, { arsID: generateArsID() }); return; }
                 document.getElementById('user-balance').innerText = userData.balance.toFixed(2);
                 document.getElementById('side-name').innerText = userData.fullname;
                 document.getElementById('side-id').innerText = userData.arsID;
-                
-                let [userPart, domain] = userData.email.split("@");
-                document.getElementById('side-email').innerText = userPart.substring(0,2) + "***@" + domain;
             }
         });
-
-        if(new Date().getHours() >= 18 || new Date().getHours() < 6) {
-            document.body.classList.add('night-mode');
-        }
     } else {
         authPage.classList.remove('hidden');
         homePage.classList.add('hidden');
@@ -115,81 +47,69 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // ==========================================
-// III. SIK TRANZAKSYON ECHANJ (USSD)
+// 3. RETRÈ KORÈKTEMAN ARANJE
 // ==========================================
-
-window.openDialer = function(rezo) {
-    let montan = prompt("Konbe Gdes w ap voye?");
-    if (!montan || isNaN(montan) || montan < 100) return alert("Minimòm lan se 100 HTG.");
-
-    let resevwa = (montan * 0.835).toFixed(2);
-    
-    if(confirm(`W ap voye ${montan} HTG.\nW ap resevwa ${resevwa} HTG sou balans ou.\n\nÈske w konfime?`)) {
-        let code = (rezo === 'natcom') ? `*123*88888888*32160708*${montan}%23` : `*128*50947111123*${montan}%23`;
-        window.location.href = "tel:" + code;
-        
-        const transID = "TR-" + Date.now();
-        set(ref(db, `transactions/${transID}`), {
-            uid: auth.currentUser.uid,
-            arsID: userData.arsID,
-            fullname: userData.fullname,
-            type: "Echanj",
-            rezo: rezo,
-            montan: parseFloat(montan),
-            resevwa: parseFloat(resevwa),
-            status: "En attente",
-            timestamp: serverTimestamp()
-        });
-    }
-};
-
-// ==========================================
-// IV. SISTÈM RETRÈ V1
-// ==========================================
-
 window.openRetreConfirm = function() {
-    const non = document.getElementById('retre-name').value.trim();
-    const tel = document.getElementById('retre-phone').value.trim();
+    // Nou rale ID yo egzakteman jan yo ye nan HTML ou a
+    const non = document.getElementById('retre-name').value;
+    const tel = document.getElementById('retre-phone').value;
     const metod = document.getElementById('retre-method').value;
-    const montanInput = document.getElementById('retre-amount').value;
-    const montan = parseFloat(montanInput);
+    const montan = parseFloat(document.getElementById('retre-amount').value);
 
-    if (!non || !tel || !montanInput || isNaN(montan) || montan < 100) return alert("Rempli chan yo kòrèkteman (Min 100 HTG).");
-    if (montan > userData.balance) return alert("Balans ou pa ase!");
+    if (!non || !tel || isNaN(montan) || montan < 100) {
+        return alert("Tanpri ranpli tout chan yo (Minimòm 100 HTG)");
+    }
 
+    if (montan > userData.balance) {
+        return alert("Balans ou pa ase pou fè retrè sa a!");
+    }
+
+    // Afiche preview nan modal la
     document.getElementById('retre-preview-data').innerHTML = `
-        <p><strong>Metòd:</strong> ${metod}</p>
-        <p><strong>Telefòn:</strong> ${tel}</p>
-        <p><strong>Retire:</strong> ${montan.toFixed(2)} HTG</p>`;
+        <div class="detail-row"><span>Non:</span> <span>${non}</span></div>
+        <div class="detail-row"><span>Telefòn:</span> <span>${tel}</span></div>
+        <div class="detail-row"><span>Metòd:</span> <span>${metod}</span></div>
+        <div class="detail-row"><span>Montan:</span> <span>${montan.toFixed(2)} HTG</span></div>
+    `;
     document.getElementById('modal-confirm-retre').classList.remove('hidden');
 };
 
 window.submitRetre = async () => {
-    const non = document.getElementById('retre-name').value.trim();
-    const tel = document.getElementById('retre-phone').value.trim();
+    const non = document.getElementById('retre-name').value;
+    const tel = document.getElementById('retre-phone').value;
     const metod = document.getElementById('retre-method').value;
     const montan = parseFloat(document.getElementById('retre-amount').value);
 
-    window.closeRetreConfirm();
+    const transID = "RET-" + Date.now();
     try {
-        const transID = "RET-" + Date.now();
+        // 1. Sove tranzaksyon an
         await set(ref(db, `transactions/${transID}`), {
-            uid: auth.currentUser.uid, arsID: userData.arsID,
-            fullname: userData.fullname, type: "Retrè",
-            method: metod, phone: tel, receiver: non,
-            amount: montan, status: "En attente", timestamp: serverTimestamp()
+            uid: auth.currentUser.uid,
+            type: "Retrè",
+            method: metod,
+            amount: montan,
+            receiver: non,
+            phone: tel,
+            status: "En attente",
+            timestamp: serverTimestamp()
         });
-        await update(ref(db, `users/${auth.currentUser.uid}`), { balance: userData.balance - montan });
-        
-        document.getElementById('modal-success').classList.remove('hidden');
-        setTimeout(() => { document.getElementById('modal-success').classList.add('hidden'); showPage('paj-akey'); }, 4000);
-    } catch (e) { alert("Erè nan retrè a."); }
+
+        // 2. Retire kòb la sou balans lan
+        await update(ref(db, `users/${auth.currentUser.uid}`), {
+            balance: userData.balance - montan
+        });
+
+        alert("Demann retrè ou voye ak siksè!");
+        window.closeRetreConfirm();
+        showPage('paj-akey');
+    } catch (e) {
+        alert("Erè: " + e.message);
+    }
 };
 
 // ==========================================
-// V. GESTYON ISTORIK (REAL-TIME)
+// 4. TABLO ISTORIK PWOFESYONÈL
 // ==========================================
-
 function setupHistoryListener(uid) {
     onValue(ref(db, 'transactions'), (snapshot) => {
         const data = snapshot.val();
@@ -207,104 +127,72 @@ function setupHistoryListener(uid) {
 function renderHistoryList(list) {
     const listContainer = document.getElementById('transaction-list');
     if (!listContainer) return;
-    listContainer.innerHTML = list.length === 0 ? "<p style='text-align:center; padding:50px;'>Okenn aktivite.</p>" : "";
+
+    if (list.length === 0) {
+        listContainer.innerHTML = `<div style="text-align:center; padding:40px; color:#999;">Poko gen tranzaksyon</div>`;
+        return;
+    }
+
+    let tableHTML = `
+        <div class="history-table-wrapper">
+            <table class="history-table" style="width:100%; border-collapse:collapse;">
+                <thead>
+                    <tr style="background:#f8f9fa; border-bottom:1px solid #eee;">
+                        <th style="padding:12px; text-align:left; font-size:12px;">TIP / DAT</th>
+                        <th style="padding:12px; text-align:right; font-size:12px;">MONTAN</th>
+                        <th style="padding:12px; text-align:center; font-size:12px;">STATUS</th>
+                    </tr>
+                </thead>
+                <tbody>`;
 
     list.forEach(tr => {
-        const statusClass = (tr.status || "En attente").toLowerCase().replace(/\s+/g, '-');
-        const datFoma = tr.timestamp ? new Date(tr.timestamp).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : 'Jodi a';
+        const statusClass = (tr.status || "en-attente").toLowerCase().replace(/\s+/g, '-');
+        const dat = tr.timestamp ? new Date(tr.timestamp).toLocaleDateString('fr-FR', {day:'numeric', month:'short'}) : '---';
         
-        listContainer.innerHTML += `
-            <div class="trans-card" style="border-left: 5px solid var(--primary-blue); margin-bottom:12px; padding:15px; background:white; border-radius:15px; display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <h4 style="margin:0;">${tr.type}</h4>
-                    <span style="font-size:12px; color:#6b778c;">${datFoma} • ${tr.method || tr.rezo || 'Plus'}</span>
-                    <br><span class="status-badge status-${statusClass}">${tr.status || 'En attente'}</span>
-                </div>
-                <div style="text-align:right;">
-                    <b style="color:var(--primary-blue);">${(tr.amount || tr.montan || 0).toFixed(2)} HTG</b>
-                </div>
-            </div>`;
+        tableHTML += `
+            <tr style="border-bottom:1px solid #f1f1f1;">
+                <td style="padding:12px;">
+                    <div style="font-weight:600; font-size:14px;">${tr.type}</div>
+                    <div style="font-size:11px; color:#999;">${dat} • ${tr.method || tr.rezo || ''}</div>
+                </td>
+                <td style="padding:12px; text-align:right; font-weight:700; color:var(--primary-blue);">
+                    ${(tr.amount || tr.montan || 0).toFixed(2)}
+                </td>
+                <td style="padding:12px; text-align:center;">
+                    <span class="status-badge status-${statusClass}">${tr.status}</span>
+                </td>
+            </tr>`;
     });
+
+    tableHTML += `</tbody></table></div>`;
+    listContainer.innerHTML = tableHTML;
 }
 
-window.filterHistory = function(kategori, btn) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    if(btn) btn.classList.add('active');
-    let filtered = (kategori === 'tout') ? cacheTransactions : 
-                   (kategori === 'Succès') ? cacheTransactions.filter(t => t.status === 'Succès' || t.status === 'Valide') :
-                   (kategori === 'Anulé') ? cacheTransactions.filter(t => t.status === 'Anulé' || t.status === 'Echoué') :
-                   cacheTransactions.filter(t => t.type === kategori);
-    renderHistoryList(filtered);
-};
-
 // ==========================================
-// VI. NAVIGASYON & UI
+// 5. CAROUSEL OTOMATIK (FIXED)
 // ==========================================
+let currentSlide = 0;
+function runCarousel() {
+    const slider = document.getElementById('carousel-slider');
+    const slides = document.querySelectorAll('#carousel-slider .slide');
+    if (!slider || slides.length === 0) return;
 
+    setInterval(() => {
+        currentSlide = (currentSlide + 1) % slides.length;
+        slider.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+        slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }, 3500);
+}
+document.addEventListener('DOMContentLoaded', runCarousel);
+
+// Fonksyon Navigasyon
 window.showPage = (id, el) => {
     document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
-    const target = document.getElementById(id);
-    if(target) target.classList.remove('hidden');
+    document.getElementById(id).classList.remove('hidden');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     if(el) el.classList.add('active');
 };
 
-window.toggleAuth = (type) => {
-    document.getElementById('login-section').classList.toggle('hidden', type === 'signup');
-    document.getElementById('signup-section').classList.toggle('hidden', type === 'login');
-};
-
+window.closeRetreConfirm = () => document.getElementById('modal-confirm-retre').classList.add('hidden');
 window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('active-sidebar');
 window.handleLogout = () => signOut(auth);
-window.closeRetreConfirm = () => document.getElementById('modal-confirm-retre').classList.add('hidden');
-window.handleForgotPassword = () => {
-    const email = prompt("Ekri email ou:");
-    if(email) sendPasswordResetEmail(auth, email).then(() => alert("Lyen reset la voye!"));
-};
-
-// CAROUSEL
-let index = 0;
-setInterval(() => {
-    const slides = document.querySelector(".slides");
-    if(slides) {
-        index = (index + 1) % 5;
-        slides.style.transform = `translateX(-${index * 100}%)`;
-    }
-}, 3500);
-    
-
-
-// ==========================================
-// CAROUSEL OTOMATIK (ECHANJ PLUS 2026)
-// ==========================================
-function komanseCarousel() {
-    const slider = document.getElementById('carousel-slider');
-    const slides = document.querySelectorAll('#carousel-slider .slide');
-    
-    // Si slider a pa egziste nan paj la, pa fè anyen
-    if (!slider || slides.length === 0) return;
-
-    let index = 0;
-    const totalSlides = slides.length;
-
-    // Fonksyon pou deplase imaj yo
-    function gliseImaj() {
-        index++;
-        
-        // Si nou rive nan dènye imaj la, tounen nan premye a
-        if (index >= totalSlides) {
-            index = 0;
-        }
-
-        // Aplike tranzisyon an (100% vle di deplase yon foto konplè)
-        slider.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
-        slider.style.transform = `translateX(-${index * 100}%)`;
-    }
-
-    // Chanje foto chak 3.5 segonn (3500ms)
-    setInterval(gliseImaj, 3500);
-}
-
-// Lanse carousel la depi paj la chaje
-document.addEventListener('DOMContentLoaded', komanseCarousel);
-        
