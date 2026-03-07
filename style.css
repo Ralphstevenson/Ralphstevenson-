@@ -559,3 +559,41 @@ object-fit:cover;
     padding: 8px 0;
     border-bottom: 1px dashed #ddd;
 }
+
+
+
+/* Stil Tablo Istorik */
+.history-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 320px;
+}
+.history-table th {
+    background: #f8f9fa;
+    padding: 12px;
+    text-align: left;
+    font-size: 11px;
+    color: #6b778c;
+    text-transform: uppercase;
+}
+.history-table td {
+    padding: 15px 12px;
+    border-bottom: 1px solid #f1f3f5;
+    font-size: 13px;
+}
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+}
+.status-en-attente { background: #fff4e5; color: #b76e00; }
+.status-succès { background: #e6fffa; color: #00875a; }
+.status-anulé { background: #ffebe6; color: #bf2600; }
