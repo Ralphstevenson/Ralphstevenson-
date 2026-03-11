@@ -14,9 +14,9 @@ const firebaseConfig = {
     measurementId: "G-J1BQRF32ZW"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getDatabase(app);
 
 // Global State
 let userData = null;
