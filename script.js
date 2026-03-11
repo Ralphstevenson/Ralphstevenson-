@@ -88,6 +88,17 @@ onAuthStateChanged(auth, (user) => {
         authPage.classList.add('hidden');
         homePage.classList.remove('hidden');
 
+        // --- KONEKSYON CHAT (Liy pou w ajoute a) ---
+        if (window.listenToMessages) {
+            window.listenToMessages(user.uid);
+        }
+
+        // LANSE ISTORIK LA
+        setupHistoryListener(user.uid);
+        
+        // Kòd ou a ap kontinye ak userRef la...
+        
+
         // LANSE ISTORIK LA
         setupHistoryListener(user.uid);
 
