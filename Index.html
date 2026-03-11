@@ -271,46 +271,6 @@
     </div>
     </section>
 </section>
-
-
-    <section id="chat-container" class="hidden">
-    <div class="chat-wrapper"> 
-    <div class="chat-header">
-        <div class="admin-status">
-            <div id="presence-indicator" class="status-dot offline"></div>
-            <div class="admin-info-text">
-                <p class="admin-name">Sipò Echanj Plus</p>
-                <small id="admin-status-text">De-konekte</small>
-            </div>
-        </div>
-        <button class="btn-close-chat" onclick="toggleChat()">
-            <i class="fa fa-times"></i>
-        </button>
-    </div>
-
-    <div id="chat-messages" class="chat-body">
-        </div>
-
-    <div class="chat-footer">
-        <label for="chat-file" class="file-label">
-            <i class="fa-solid fa-camera"></i>
-            <input type="file" id="chat-file" accept="image/*" style="display:none" onchange="uploadImage(this)">
-        </label>
-
-        <div class="chat-input-container">
-            <input type="text" id="chat-input" placeholder="Ekri yon mesaj..." onkeypress="if(event.key === 'Enter') sendMessage()">
-        </div>
-
-        <button class="btn-send" onclick="sendMessage()">
-            <i class="fa-solid fa-paper-plane"></i>
-        </button>
-    </div>
-</div>
-    
-<audio id="notif-sound" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3" preload="auto"></audio>
-        
-        
-</section>
     
         </main>
 
