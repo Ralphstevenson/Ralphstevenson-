@@ -1,4 +1,4 @@
-import { auth, db } from './script (2).js'; 
+import { auth, db } from './script.js'; 
 import { ref, push, onValue, set, serverTimestamp, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 async function chajeChat() {
