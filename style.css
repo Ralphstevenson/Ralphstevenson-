@@ -2,6 +2,10 @@
    STYLE BANK PWOFESYONÈL - ECHANJ PLUS 2026
    ========================================== */
 
+
+@import url('chat.css');
+
+
 :root {
     --primary-blue: #0052cc;      /* Ble Bank (Trust) */
     --accent-cyan: #00d1ff;       /* Pou gradyan */
