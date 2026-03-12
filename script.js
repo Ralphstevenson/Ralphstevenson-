@@ -148,76 +148,79 @@ window.openDialer = function(rezo) {
             rezo: rezo,
             montan: parseFloat(montan),
             resevwa: parseFloat(resevwa),
-            status: "En attente",
+         status: "En attente",
             timestamp: serverTimestamp()
         });
     }
 };
 
+
 // ==========================================
-// III. LOJIK RETRÈ PWOFESYONÈL (ECHANJ PLUS)
+// LOJIK RETRÈ KONPLÈ (SOUSTRAKSYON IMEDYA)
 // ==========================================
 
-// 1. Fonksyon pou ouvè modal konfimasyon an
+// 1. Fonksyon pou ouvè modal konfimasyon an epi kalkile rès la
 window.openRetreConfirm = () => {
     const non = document.getElementById('retre-name').value.trim();
     const tel = document.getElementById('retre-phone').value.trim();
     const metod = document.getElementById('retre-method').value;
-    const montanInput = document.getElementById('retre-amount').value;
-    const montan = parseFloat(montanInput);
+    const montanVal = document.getElementById('retre-amount').value;
+    const montan = parseFloat(montanVal);
 
-    // Sekirite: Tcheke si chan yo vid
-    if (!non || !tel || !montanInput || montan <= 0) {
+    // Sekirite: Tcheke chan vid
+    if (!non || !tel || !montanVal || montan <= 0) {
         alert("⚠️ Tanpri ranpli tout chan yo kòrèkteman.");
         return;
     }
 
-    // Sekirite: Tcheke si balans lan ase
+    // Sekirite: Tcheke si balans ase
     if (montan > userData.balance) {
-        alert(`❌ Balans ou twò piti. Ou gen ${userData.balance.toFixed(2)} HTG.`);
+        alert(`❌ Balans ou twò piti. Ou gen sèlman ${userData.balance.toFixed(2)} HTG.`);
         return;
     }
 
-    // Kalkil rès balans (Lojik 12)
+    // Kalkil rès balans lan
     const resBalans = userData.balance - montan;
 
-    // Afiche enfòmasyon yo nan modal la (Lojik 15)
-    // N.B. Si ID sa yo pa nan HTML ou, JS la p'ap kraze, l'ap jis sote yo
-    const spanMontan = document.getElementById('confirm-amount-retre');
-    const spanNon = document.getElementById('confirm-name-retre'); // Ajoute ID sa si w vle non an parèt
-    const spanRes = document.getElementById('confirm-res-balance'); // Ajoute ID sa pou rès balans
+    // Afiche enfòmasyon yo nan Modal la
+    const elName = document.getElementById('confirm-name-retre');
+    const elAmt = document.getElementById('confirm-amount-retre');
+    const elRes = document.getElementById('confirm-res-balance');
 
-    if (spanMontan) spanMontan.innerText = montan.toFixed(2) + " HTG";
-    if (spanNon) spanNon.innerText = non;
-    if (spanRes) spanRes.innerText = resBalans.toFixed(2) + " HTG";
+    if (elName) elName.innerText = non;
+    if (elAmt) elAmt.innerText = montan.toFixed(2) + " HTG";
+    if (elRes) elRes.innerText = resBalans.toFixed(2) + " HTG";
 
-    // Louvri modal konfimasyon an
-    const modalConfirm = document.getElementById('modal-confirm-retre');
-    if (modalConfirm) modalConfirm.classList.remove('hidden');
+    // Louvri Modal la
+    const modal = document.getElementById('modal-confirm-retre');
+    if (modal) modal.classList.remove('hidden');
 };
 
 // 2. Fonksyon pou fèmen modal la
 window.closeRetreConfirm = () => {
-    const modalConfirm = document.getElementById('modal-confirm-retre');
-    if (modalConfirm) modalConfirm.classList.add('hidden');
+    const modal = document.getElementById('modal-confirm-retre');
+    if (modal) modal.classList.add('hidden');
 };
 
-// 3. Fonksyon final pou voye retrè a nan Firebase
+// 3. Fonksyon final: Soustrè balans epi voye tranzaksyon
 window.submitRetre = async () => {
     const non = document.getElementById('retre-name').value.trim();
     const tel = document.getElementById('retre-phone').value.trim();
     const metod = document.getElementById('retre-method').value;
     const montan = parseFloat(document.getElementById('retre-amount').value);
 
-    // Fèmen modal konfimasyon an
+    // Fèmen modal konfimasyon an anvan
     window.closeRetreConfirm();
 
     try {
-        // Kreye yon ID tranzaksyon inik
         const transID = "RET-" + Date.now();
-        
-        // Save nan Firebase Realtime Database
-        await set(ref(db, `transactions/${transID}`), {
+        const nouvoBalans = userData.balance - montan;
+
+        // Lojik "Atomic Update" nan Firebase
+        // Nou chanje balans lan epi nou kreye tranzaksyon an yon sèl kou
+        const updates = {};
+        updates[`users/${auth.currentUser.uid}/balance`] = nouvoBalans;
+        updates[`transactions/${transID}`] = {
             uid: auth.currentUser.uid,
             arsID: userData.arsID,
             fullname: userData.fullname,
@@ -228,35 +231,36 @@ window.submitRetre = async () => {
             amount: montan,
             status: "En attente",
             timestamp: serverTimestamp()
-        });
+        };
 
-        // Montre Modal Siksè a (Lojik lordicon 5 segond)
+        // Egzekite mizajou a
+        await update(ref(db), updates);
+
+        // Montre Modal Siksè (Lordicon)
         const successModal = document.getElementById('modal-success');
         if (successModal) {
             successModal.classList.remove('hidden');
             
-            // Delè 5 segond anvan redireksyon
+            // Atann 5 segond
             setTimeout(() => {
                 successModal.classList.add('hidden');
                 
-                // Vide fòm nan
+                // Netwaye fòm nan
                 document.getElementById('retre-name').value = "";
                 document.getElementById('retre-phone').value = "";
                 document.getElementById('retre-amount').value = "";
 
-                // Voye kliyan an sou Akèy
+                // Voye sou paj akèy (Balans lan ap deja parèt desann)
                 window.showPage('paj-akey', document.querySelector('.nav-item'));
             }, 5000);
-        } else {
-            alert("✅ Tranzaksyon Reyisi!");
-            window.showPage('paj-akey', document.querySelector('.nav-item'));
         }
 
     } catch (error) {
-        alert("❌ Erè: " + error.message);
+        console.error("Erè:", error);
+        alert("❌ Tranzaksyon an echwe: " + error.message);
     }
 };
-        
+
 
 // ==========================================
 // V. GESTYON ISTORIK (REAL-TIME)
