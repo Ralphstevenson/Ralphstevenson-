@@ -154,142 +154,71 @@ window.openDialer = function(rezo) {
     }
 };
 
-// ==========================================
-// IV. SISTÈM RETRÈ (MIZAJOU KONPLÈ)
-// ==========================================
+                //========
+            // Retrè 
+// ==≠====================
 
-window.openRetreConfirm = function() {
-    const non = document.getElementById('retre-name').value.trim();
+window.submitRetre = async () => {
+    // Rekiperasyon done nan fòm nan ankò pou sekirite
+    const nonResevwa = document.getElementById('retre-name').value.trim();
     const tel = document.getElementById('retre-phone').value.trim();
     const metod = document.getElementById('retre-method').value;
     const montanInput = document.getElementById('retre-amount').value;
     const montan = parseFloat(montanInput);
 
-    // 1. Validasyon sekirite
-    if (!non || !tel || !montanInput || isNaN(montan) || montan < 100) {
-        return alert("Tanpri ranpli tout chan yo kòrèkteman (Min 100 HTG).");
-    }
-
-    if (!userData) return alert("Done ou yo ap chaje, tann yon segond...");
-    if (montan > userData.balance) return alert("Balans ou pa ase!");
-
-    // 2. Kalkile rès balans lan
-    const resBalans = userData.balance - montan;
-
-    // 3. Prepare kontni Preview a dinamikman
-    const previewContainer = document.getElementById('retre-preview-data');
-    if (previewContainer) {
-        previewContainer.innerHTML = `
-            <div style="text-align: left; padding: 10px; line-height: 1.6;">
-                <p><strong>Moun k'ap resevwa:</strong> ${non}</p>
-                <p><strong>Telefòn:</strong> ${tel}</p>
-                <p><strong>Metòd:</strong> ${metod}</p>
-                <p><strong>Montan retrè:</strong> <span style="color:var(--primary-blue);">${montan.toFixed(2)} HTG</span></p>
-                <p style="border-top: 1px dashed #ccc; margin-top: 10px; padding-top: 10px; color: #ff5630;">
-                    <strong>Balans k'ap rete:</strong> ${resBalans.toFixed(2)} HTG
-                </p>
-            </div>
-        `;
-    }
-
-    // 4. Louvri Modal la
-    document.getElementById('modal-confirm-retre').classList.remove('hidden');
-};
-
-window.submitRetre = async () => {
-    const non = document.getElementById('retre-name').value.trim();
-    const tel = document.getElementById('retre-phone').value.trim();
-    const metod = document.getElementById('retre-method').value;
-    const montan = parseFloat(document.getElementById('retre-amount').value);
+    // Tcheke si userData egziste, si se pa sa, nou kreye yon objè tanporè
+    const fName = (userData && userData.fullname) ? userData.fullname : "Kliyan Echanj Plus";
+    const aID = (userData && userData.arsID) ? userData.arsID : "ARS-PENDING";
+    const balansKounyea = (userData && userData.balance) ? userData.balance : 0;
 
     window.closeRetreConfirm();
 
     try {
         const transID = "RET-" + Date.now();
-        const nouvoBalans = userData.balance - montan;
+        const nouvoBalans = balansKounyea - montan;
 
-        // A. Mizajou an menm tan nan Firebase (Balans + Tranzaksyon)
+        // Nou prepare mizajou a
         const updates = {};
+        
+        // 1. Mete nouvo balans lan
         updates[`users/${auth.currentUser.uid}/balance`] = nouvoBalans;
+        
+        // 2. Kreye tranzaksyon an (Nou asire okenn valè pa 'undefined')
         updates[`transactions/${transID}`] = {
             uid: auth.currentUser.uid,
-            arsID: userData.arsID || "Inconnu",
-            fullname: userData.fullname || "Itilizatè",
+            arsID: aID,
+            fullname: fName, // Sa a p'ap 'undefined' ankò
             type: "Retrè",
             method: metod,
             phone: tel,
-            receiver: non,
+            receiver: nonResevwa,
             amount: montan,
             status: "En attente",
             timestamp: serverTimestamp()
         };
 
+        // Voye nan Firebase
         await update(ref(db), updates);
 
-        // B. Montre Modal Siksè a
+        // Montre Siksè
         const successModal = document.getElementById('modal-success');
         if (successModal) {
             successModal.classList.remove('hidden');
-            
             setTimeout(() => {
                 successModal.classList.add('hidden');
-                
-                // Vide fòm nan
                 document.getElementById('retre-name').value = "";
                 document.getElementById('retre-phone').value = "";
                 document.getElementById('retre-amount').value = "";
-
-                // Tounen sou paj akèy (Balans lan ap deja parèt desann)
                 showPage('paj-akey');
             }, 5000);
         }
 
     } catch (e) {
-        alert("❌ Erè nan sistèm nan: " + e.message);
+        console.error("Erè detay:", e);
+        alert("❌ Tranzaksyon an echwe: " + e.message);
     }
 };
     
-
-// ==========================================
-// V. GESTYON ISTORIK (REAL-TIME)
-// ==========================================
-
-function setupHistoryListener(uid) {
-    onValue(ref(db, 'transactions'), (snapshot) => {
-        const data = snapshot.val();
-        cacheTransactions = [];
-        if (data) {
-            Object.keys(data).forEach(key => {
-                if (data[key].uid === uid) cacheTransactions.push({ id: key, ...data[key] });
-            });
-            cacheTransactions.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-        }
-        renderHistoryList(cacheTransactions);
-    });
-}
-
-function renderHistoryList(list) {
-    const listContainer = document.getElementById('transaction-list');
-    if (!listContainer) return;
-    listContainer.innerHTML = list.length === 0 ? "<p style='text-align:center; padding:50px;'>Okenn aktivite.</p>" : "";
-
-    list.forEach(tr => {
-        const statusClass = (tr.status || "En attente").toLowerCase().replace(/\s+/g, '-');
-        const datFoma = tr.timestamp ? new Date(tr.timestamp).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : 'Jodi a';
-        
-        listContainer.innerHTML += `
-            <div class="trans-card" style="border-left: 5px solid var(--primary-blue); margin-bottom:12px; padding:15px; background:white; border-radius:15px; display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <h4 style="margin:0;">${tr.type}</h4>
-                    <span style="font-size:12px; color:#6b778c;">${datFoma} • ${tr.method || tr.rezo || 'Plus'}</span>
-                    <br><span class="status-badge status-${statusClass}">${tr.status || 'En attente'}</span>
-                </div>
-                <div style="text-align:right;">
-                    <b style="color:var(--primary-blue);">${(tr.amount || tr.montan || 0).toFixed(2)} HTG</b>
-                </div>
-            </div>`;
-    });
-}
 
 window.filterHistory = function(kategori, btn) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
