@@ -1,20 +1,33 @@
-/* --- ESTIL PAJ RETRÈ V1 --- */
+/* --- STYLE PAJ RETRÈ V1 (ARS-SYSTEM) --- */
 
 .paj-retre-kontni {
-    padding: 15px;
-    animation: fadeIn 0.5s ease;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
+    animation: fadeIn 0.4s ease-out;
 }
 
-/* 1. Bar Balans ak ID (Lojik 7 & 10) */
+/* 1. Banner Imaj */
+.retre-banner-box {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.retre-banner-box img {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    object-fit: cover;
+}
+
+/* 2. Bwat Balans ak ID (Bwat Ble a) */
 .user-status-bar-simple {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background: linear-gradient(135deg, #0052cc, #0747a6);
-    padding: 15px;
-    border-radius: 15px;
+    padding: 18px;
+    border-radius: 16px;
     margin-bottom: 20px;
     color: white;
-    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.2);
+    box-shadow: 0 6px 15px rgba(0, 82, 204, 0.25);
 }
 
 .status-info {
@@ -25,118 +38,108 @@
 .status-info .label {
     font-size: 11px;
     text-transform: uppercase;
-    opacity: 0.8;
-    letter-spacing: 0.5px;
+    opacity: 0.85;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
 }
 
 .status-info .value {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
 }
 
-/* 2. Container Fòm nan */
+/* 3. Container Fòm nan */
 .form-container {
     background: #ffffff;
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .form-header h3 {
     margin: 0;
-    font-size: 18px;
+    font-size: 19px;
     color: #172b4d;
 }
 
 .form-header p {
-    margin-top: 5px;
     font-size: 12px;
     color: #6b778c;
+    margin-top: 5px;
 }
 
-/* 3. Style pou Chak Group Input */
+/* 4. Style Input yo */
 .form-group {
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .form-group label {
     display: block;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: #344563;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .form-group input, 
 .form-group select {
     width: 100%;
-    padding: 12px 15px;
+    padding: 12px 14px;
     border: 2px solid #ebecf0;
     border-radius: 12px;
     font-size: 15px;
-    font-family: 'Inter', sans-serif;
+    background-color: #f9fafb;
     color: #172b4d;
-    transition: all 0.3s ease;
-    background-color: #f4f5f7;
+    transition: all 0.2s ease;
+    box-sizing: border-box; /* Anpeche input la debòde */
 }
 
-.form-group input:focus, 
-.form-group select:focus {
+.form-group input:focus {
     border-color: #0052cc;
     background-color: #fff;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
 }
 
-/* 4. Bouton KONFIME a */
+/* 5. Bouton KONFIME a */
 .btn-primary-pro {
     width: 100%;
-    padding: 15px;
+    padding: 16px;
     background: #0052cc;
     color: white;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
-    transition: background 0.3s ease;
     margin-top: 10px;
-}
-
-.btn-primary-pro:hover {
-    background: #0747a6;
+    box-shadow: 0 4px 10px rgba(0, 82, 204, 0.2);
+    transition: transform 0.2s, background 0.2s;
 }
 
 .btn-primary-pro:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
+    background: #0747a6;
 }
 
-/* 5. Banner Imaj */
-.retre-banner-box {
-    width: 100%;
-    margin-bottom: 15px;
+/* Sekirite Footer */
+.security-footer {
+    color: #999;
+    font-weight: 500;
 }
 
-.retre-banner-box img {
-    display: block;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+.security-footer i {
+    color: #36b37e; /* Koulè vèt pou sekirite */
+    margin-right: 4px;
 }
 
-/* Animasyon pou paj la parèt dous */
+/* Animasyon */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
-}
-
-/* Pou Night Mode (Lojik 28) si w aktive l pita */
-body.dark-mode .form-container {
-    background: #1d2125;
-}
-body.dark-mode .form-group label {
-    color: #b3bac5;
-}
-body.dark-mode .form-group input {
-    background: #22272b;
-    border-color: #444;
-    color: white;
-}
+    }
