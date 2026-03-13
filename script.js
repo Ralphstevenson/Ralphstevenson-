@@ -1,29 +1,25 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getDatabase, ref, set, get, onValue, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getDatabase, ref, set, onValue, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// 1. CONFIGURATION FIREBASE
+// CONFIGURATION FIREBASE
 const firebaseConfig = {
-  apiKey: "AIzaSyB1VTPakleoggsbLdpm_HS7nSb3A7A99Qw",
-  authDomain: "echanj-plus-778cd.firebaseapp.com",
-  databaseURL: "https://echanj-plus-778cd-default-rtdb.firebaseio.com",
-  projectId: "echanj-plus-778cd",
-  storageBucket: "echanj-plus-778cd.firebasestorage.app",
-  messagingSenderId: "111144762929",
-  appId: "1:111144762929:web:e64ce9a6da65781c289f10",
-  measurementId: "G-J1BQRF32ZW"
+    apiKey: "AIzaSyB1VTPakleoggsbLdpm_HS7nSb3A7A99Qw",
+    authDomain: "echanj-plus-778cd.firebaseapp.com",
+    databaseURL: "https://echanj-plus-778cd-default-rtdb.firebaseio.com",
+    projectId: "echanj-plus-778cd",
+    storageBucket: "echanj-plus-778cd.firebasestorage.app",
+    messagingSenderId: "111144762929",
+    appId: "1:111144762929:web:e64ce9a6da65781c289f10",
+    measurementId: "G-J1BQRF32ZW"
 };
 
-// Inisyalize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 
-// Nou kreye yon varyab global pou kenbe done itilizatè a
-export let userData = null;
-
 // ==========================================
-// II. GESTYON AUTH & DONE DIRÈK
+// I. OTANTIFIKASYON & SEKIRITE (Lojik 1-9)
 // ==========================================
 
 onAuthStateChanged(auth, (user) => {
@@ -31,101 +27,102 @@ onAuthStateChanged(auth, (user) => {
     const homePage = document.getElementById('home-page');
 
     if (user) {
-        // Itilizatè a konekte
+        // Lojik 3: Verifikasyon Email
+        if (!user.emailVerified) {
+            alert("Tanpri verifye email ou nan bwat mesaj ou anvan ou konekte.");
+            signOut(auth);
+            return;
+        }
+
         authPage.classList.add('hidden');
         homePage.classList.remove('hidden');
 
-        // Chaje Paj Akèy la imedyatman si anyen poko chaje
-        if (window.showPage) {
-            const akeySec = document.getElementById('paj-akey');
-            if (akeySec && akeySec.innerHTML.trim() === "") {
-                window.showPage('paj-akey');
-            }
-        }
+        // Lojik 8: Last Login
+        update(ref(db, `users/${user.uid}`), { lastLogin: serverTimestamp() });
 
-        // Koute done itilizatè a (Balans, ARS-ID, elatriye)
-        const userRef = ref(db, `users/${user.uid}`);
-        onValue(userRef, (snap) => {
-            userData = snap.val();
-            if (userData) {
-                // Si itilizatè a poko gen ARS-ID, nou kreye youn
-                if (!userData.arsID) {
-                    const newID = "ARS-" + Math.floor(100000 + Math.random() * 900000);
-                    update(userRef, { arsID: newID });
-                    return;
-                }
-                updateAllUIComponents(userData);
-            }
-        });
+        // Kòmanse koute done yo (Lojik 10)
+        kouteDoneItilizatè(user.uid);
+
+        // Chaje paj akey la otomatikman
+        if (window.showPage) window.showPage('paj-akey');
 
     } else {
-        // Itilizatè a dekonekte
         authPage.classList.remove('hidden');
         homePage.classList.add('hidden');
     }
 });
 
-// ==========================================
-// III. MISYON: METE DONE NAN TOUT PAJ YO
-// ==========================================
-function updateAllUIComponents(data) {
-    const formatBalans = `${data.balance.toFixed(2)} HTG`;
+// Lojik 9: Netwayaj (Trim) & Lojik 2: Modpas Fò
+window.handleSignup = async () => {
+    const non = document.getElementById('sign-name').value.trim();
+    const email = document.getElementById('sign-email').value.trim();
+    const pass = document.getElementById('sign-pass').value;
+    const phone = document.getElementById('sign-phone').value.trim();
+    const refCode = document.getElementById('sign-ref').value.trim();
+    const terms = document.getElementById('accept-terms').checked;
 
-    // 1. Sidebar
-    if (document.getElementById('side-name')) document.getElementById('side-name').innerText = data.fullname;
-    if (document.getElementById('side-id')) document.getElementById('side-id').innerText = data.arsID;
-    if (document.getElementById('side-email')) {
-        let [u, d] = data.email.split("@");
-        document.getElementById('side-email').innerText = u.substring(0,2) + "***@" + d;
-    }
+    if (!terms) return alert("Ou dwe asepte kondisyon yo.");
+    if (pass[0] !== pass[0].toUpperCase()) return alert("Modpas la dwe kòmanse ak yon lèt majiskil (Lojik 2).");
 
-    // 2. Paj Akèy (Lè li chaje)
-    const elBalansAkey = document.getElementById('user-balance');
-    if (elBalansAkey) elBalansAkey.innerText = data.balance.toFixed(2);
+    try {
+        const res = await createUserWithEmailAndPassword(auth, email, pass);
+        // Lojik 7: Jenere ARS-ID
+        const arsID = "ARS-" + Math.floor(100000 + Math.random() * 900000);
+        
+        await set(ref(db, `users/${res.user.uid}`), {
+            fullname: non,
+            email: email,
+            phone: phone,
+            arsID: arsID,
+            referBy: refCode || "none",
+            balance: 0,
+            points: 0,
+            status: "active",
+            createdAt: serverTimestamp()
+        });
 
-    // 3. Paj Retrè (Lè li chaje)
-    const elBalansRetre = document.getElementById('retre-display-balance');
-    const elIdRetre = document.getElementById('display-ars-id');
-    if (elBalansRetre) elBalansRetre.innerText = formatBalans;
-    if (elIdRetre) elIdRetre.innerText = data.arsID;
-}
-
-// ==========================================
-// IV. FONKSYON LOGIN / SIGNUP (Globale)
-// ==========================================
+        await sendEmailVerification(res.user);
+        alert("Bravo! Tcheke email ou pou verifye kont ou an.");
+        signOut(auth);
+    } catch (e) { alert("Erè: " + e.message); }
+};
 
 window.handleLogin = () => {
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-pass').value;
-    if (!email || !pass) return alert("Ranpli tout chan yo!");
-
-    signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Erè: " + err.message));
+    signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Email oswa Modpas pa bon"));
 };
 
-window.handleSignup = () => {
-    const name = document.getElementById('sign-name').value.trim();
-    const email = document.getElementById('sign-email').value.trim();
-    const pass = document.getElementById('sign-pass').value;
-    const phone = document.getElementById('sign-phone').value.trim();
+// ==========================================
+// II. GESTYON DONE REYÈL (Lojik 10-14)
+// ==========================================
 
-    if (!name || !email || pass.length < 6) return alert("Verifye enfòmasyon yo!");
+function kouteDoneItilizatè(uid) {
+    onValue(ref(db, `users/${uid}`), (snap) => {
+        const data = snap.val();
+        if (!data) return;
 
-    createUserWithEmailAndPassword(auth, email, pass).then((res) => {
-        set(ref(db, `users/${res.user.uid}`), {
-            fullname: name,
-            email: email,
-            phone: phone,
-            balance: 0,
-            arsID: "",
-            createdAt: serverTimestamp()
-        });
-    }).catch(err => alert(err.message));
-};
+        // Lojik 6: Maskay Email
+        let [u, d] = data.email.split("@");
+        const emailMasked = u.substring(0, 3) + "***@" + d;
 
-window.handleLogout = () => signOut(auth);
+        // Mete done nan tout ID ki disponib yo (Penetrasyon Done)
+        updateElement('side-name', data.fullname);
+        updateElement('side-id', data.arsID);
+        updateElement('side-email', emailMasked);
+        updateElement('user-balance', data.balance.toFixed(2));
+        updateElement('retre-display-balance', data.balance.toFixed(2) + " HTG");
+        updateElement('display-ars-id', data.arsID);
+    });
+}
 
-window.toggleAuth = (type) => {
-    document.getElementById('login-section').classList.toggle('hidden', type === 'signup');
-    document.getElementById('signup-section').classList.toggle('hidden', type === 'login');
-};
-                        
+function updateElement(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.innerText = value;
+}
+
+// Lojik 29: Night Mode Otomatik
+if (new Date().getHours() >= 18 || new Date().getHours() < 6) {
+    document.body.classList.add('night-mode');
+               }
+  
