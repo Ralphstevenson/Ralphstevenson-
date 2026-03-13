@@ -154,76 +154,67 @@ window.openDialer = function(rezo) {
     }
 };
 
-
 // ==========================================
-// LOJIK RETRÈ KONPLÈ (SOUSTRAKSYON IMEDYA)
+// IV. SISTÈM RETRÈ (MIZAJOU KONPLÈ)
 // ==========================================
 
-// 1. Fonksyon pou ouvè modal konfimasyon an epi kalkile rès la
-window.openRetreConfirm = () => {
+window.openRetreConfirm = function() {
     const non = document.getElementById('retre-name').value.trim();
     const tel = document.getElementById('retre-phone').value.trim();
     const metod = document.getElementById('retre-method').value;
-    const montanVal = document.getElementById('retre-amount').value;
-    const montan = parseFloat(montanVal);
+    const montanInput = document.getElementById('retre-amount').value;
+    const montan = parseFloat(montanInput);
 
-    // Sekirite: Tcheke chan vid
-    if (!non || !tel || !montanVal || montan <= 0) {
-        alert("⚠️ Tanpri ranpli tout chan yo kòrèkteman.");
-        return;
+    // 1. Validasyon sekirite
+    if (!non || !tel || !montanInput || isNaN(montan) || montan < 100) {
+        return alert("Tanpri ranpli tout chan yo kòrèkteman (Min 100 HTG).");
     }
 
-    // Sekirite: Tcheke si balans ase
-    if (montan > userData.balance) {
-        alert(`❌ Balans ou twò piti. Ou gen sèlman ${userData.balance.toFixed(2)} HTG.`);
-        return;
-    }
+    if (!userData) return alert("Done ou yo ap chaje, tann yon segond...");
+    if (montan > userData.balance) return alert("Balans ou pa ase!");
 
-    // Kalkil rès balans lan
+    // 2. Kalkile rès balans lan
     const resBalans = userData.balance - montan;
 
-    // Afiche enfòmasyon yo nan Modal la
-    const elName = document.getElementById('confirm-name-retre');
-    const elAmt = document.getElementById('confirm-amount-retre');
-    const elRes = document.getElementById('confirm-res-balance');
+    // 3. Prepare kontni Preview a dinamikman
+    const previewContainer = document.getElementById('retre-preview-data');
+    if (previewContainer) {
+        previewContainer.innerHTML = `
+            <div style="text-align: left; padding: 10px; line-height: 1.6;">
+                <p><strong>Moun k'ap resevwa:</strong> ${non}</p>
+                <p><strong>Telefòn:</strong> ${tel}</p>
+                <p><strong>Metòd:</strong> ${metod}</p>
+                <p><strong>Montan retrè:</strong> <span style="color:var(--primary-blue);">${montan.toFixed(2)} HTG</span></p>
+                <p style="border-top: 1px dashed #ccc; margin-top: 10px; padding-top: 10px; color: #ff5630;">
+                    <strong>Balans k'ap rete:</strong> ${resBalans.toFixed(2)} HTG
+                </p>
+            </div>
+        `;
+    }
 
-    if (elName) elName.innerText = non;
-    if (elAmt) elAmt.innerText = montan.toFixed(2) + " HTG";
-    if (elRes) elRes.innerText = resBalans.toFixed(2) + " HTG";
-
-    // Louvri Modal la
-    const modal = document.getElementById('modal-confirm-retre');
-    if (modal) modal.classList.remove('hidden');
+    // 4. Louvri Modal la
+    document.getElementById('modal-confirm-retre').classList.remove('hidden');
 };
 
-// 2. Fonksyon pou fèmen modal la
-window.closeRetreConfirm = () => {
-    const modal = document.getElementById('modal-confirm-retre');
-    if (modal) modal.classList.add('hidden');
-};
-
-// 3. Fonksyon final: Soustrè balans epi voye tranzaksyon
 window.submitRetre = async () => {
     const non = document.getElementById('retre-name').value.trim();
     const tel = document.getElementById('retre-phone').value.trim();
     const metod = document.getElementById('retre-method').value;
     const montan = parseFloat(document.getElementById('retre-amount').value);
 
-    // Fèmen modal konfimasyon an anvan
     window.closeRetreConfirm();
 
     try {
         const transID = "RET-" + Date.now();
         const nouvoBalans = userData.balance - montan;
 
-        // Lojik "Atomic Update" nan Firebase
-        // Nou chanje balans lan epi nou kreye tranzaksyon an yon sèl kou
+        // A. Mizajou an menm tan nan Firebase (Balans + Tranzaksyon)
         const updates = {};
         updates[`users/${auth.currentUser.uid}/balance`] = nouvoBalans;
         updates[`transactions/${transID}`] = {
             uid: auth.currentUser.uid,
-            arsID: userData.arsID,
-            fullname: userData.fullname,
+            arsID: userData.arsID || "Inconnu",
+            fullname: userData.fullname || "Itilizatè",
             type: "Retrè",
             method: metod,
             phone: tel,
@@ -233,34 +224,31 @@ window.submitRetre = async () => {
             timestamp: serverTimestamp()
         };
 
-        // Egzekite mizajou a
         await update(ref(db), updates);
 
-        // Montre Modal Siksè (Lordicon)
+        // B. Montre Modal Siksè a
         const successModal = document.getElementById('modal-success');
         if (successModal) {
             successModal.classList.remove('hidden');
             
-            // Atann 5 segond
             setTimeout(() => {
                 successModal.classList.add('hidden');
                 
-                // Netwaye fòm nan
+                // Vide fòm nan
                 document.getElementById('retre-name').value = "";
                 document.getElementById('retre-phone').value = "";
                 document.getElementById('retre-amount').value = "";
 
-                // Voye sou paj akèy (Balans lan ap deja parèt desann)
-                window.showPage('paj-akey', document.querySelector('.nav-item'));
+                // Tounen sou paj akèy (Balans lan ap deja parèt desann)
+                showPage('paj-akey');
             }, 5000);
         }
 
-    } catch (error) {
-        console.error("Erè:", error);
-        alert("❌ Tranzaksyon an echwe: " + error.message);
+    } catch (e) {
+        alert("❌ Erè nan sistèm nan: " + e.message);
     }
 };
-
+    
 
 // ==========================================
 // V. GESTYON ISTORIK (REAL-TIME)
