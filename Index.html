@@ -46,9 +46,10 @@
                 <div class="input-group"><i class="fa fa-gift"></i><input type="text" id="sign-ref" placeholder="Kòd Paren (Opsyonèl)"></div>
                 
                 <div class="terms-group">
-                    <input type="radio" id="accept-terms" name="terms">
-                    <label for="accept-terms">Mwen asepte kondisyon yo</label>
+    <input type="checkbox" id="accept-terms">
+    <label for="accept-terms">Mwen asepte <span onclick="alert('Kondisyon Echanj Plus: Ou dakò pou pa fè fwod...') " style="color:var(--primary-blue); cursor:pointer; text-decoration:underline;">kondisyon yo</span></label>
                 </div>
+                
 
                 <button class="btn-primary-pro" onclick="handleSignup()">ANSKRI</button>
                 <p class="auth-footer">Gen kont deja? <span onclick="toggleAuth('login')">Konekte</span></p>
