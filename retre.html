@@ -1,142 +1,54 @@
-/* --- ESTIL PAJ RETRÈ V1 --- */
+<div class="paj-retre-kontni">
+    <div class="retre-banner-box">
+        <img src="https://i.postimg.cc/tTPghNYw/1772041853646-(1).png" alt="Echanj Plus" style="width: 100%; border-radius: 15px;">
+    </div>
 
-.paj-retre-kontni {
-    padding: 15px;
-    animation: fadeIn 0.5s ease;
-}
+    <div class="user-status-bar-simple">
+        <div class="status-info">
+            <span class="label">Balans:</span>
+            <span id="display-balance" class="value">0.00 HTG</span>
+        </div>
+        <div class="status-info">
+            <span class="label">ID Kont:</span>
+            <span id="display-ars-id" class="value">---</span> </div>
+    </div>
 
-/* 1. Bar Balans ak ID (Lojik 7 & 10) */
-.user-status-bar-simple {
-    display: flex;
-    justify-content: space-between;
-    background: linear-gradient(135deg, #0052cc, #0747a6);
-    padding: 15px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    color: white;
-    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.2);
-}
+    <div class="form-container">
+        <div class="form-header">
+            <h3>Demann Retrè</h3>
+            <p>Done ou yo ap pase nan yon tinèl SSL chifre (Lojik 1)</p>
+        </div>
 
-.status-info {
-    display: flex;
-    flex-direction: column;
-}
+        <div class="form-group">
+            <label>Non sou kont reseptè a</label>
+            <input type="text" id="retre-name" placeholder="Egz: Jean Bakèl">
+        </div>
 
-.status-info .label {
-    font-size: 11px;
-    text-transform: uppercase;
-    opacity: 0.8;
-    letter-spacing: 0.5px;
-}
+        <div class="form-group">
+            <label>Nimewo telefòn</label>
+            <input type="tel" id="retre-phone" placeholder="Egz: 47112233">
+        </div>
 
-.status-info .value {
-    font-size: 16px;
-    font-weight: 700;
-}
+        <div class="form-group">
+            <label>Metòd peman</label>
+            <select id="retre-method">
+                <option value="MonCash">MonCash</option>
+                <option value="NatCash">NatCash</option>
+            </select>
+        </div>
 
-/* 2. Container Fòm nan */
-.form-container {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-}
+        <div class="form-group">
+            <label>Montan (HTG)</label>
+            <input type="number" id="retre-amount" placeholder="Minimòm 100 HTG">
+        </div>
 
-.form-header h3 {
-    margin: 0;
-    font-size: 18px;
-    color: #172b4d;
-}
+        <button class="btn-primary-pro" id="btn-konfime-retre">
+            KONFIME RETRÈ
+        </button>
 
-.form-header p {
-    margin-top: 5px;
-    font-size: 12px;
-    color: #6b778c;
-}
+        <div class="security-footer" style="text-align: center; margin-top: 15px; font-size: 11px; color: #999;">
+            <i class="fa fa-shield-alt"></i> Tranzaksyon verifye pa Echanj Plus Security
+        </div>
+    </div>
+        </div>
 
-/* 3. Style pou Chak Group Input */
-.form-group {
-    margin-bottom: 18px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: #344563;
-    margin-bottom: 8px;
-}
-
-.form-group input, 
-.form-group select {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #ebecf0;
-    border-radius: 12px;
-    font-size: 15px;
-    font-family: 'Inter', sans-serif;
-    color: #172b4d;
-    transition: all 0.3s ease;
-    background-color: #f4f5f7;
-}
-
-.form-group input:focus, 
-.form-group select:focus {
-    border-color: #0052cc;
-    background-color: #fff;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
-}
-
-/* 4. Bouton KONFIME a */
-.btn-primary-pro {
-    width: 100%;
-    padding: 15px;
-    background: #0052cc;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    margin-top: 10px;
-}
-
-.btn-primary-pro:hover {
-    background: #0747a6;
-}
-
-.btn-primary-pro:active {
-    transform: scale(0.98);
-}
-
-/* 5. Banner Imaj */
-.retre-banner-box {
-    width: 100%;
-    margin-bottom: 15px;
-}
-
-.retre-banner-box img {
-    display: block;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-/* Animasyon pou paj la parèt dous */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Pou Night Mode (Lojik 28) si w aktive l pita */
-body.dark-mode .form-container {
-    background: #1d2125;
-}
-body.dark-mode .form-group label {
-    color: #b3bac5;
-}
-body.dark-mode .form-group input {
-    background: #22272b;
-    border-color: #444;
-    color: white;
-}
