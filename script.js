@@ -1,85 +1,131 @@
-/**
- * UI LOGIC - ECHANJ PLUS 2026
- * Jere navigasyon ak chajman paj modilè (Fetch API)
- */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getDatabase, ref, set, get, onValue, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// 1. MAPING PAJ YO (ID Seksyon -> Non Fichye HTML)
-const pajMap = {
-    'paj-akey': 'akey.html',
-    'paj-echanj': 'echanj.html',
-    'paj-retre': 'retre.html',
-    'paj-trans': 'istorik.html',
-    'chat-container': 'chat.html'
+// 1. CONFIGURATION FIREBASE
+const firebaseConfig = {
+  apiKey: "AIzaSyB1VTPakleoggsbLdpm_HS7nSb3A7A99Qw",
+  authDomain: "echanj-plus-778cd.firebaseapp.com",
+  databaseURL: "https://echanj-plus-778cd-default-rtdb.firebaseio.com",
+  projectId: "echanj-plus-778cd",
+  storageBucket: "echanj-plus-778cd.firebasestorage.app",
+  messagingSenderId: "111144762929",
+  appId: "1:111144762929:web:e64ce9a6da65781c289f10",
+  measurementId: "G-J1BQRF32ZW"
 };
 
-// 2. FONKSYON PRINCIPAL POU CHANJE PAJ
-window.showPage = async function(pageId, element) {
-    // A. Kache tout seksyon yo
-    document.querySelectorAll('.content-wrapper > section').forEach(sec => {
-        sec.classList.add('hidden');
-    });
+// Inisyalize Firebase
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getDatabase(app);
 
-    // B. Montre seksyon ki klike a
-    const targetSection = document.getElementById(pageId);
-    if (targetSection) {
-        targetSection.classList.remove('hidden');
-        
-        // C. Tcheke si paj la vid pou n chaje kontni an
-        if (targetSection.innerHTML.trim() === "") {
-            await chajeKontniPaj(pageId);
+// Nou kreye yon varyab global pou kenbe done itilizatè a
+export let userData = null;
+
+// ==========================================
+// II. GESTYON AUTH & DONE DIRÈK
+// ==========================================
+
+onAuthStateChanged(auth, (user) => {
+    const authPage = document.getElementById('auth-page');
+    const homePage = document.getElementById('home-page');
+
+    if (user) {
+        // Itilizatè a konekte
+        authPage.classList.add('hidden');
+        homePage.classList.remove('hidden');
+
+        // Chaje Paj Akèy la imedyatman si anyen poko chaje
+        if (window.showPage) {
+            const akeySec = document.getElementById('paj-akey');
+            if (akeySec && akeySec.innerHTML.trim() === "") {
+                window.showPage('paj-akey');
+            }
         }
+
+        // Koute done itilizatè a (Balans, ARS-ID, elatriye)
+        const userRef = ref(db, `users/${user.uid}`);
+        onValue(userRef, (snap) => {
+            userData = snap.val();
+            if (userData) {
+                // Si itilizatè a poko gen ARS-ID, nou kreye youn
+                if (!userData.arsID) {
+                    const newID = "ARS-" + Math.floor(100000 + Math.random() * 900000);
+                    update(userRef, { arsID: newID });
+                    return;
+                }
+                updateAllUIComponents(userData);
+            }
+        });
+
+    } else {
+        // Itilizatè a dekonekte
+        authPage.classList.remove('hidden');
+        homePage.classList.add('hidden');
+    }
+});
+
+// ==========================================
+// III. MISYON: METE DONE NAN TOUT PAJ YO
+// ==========================================
+function updateAllUIComponents(data) {
+    const formatBalans = `${data.balance.toFixed(2)} HTG`;
+
+    // 1. Sidebar
+    if (document.getElementById('side-name')) document.getElementById('side-name').innerText = data.fullname;
+    if (document.getElementById('side-id')) document.getElementById('side-id').innerText = data.arsID;
+    if (document.getElementById('side-email')) {
+        let [u, d] = data.email.split("@");
+        document.getElementById('side-email').innerText = u.substring(0,2) + "***@" + d;
     }
 
-    // D. Mete ajou style nan Navbar a
-    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-    if (element) {
-        element.classList.add('active');
-    }
-};
+    // 2. Paj Akèy (Lè li chaje)
+    const elBalansAkey = document.getElementById('user-balance');
+    if (elBalansAkey) elBalansAkey.innerText = data.balance.toFixed(2);
 
-// 3. FONKSYON POU FETCH HTML LA
-async function chajeKontniPaj(pageId) {
-    const fileName = pajMap[pageId];
-    if (!fileName) return;
-
-    const targetSection = document.getElementById(pageId);
-    
-    // Montre yon ti loader pandan l ap chaje
-    targetSection.innerHTML = `<div class="loader-paj"><i class="fa fa-spinner fa-spin"></i> Chaje...</div>`;
-
-    try {
-        const response = await fetch(fileName);
-        if (!response.ok) throw new Error(`Pa ka jwenn ${fileName}`);
-        
-        const html = await response.text();
-        targetSection.innerHTML = html;
-
-        // LANSE FONKSYON ESPESIFIK POU CHAK PAJ (si yo egziste)
-        postChajmanLojik(pageId);
-
-    } catch (error) {
-        console.error("Erè chajman:", error);
-        targetSection.innerHTML = `<p style="color:red; text-align:center; padding:20px;">Erè nan chajman paj la. Verifye koneksyon w.</p>`;
-    }
+    // 3. Paj Retrè (Lè li chaje)
+    const elBalansRetre = document.getElementById('retre-display-balance');
+    const elIdRetre = document.getElementById('display-ars-id');
+    if (elBalansRetre) elBalansRetre.innerText = formatBalans;
+    if (elIdRetre) elIdRetre.innerText = data.arsID;
 }
 
-// 4. LOJIK APRE CHAJMAN (Pou re-konekte bouton oswa done Firebase)
-function postChajmanLojik(pageId) {
-    if (pageId === 'paj-retre') {
-        // Si retre.js gen yon fonksyon inisyalizasyon, rele l isit la
-        if (window.initRetre) window.initRetre();
-    }
-    if (pageId === 'paj-akey') {
-        // Rekòmanse carousel la si l nan akey.html
-        if (window.komanseCarousel) window.komanseCarousel();
-    }
-}
+// ==========================================
+// IV. FONKSYON LOGIN / SIGNUP (Globale)
+// ==========================================
 
-// 5. GESTYON SIDEBAR
-window.toggleSidebar = function() {
-    const sidebar = document.getElementById('sidebar');
-    if (sidebar) {
-        sidebar.classList.toggle('active');
-    }
+window.handleLogin = () => {
+    const email = document.getElementById('login-email').value.trim();
+    const pass = document.getElementById('login-pass').value;
+    if (!email || !pass) return alert("Ranpli tout chan yo!");
+
+    signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Erè: " + err.message));
 };
-            
+
+window.handleSignup = () => {
+    const name = document.getElementById('sign-name').value.trim();
+    const email = document.getElementById('sign-email').value.trim();
+    const pass = document.getElementById('sign-pass').value;
+    const phone = document.getElementById('sign-phone').value.trim();
+
+    if (!name || !email || pass.length < 6) return alert("Verifye enfòmasyon yo!");
+
+    createUserWithEmailAndPassword(auth, email, pass).then((res) => {
+        set(ref(db, `users/${res.user.uid}`), {
+            fullname: name,
+            email: email,
+            phone: phone,
+            balance: 0,
+            arsID: "",
+            createdAt: serverTimestamp()
+        });
+    }).catch(err => alert(err.message));
+};
+
+window.handleLogout = () => signOut(auth);
+
+window.toggleAuth = (type) => {
+    document.getElementById('login-section').classList.toggle('hidden', type === 'signup');
+    document.getElementById('signup-section').classList.toggle('hidden', type === 'login');
+};
+                        
