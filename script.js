@@ -102,42 +102,56 @@ onAuthStateChanged(auth, (user) => {
         // LANSE ISTORIK LA
         setupHistoryListener(user.uid);
 
-                const userRef = ref(db, `users/${user.uid}`);
+                
+    Nan gwo js mwen sel la Mwen jwenn saw dim chache a . 
+==========================================
+// II. GESTYON DONE DIRÈK & ISTORIK
+// ==========================================
+
+onAuthStateChanged(auth, (user) => {
+    const authPage = document.getElementById('auth-page');
+    const homePage = document.getElementById('home-page');
+
+    if (user && user.emailVerified) {
+        authPage.classList.add('hidden');
+        homePage.classList.remove('hidden');
+
+        // --- KONEKSYON CHAT (Liy pou w ajoute a) ---
+        if (window.listenToMessages) {
+            window.listenToMessages(user.uid);
+        }
+
+        // LANSE ISTORIK LA
+        setupHistoryListener(user.uid);
+        
+        // Kòd ou a ap kontinye ak userRef la...
+        
+
+        // LANSE ISTORIK LA
+        setupHistoryListener(user.uid);
+
+        const userRef = ref(db, `users/${user.uid}`);
         onValue(userRef, (snap) => {
             userData = snap.val();
             if (userData) {
                 if (!userData.arsID) { update(userRef, { arsID: generateArsID() }); return; }
-
-                // 1. Defini balans lan yon sèl fwa
-                const valèBalans = userData.balance.toFixed(2);
-                const tèmBalans = `${valèBalans} HTG`;
-
-                // 2. Mete ajou Balans nan tout bwat yo (si yo egziste)
-                const elBalansAkey = document.getElementById('user-balance');
-                const elBalansRetre = document.getElementById('retre-display-balance');
+                document.getElementById('user-balance').innerText = userData.balance.toFixed(2);
+                document.getElementById('side-name').innerText = userData.fullname;
+                document.getElementById('side-id').innerText = userData.arsID;
                 
-                if (elBalansAkey) elBalansAkey.innerText = valèBalans;
-                if (elBalansRetre) elBalansRetre.innerText = tèmBalans;
-
-                // 3. Mete ajou Non ak ID nan Menu bò a (Side Menu)
-                const elSideName = document.getElementById('side-name');
-                const elSideId = document.getElementById('side-id');
-                if (elSideName) elSideName.innerText = userData.fullname;
-                if (elSideId) elSideId.innerText = userData.arsID;
-                
-                // 4. Mete ajou ID nan paj retrè a tou
-                const elRetreId = document.getElementById('display-ars-id');
-                if (elRetreId) elRetreId.innerText = userData.arsID;
-
-                // 5. Maske Email la
-                const elSideEmail = document.getElementById('side-email');
-                if (elSideEmail) {
-                    let [userPart, domain] = userData.email.split("@");
-                    elSideEmail.innerText = userPart.substring(0,2) + "***@" + domain;
-                }
+                let [userPart, domain] = userData.email.split("@");
+                document.getElementById('side-email').innerText = userPart.substring(0,2) + "***@" + domain;
             }
         });
-    
+
+        if(new Date().getHours() >= 18 || new Date().getHours() < 6) {
+            document.body.classList.add('night-mode');
+        }
+    } else {
+        authPage.classList.remove('hidden');
+        homePage.classList.add('hidden');
+    }
+});
 
 // ==========================================
 // III. SIK TRANZAKSYON ECHANJ (USSD)
