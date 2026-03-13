@@ -154,81 +154,95 @@ window.openDialer = function(rezo) {
     }
 };
 
-                //========
-            // Retrè 
-// ==≠====================
+                // ==========================================
+// IV. SISTÈM RETRÈ (ESTRATEJI BLOKE VALIDASYON)
+// ==========================================
 
-window.submitRetre = async () => {
-    // Rekiperasyon done nan fòm nan ankò pou sekirite
-    const nonResevwa = document.getElementById('retre-name').value.trim();
+window.openRetreConfirm = function() {
+    // Nou pran done nan fòm nan
+    const non = document.getElementById('retre-name').value.trim();
     const tel = document.getElementById('retre-phone').value.trim();
     const metod = document.getElementById('retre-method').value;
     const montanInput = document.getElementById('retre-amount').value;
     const montan = parseFloat(montanInput);
 
-    // Tcheke si userData egziste, si se pa sa, nou kreye yon objè tanporè
-    const fName = (userData && userData.fullname) ? userData.fullname : "Kliyan Echanj Plus";
-    const aID = (userData && userData.arsID) ? userData.arsID : "ARS-PENDING";
-    const balansKounyea = (userData && userData.balance) ? userData.balance : 0;
+    // 1. Validasyon sekirite (Pwen 9, 14 nan lojik ou)
+    if (!non || !tel || !montanInput || isNaN(montan) || montan < 100) {
+        return alert("Tanpri ranpli tout chan yo kòrèkteman (Minimòm 100 HTG).");
+    }
 
+    // 2. Lojik Balans Reyèl (Pwen 10)
+    // Nou tcheke si kliyan an gen ase kòb anvan nou menm ouvri modal la
+    if (montan > userData.balance) {
+        return alert("Balans ou pa ase pou montan sa a. Ou gen: " + userData.balance.toFixed(2) + " HTG");
+    }
+
+    // 3. Prepare afichaj modal la
+    document.getElementById('retre-preview-data').innerHTML = `
+        <div class="preview-item">
+            <p><strong>Benefisyè:</strong> ${non}</p>
+            <p><strong>Metòd:</strong> ${metod}</p>
+            <p><strong>Telefòn:</strong> ${tel}</p>
+            <p style="color: #0052cc; font-size: 1.1em;"><strong>Montan:</strong> ${montan.toFixed(2)} HTG</p>
+        </div>
+    `;
+
+    // Louvri modal konfimasyon an
+    document.getElementById('modal-confirm-retre').classList.remove('hidden');
+};
+
+window.submitRetre = async () => {
+    const non = document.getElementById('retre-name').value.trim();
+    const tel = document.getElementById('retre-phone').value.trim();
+    const metod = document.getElementById('retre-method').value;
+    const montan = parseFloat(document.getElementById('retre-amount').value);
+
+    // Nou fèmen modal konfimasyon an anvan
     window.closeRetreConfirm();
 
     try {
         const transID = "RET-" + Date.now();
-        const nouvoBalans = balansKounyea - montan;
-
-        // Nou prepare mizajou a
-        const updates = {};
         
-        // 1. Mete nouvo balans lan
-        updates[`users/${auth.currentUser.uid}/balance`] = nouvoBalans;
-        
-        // 2. Kreye tranzaksyon an (Nou asire okenn valè pa 'undefined')
-        updates[`transactions/${transID}`] = {
+        // 4. Nou voye tranzaksyon an nan Firebase ak estati "En attente"
+        // REMAK: Nou PA diminye balans lan isit la. Se Admin k ap fè sa lè l valide.
+        await set(ref(db, `transactions/${transID}`), {
             uid: auth.currentUser.uid,
-            arsID: aID,
-            fullname: fName, // Sa a p'ap 'undefined' ankò
+            arsID: userData.arsID,
+            fullname: userData.fullname,
             type: "Retrè",
             method: metod,
             phone: tel,
-            receiver: nonResevwa,
+            receiver: non,
             amount: montan,
             status: "En attente",
             timestamp: serverTimestamp()
-        };
+        });
 
-        // Voye nan Firebase
-        await update(ref(db), updates);
+        // 5. Montre modal siksè a (Pwen 19)
+        document.getElementById('modal-success').classList.remove('hidden');
 
-        // Montre Siksè
-        const successModal = document.getElementById('modal-success');
-        if (successModal) {
-            successModal.classList.remove('hidden');
-            setTimeout(() => {
-                successModal.classList.add('hidden');
-                document.getElementById('retre-name').value = "";
-                document.getElementById('retre-phone').value = "";
-                document.getElementById('retre-amount').value = "";
-                showPage('paj-akey');
-            }, 5000);
-        }
+        // 6. Netwaye fòm nan
+        document.getElementById('retre-name').value = "";
+        document.getElementById('retre-phone').value = "";
+        document.getElementById('retre-amount').value = "";
 
-    } catch (e) {
-        console.error("Erè detay:", e);
-        alert("❌ Tranzaksyon an echwe: " + e.message);
+        // 7. Retounen nan paj akèy apre 5 segond
+        setTimeout(() => {
+            document.getElementById('modal-success').classList.add('hidden');
+            showPage('paj-akey', document.querySelector('.nav-item')); 
+        }, 5000);
+
+    } catch (erè) {
+        console.error("Erè Firebase:", erè);
+        alert("Yon erè rive. Verifye koneksyon entènèt ou.");
     }
 };
-    
 
-window.filterHistory = function(kategori, btn) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    if(btn) btn.classList.add('active');
-    let filtered = (kategori === 'tout') ? cacheTransactions : 
-                   (kategori === 'Succès') ? cacheTransactions.filter(t => t.status === 'Succès' || t.status === 'Valide') :
-                   (kategori === 'Anulé') ? cacheTransactions.filter(t => t.status === 'Anulé' || t.status === 'Echoué') :
-                   cacheTransactions.filter(t => t.type === kategori);
-    renderHistoryList(filtered);
+// Fonksyon pou fèmen modal la si kliyan an klike ANILE
+window.closeRetreConfirm = () => {
+    document.getElementById('modal-confirm-retre').classList.add('hidden');
 };
+    
 
 // ==========================================
 // VI. NAVIGASYON & UI
