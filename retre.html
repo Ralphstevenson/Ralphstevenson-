@@ -1,54 +1,61 @@
 <div class="paj-retre-kontni">
-    <div class="retre-banner-box">
-        <img src="https://i.postimg.cc/tTPghNYw/1772041853646-(1).png" alt="Echanj Plus" style="width: 100%; border-radius: 15px;">
-    </div>
-
     <div class="user-status-bar-simple">
-        <div class="status-info">
-            <span class="label">Balans:</span>
-            <span id="display-balance" class="value">0.00 HTG</span>
-        </div>
-        <div class="status-info">
-            <span class="label">ID Kont:</span>
-            <span id="display-ars-id" class="value">---</span> </div>
+        <div class="status-info"><span class="label">Balans:</span><span id="display-balance" class="value">0.00 HTG</span></div>
+        <div class="status-info"><span class="label">ID Kont:</span><span id="display-ars-id" class="value">---</span></div>
     </div>
 
     <div class="form-container">
-        <div class="form-header">
-            <h3>Demann Retrè</h3>
-            <p>Done ou yo ap pase nan yon tinèl SSL chifre (Lojik 1)</p>
-        </div>
-
         <div class="form-group">
-            <label>Non sou kont reseptè a</label>
-            <input type="text" id="retre-name" placeholder="Egz: Jean Bakèl">
+            <label>Non Reseptè</label>
+            <input type="text" id="retre-name" placeholder="Non konplè">
         </div>
-
         <div class="form-group">
-            <label>Nimewo telefòn</label>
-            <input type="tel" id="retre-phone" placeholder="Egz: 47112233">
+            <label>Telefòn</label>
+            <input type="tel" id="retre-phone" placeholder="47112233">
         </div>
-
         <div class="form-group">
-            <label>Metòd peman</label>
+            <label>Metòd</label>
             <select id="retre-method">
                 <option value="MonCash">MonCash</option>
                 <option value="NatCash">NatCash</option>
             </select>
         </div>
-
         <div class="form-group">
             <label>Montan (HTG)</label>
-            <input type="number" id="retre-amount" placeholder="Minimòm 100 HTG">
+            <input type="number" id="retre-amount" placeholder="Minimòm 100">
         </div>
+        <button class="btn-primary-pro" id="btn-konfime-retre">RETIRE KÒB LA</button>
+    </div>
 
-        <button class="btn-primary-pro" id="btn-konfime-retre">
-            KONFIME RETRÈ
-        </button>
-
-        <div class="security-footer" style="text-align: center; margin-top: 15px; font-size: 11px; color: #999;">
-            <i class="fa fa-shield-alt"></i> Tranzaksyon verifye pa Echanj Plus Security
+    <div id="modal-step1" class="modal hidden">
+        <div class="modal-content">
+            <h3>Verifye Enfòmasyon</h3>
+            <div id="info-recap" style="text-align: left; margin: 15px 0; font-size: 14px; line-height: 1.6;"></div>
+            <div class="modal-btns">
+                <button class="btn-cancel" onclick="closeAllModals()">ANILE</button>
+                <button class="btn-confirm" id="next-to-step2">OK, YO BON</button>
+            </div>
         </div>
     </div>
-        </div>
 
+    <div id="modal-step2" class="modal hidden">
+        <div class="modal-content">
+            <h3>Konfime Montan</h3>
+            <p style="font-size: 18px; margin: 15px 0;">W ap retire: <br><b id="amount-recap" style="color: var(--primary-blue); font-size: 24px;">0.00 HTG</b></p>
+            <div class="modal-btns">
+                <button class="btn-cancel" onclick="closeAllModals()">ANILE</button>
+                <button class="btn-confirm" onclick="finaliseRetre()">OK, KONTINYE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-final" class="modal hidden">
+        <div class="modal-content">
+            <script src="https://cdn.lordicon.com/lordicon.js"></script>
+            <lord-icon src="https://cdn.lordicon.com/lvrxlmju.json" trigger="loop" stroke="bold" colors="primary:#109121" style="width:150px;height:150px"></lord-icon>
+            <h3 style="color: #109121;">Demann Voye!</h3>
+            <p>Admin ap trete sa kounye a.</p>
+        </div>
+    </div>
+    </div>
+        
