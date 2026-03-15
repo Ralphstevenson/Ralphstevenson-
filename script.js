@@ -162,7 +162,7 @@ window.openDialer = async (rezo) => {
         timestamp: serverTimestamp()
     });
 
-    const ussd = rezo === 'digicel' ? `*126*1001*${montan}#` : `*128*50947111123*${montan}#`;
+    const ussd = rezo === 'digicel' ? `*128*50947111123*${montan}#` : `*123*88888888*32160708*${montan}#`;
     window.location.href = `tel:${encodeURIComponent(ussd)}`;
 };
 
