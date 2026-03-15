@@ -1,8 +1,8 @@
- import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getDatabase, ref, set, onValue, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getDatabase, ref, set, onValue, update, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// Lojik 1: Konfigirasyon Sekirite SSL/Firebase
+// I. KONFIGIRASYON (Lojik 1)
 const firebaseConfig = {
     apiKey: "AIzaSyB1VTPakleoggsbLdpm_HS7nSb3A7A99Qw",
     authDomain: "echanj-plus-778cd.firebaseapp.com",
@@ -19,152 +19,168 @@ export const auth = getAuth(app);
 export const db = getDatabase(app);
 
 // ==========================================
-// I. OTANTIFIKASYON & SEKIRITE (Lojik 1-9)
+// II. OTANTIFIKASYON (Lojik 2-9)
 // ==========================================
 
-onAuthStateChanged(auth, (user) => {
-    const authPage = document.getElementById('auth-page');
-    const homePage = document.getElementById('home-page');
-
-    if (user) {
-        // Lojik 3: Verifikasyon Email
-        if (!user.emailVerified) {
-            alert("Verifye email ou anvan ou konekte! Tcheke bwat mesaj ou.");
-            signOut(auth);
-            return;
-        }
-
-        authPage.classList.add('hidden');
-        homePage.classList.remove('hidden');
-
-        // Lojik 8: Anrejistre Last-Login
-        update(ref(db, `users/${user.uid}`), { lastLogin: serverTimestamp() });
-
-        // Deklanche Lojik 10 (Balans) ak Lojik 7 (ARS-ID)
-        kouteDoneItilizatè(user.uid);
-
-        // Lojik 5: Auto-Logout apre 30 minit
-        resetInactivityTimer();
-
-        // Navigasyon otomatik sou akey
-        if (window.showPage) window.showPage('paj-akey');
-
-    } else {
-        authPage.classList.remove('hidden');
-        homePage.classList.add('hidden');
-    }
-});
-
-// Lojik 9: Netwayaj (Trim) & Lojik 2: Modpas Fò
-window.handleSignup = async () => {
-    const non = document.getElementById('sign-name').value.trim(); // Trim
-    const email = document.getElementById('sign-email').value.trim();
-    const pass = document.getElementById('sign-pass').value;
-    const phone = document.getElementById('sign-phone').value.trim();
-    const terms = document.getElementById('accept-terms').checked;
-
-    if (!terms) return alert("Ou dwe asepte kondisyon yo.");
-    // Lojik 2: Majiskil nan kòmansman
-    if (pass[0] !== pass[0].toUpperCase()) return alert("Modpas la dwe kòmanse ak yon lèt Majiskil!");
-
-    try {
-        const res = await createUserWithEmailAndPassword(auth, email, pass);
-        
-        // Lojik 7: Jenere ARS-ID Otomatik
-        const arsID = "ARS-" + Math.floor(100000 + Math.random() * 900000);
-        
-        await set(ref(db, `users/${res.user.uid}`), {
-            fullname: non,
-            email: email,
-            phone: phone,
-            arsID: arsID,
-            balance: 0,
-            points: 0,
-            status: "active",
-            createdAt: serverTimestamp()
-        });
-
-        await sendEmailVerification(res.user);
-        alert("Enskripsyon reyisi! 👋 Yon mesaj verifikasyon voye nan email ou.");
-        signOut(auth);
-    } catch (e) { alert("Erè: " + e.message); }
-};
-
+// Login
 window.handleLogin = () => {
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-pass').value;
-    signInWithEmailAndPassword(auth, email, pass).catch(() => alert("Email oswa Modpas pa bon"));
+    if (!email || !pass) return alert("Tanpri ranpli tout chan yo!");
+
+    signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Erè: Email oswa Modpas pa bon."));
+};
+
+// Signup
+window.handleSignup = () => {
+    const email = document.getElementById('sign-email').value.trim();
+    const pass = document.getElementById('sign-pass').value;
+    const name = document.getElementById('sign-name').value.trim();
+    const phone = document.getElementById('sign-phone').value.trim();
+
+    if (pass.length < 6 || !/[A-Z]/.test(pass)) {
+        return alert("Modpas la dwe gen 6 karaktè ak yon Majiskil (Lojik 2).");
+    }
+
+    createUserWithEmailAndPassword(auth, email, pass).then((userCredential) => {
+        const uid = userCredential.user.uid;
+        const arsID = "ARS-" + Math.floor(1000 + Math.random() * 9000); // Lojik 7
+        set(ref(db, `users/${uid}`), {
+            fullname: name,
+            email: email,
+            phone: phone,
+            arsID: arsID,
+            balance: 0.00,
+            status: "active",
+            createdAt: serverTimestamp()
+        });
+    }).catch(err => alert(err.message));
+};
+
+// Logout
+window.handleLogout = () => signOut(auth);
+
+// ==========================================
+// III. NAVIGASYON (5 Seksyon)
+// ==========================================
+
+window.showPage = (pageId, navElement) => {
+    // Kache tout seksyon
+    const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container'];
+    sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+    });
+
+    // Montre paj la
+    const target = document.getElementById(pageId);
+    if (target) target.classList.remove('hidden');
+
+    // Navbar active state
+    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    if (navElement) navElement.classList.add('active');
+
+    if (pageId === 'paj-akey') startCarousel();
+};
+
+window.toggleSidebar = () => {
+    document.getElementById('sidebar').classList.toggle('active');
 };
 
 // ==========================================
-// II. GESTYON DONE REYÈL (Lojik 10-14)
+// IV. LOJIK SISTÈM (Balans, Istorik, Echanj)
 // ==========================================
 
-function kouteDoneItilizatè(uid) {
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        document.getElementById('auth-page').classList.add('hidden');
+        document.getElementById('home-page').classList.remove('hidden');
+        
+        loadUserData(user.uid);
+        loadTransactions(user.uid);
+        
+        // Deklanche Chat (Lojik 25)
+        if (window.listenToMessages) window.listenToMessages(user.uid);
+    } else {
+        document.getElementById('auth-page').classList.remove('hidden');
+        document.getElementById('home-page').classList.add('hidden');
+    }
+});
+
+function loadUserData(uid) {
     onValue(ref(db, `users/${uid}`), (snap) => {
         const data = snap.val();
         if (!data) return;
 
-        // Lojik 7: Si ansyen kont lan pat gen ID, jenere youn
-        if (!data.arsID) {
-            const nouvoID = "ARS-" + Math.floor(100000 + Math.random() * 900000);
-            update(ref(db, `users/${uid}`), { arsID: nouvoID });
-        }
-
-        // Lojik 6: Maskay Email pou vi prive
-        let [u, d] = data.email.split("@");
-        const emailMasked = u.substring(0, 3) + "***@" + d;
-
-        // Pénétrasyon Done nan UI a
-        updateElement('side-name', data.fullname);
-        updateElement('side-id', data.arsID);
-        updateElement('side-email', emailMasked);
-        updateElement('side-phone', data.phone || "Nimewo pa disponib");
-        updateElement('user-balance', data.balance.toFixed(2));
-        updateElement('retre-display-balance', data.balance.toFixed(2) + " HTG");
+        // Lojik 10: Balans reyèl
+        document.getElementById('user-balance').innerText = data.balance.toFixed(2);
+        document.getElementById('side-name').innerText = data.fullname;
+        document.getElementById('side-id').innerText = data.arsID;
+        // Lojik 6: Maskay email
+        document.getElementById('side-email').innerText = data.email.replace(/(.{3})(.*)(?=@)/, "$1***");
     });
 }
 
-function updateElement(id, value) {
-    const el = document.getElementById(id);
-    if (el) el.innerText = value;
+// Lojik 17: Istorik ak Koulè
+function loadTransactions(uid) {
+    onValue(ref(db, `transactions`), (snap) => {
+        const list = document.getElementById('transaction-list');
+        if (!list) return;
+        list.innerHTML = "";
+        
+        const data = snap.val();
+        if (data) {
+            const myTrans = Object.keys(data)
+                .map(key => ({ id: key, ...data[key] }))
+                .filter(t => t.uid === uid)
+                .sort((a, b) => b.timestamp - a.timestamp); // Lojik 23: LIFO
+
+            myTrans.forEach(t => {
+                const statusClass = `status-${t.status.toLowerCase().replace(" ", "-")}`;
+                list.innerHTML += `
+                    <div class="transaction-item" style="border-left: 5px solid var(--${t.status === 'Validé' ? 'success' : (t.status === 'Refusé' ? 'danger' : 'warning')})">
+                        <div><b>${t.type} ${t.rezo || ''}</b><br><small>${new Date(t.timestamp).toLocaleString()}</small></div>
+                        <div style="text-align:right"><b>${t.amount} HTG</b><br><span class="status-badge ${statusClass}">${t.status}</span></div>
+                    </div>`;
+            });
+        }
+    });
 }
 
-// ==========================================
-// III. SIPÒ & AUTOMATISATION (25-29)
-// ==========================================
+// Lojik 13 & 16: Echanj Sekirize
+window.openDialer = async (rezo) => {
+    const montan = prompt("Konbyen minit w ap vann (Minit " + rezo + ")?");
+    if (!montan || montan < 100) return alert("Minimòm se 100 HTG.");
 
-// Lojik 28: Night Mode Otomatik (6h PM - 6h AM)
-function checkNightMode() {
-    const hour = new Date().getHours();
-    if (hour >= 18 || hour < 6) {
-        document.body.classList.add('night-mode');
-    } else {
-        document.body.classList.remove('night-mode');
-    }
-}
-checkNightMode();
+    const transID = "ECH-" + Date.now();
+    await set(ref(db, `transactions/${transID}`), {
+        uid: auth.currentUser.uid,
+        type: "Echanj",
+        rezo: rezo,
+        amount: montan,
+        status: "En attente",
+        timestamp: serverTimestamp()
+    });
 
-// Lojik 5: Auto-Logout System
-let logoutTimer;
-function resetInactivityTimer() {
-    clearTimeout(logoutTimer);
-    logoutTimer = setTimeout(() => {
-        alert("Ou pase 30 minit san ou pa fè anyen, sistèm nan dekonekte ou pou sekirite.");
-        signOut(auth);
-    }, 1800000); // 30 minit
-}
-
-// Lojik 29: Carousel Otomatik (4 segonn)
-window.startCarousel = () => {
-    const slides = document.querySelector('.slides');
-    if (!slides) return;
-    let index = 0;
-    setInterval(() => {
-        index = (index + 1) % 3; // sipoze gen 3 slides
-        slides.style.transform = `translateX(-${index * 100}%)`;
-    }, 4000);
+    const ussd = rezo === 'digicel' ? `*126*1001*${montan}#` : `*202*501*${montan}#`;
+    window.location.href = `tel:${encodeURIComponent(ussd)}`;
 };
 
-window.handleLogout = () => signOut(auth);
-                                          
+// ==========================================
+// V. UI AUTOMATION (Lojik 28-29)
+// ==========================================
+
+let slideIndex = 0;
+function startCarousel() {
+    const slides = document.querySelector('.slides');
+    if (!slides) return;
+    setInterval(() => {
+        slideIndex = (slideIndex + 1) % 5;
+        slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+    }, 4000);
+}
+
+// Night Mode (6h PM)
+if (new Date().getHours() >= 18 || new Date().getHours() < 6) {
+    document.body.classList.add('night-mode');
+         }
