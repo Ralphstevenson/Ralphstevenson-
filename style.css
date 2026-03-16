@@ -131,6 +131,110 @@ body {
     cursor: pointer;
 }
 
+.pro-footer {
+    background: #ffffff;
+    border-top: 1px solid #e1e4e8;
+    padding: 60px 25px 120px 25px; /* Espas pou navbar */
+    color: #172b4d;
+    font-family: 'Inter', sans-serif;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 15px;
+    color: #0052cc;
+}
+
+.footer-logo span { color: #00d1ff; }
+
+.brand-mission {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #6b778c;
+    max-width: 300px;
+}
+
+.certification-badges {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.badge {
+    font-size: 11px;
+    background: #f4f5f7;
+    padding: 5px 12px;
+    border-radius: 50px;
+    color: #42526e;
+    font-weight: 600;
+    border: 1px solid #dfe1e6;
+}
+
+.footer-nav-links h3, .footer-contact h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #091e42;
+}
+
+.footer-nav-links ul { list-style: none; padding: 0; }
+.footer-nav-links ul li { margin-bottom: 12px; }
+
+.footer-nav-links ul li a {
+    text-decoration: none;
+    color: #6b778c;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.footer-nav-links ul li a:hover { color: #0052cc; }
+
+.contact-link {
+    display: inline-block;
+    background: #25d366;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 15px 0;
+}
+
+.working-hours { font-size: 12px; color: #36b37e; font-weight: 600; }
+
+.footer-legal {
+    margin-top: 50px;
+    padding-top: 25px;
+    border-top: 1px solid #ebecf0;
+    text-align: center;
+}
+
+.legal-content p { font-size: 12px; color: #a5adba; }
+
+.legal-links { margin-top: 10px; font-size: 11px; color: #a5adba; }
+
+/* Responsive pou mobil */
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .brand-mission { max-width: 100%; }
+    .certification-badges { justify-content: center; }
+                }
+
+
 /* ==========================================
    III. CAROUSEL SLIDER (Lojik 29)
    ========================================== */
