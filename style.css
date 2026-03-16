@@ -399,7 +399,7 @@ body.night-mode .notice-text p {
 /* Sidebar */
 .sidebar-pro {
     position: fixed;
-    left: -280px;
+    left:0px;
     top: 0;
     width: 280px;
     height: 100%;
