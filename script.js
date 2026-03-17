@@ -209,28 +209,47 @@ window.toggleSidebar = () => {
     document.getElementById('sidebar').classList.toggle('active');
 };
 
-
-//===========================================
-// kalkilatè Otomatik 
-//===========================================
-
 window.kalkileEchanj = () => {
-    const montan = document.getElementById('input-montan').value;
+    const montanVal = document.getElementById('input-montan').value;
     const freEl = document.getElementById('res-fre');
     const netEl = document.getElementById('res-net');
     
-    if (montan > 0) {
-        const pousantaj = 16.5 / 100;
-        const frè = montan * pousantaj;
-        const totalNèt = montan - frè;
+    const montan = parseFloat(montanVal);
+
+    if (montan && montan >= 10) {
+        const fre = montan * 0.165;
+        const net = montan - fre;
         
-        freEl.innerText = `- ${frè.toFixed(2)} HTG`;
-        netEl.innerText = `${totalNèt.toFixed(2)} HTG`;
+        freEl.innerText = `- ${fre.toFixed(2)} HTG`;
+        netEl.innerText = `${net.toFixed(2)} HTG`;
     } else {
-        freEl.innerText = "- 0.00 HTG";
+        freEl.innerText = "0.00 HTG";
         netEl.innerText = "0.00 HTG";
     }
 };
+
+// ==========================≠==
+// kalkilatè Otomatik 
+// =============================
+window.kalkileEchanj = () => {
+    const montanVal = document.getElementById('input-montan').value;
+    const freEl = document.getElementById('res-fre');
+    const netEl = document.getElementById('res-net');
+    
+    const montan = parseFloat(montanVal);
+
+    if (montan && montan >= 10) {
+        const fre = montan * 0.165;
+        const net = montan - fre;
+        
+        freEl.innerText = `- ${fre.toFixed(2)} HTG`;
+        netEl.innerText = `${net.toFixed(2)} HTG`;
+    } else {
+        freEl.innerText = "0.00 HTG";
+        netEl.innerText = "0.00 HTG";
+    }
+};
+
 
 // ==========================================
 // IV. LOJIK SISTÈM (DONE YO)
