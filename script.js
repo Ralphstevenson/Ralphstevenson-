@@ -209,6 +209,29 @@ window.toggleSidebar = () => {
     document.getElementById('sidebar').classList.toggle('active');
 };
 
+
+//===========================================
+// kalkilatè Otomatik 
+//===========================================
+
+window.kalkileEchanj = () => {
+    const montan = document.getElementById('input-montan').value;
+    const freEl = document.getElementById('res-fre');
+    const netEl = document.getElementById('res-net');
+    
+    if (montan > 0) {
+        const pousantaj = 16.5 / 100;
+        const frè = montan * pousantaj;
+        const totalNèt = montan - frè;
+        
+        freEl.innerText = `- ${frè.toFixed(2)} HTG`;
+        netEl.innerText = `${totalNèt.toFixed(2)} HTG`;
+    } else {
+        freEl.innerText = "- 0.00 HTG";
+        netEl.innerText = "0.00 HTG";
+    }
+};
+
 // ==========================================
 // IV. LOJIK SISTÈM (DONE YO)
 // ==========================================
