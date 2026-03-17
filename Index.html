@@ -120,27 +120,6 @@
                     <div class="action-content"><i class="fa fa-rotate"></i> <b>Kòmanse yon echanj</b></div>
                     <i class="fa fa-chevron-right"></i>
                 </div>
-
-<div class="kalkilatris-box">
-    <label>Konbe minit w ap voye?</label>
-    <div class="input-calc">
-        <input type="number" id="input-montan" placeholder="Ex: 500" oninput="kalkileEchanj()">
-        <span>HTG</span>
-    </div>
-    
-    <div class="rezilta-calc">
-        <div class="res-row">
-            <span>Frè Operasyon (16.5%):</span>
-            <span id="res-fre" class="minus">- 0.00 HTG</span>
-        </div>
-        <hr>
-        <div class="res-row total">
-            <span>W ap resevwa:</span>
-            <span id="res-net">0.00 HTG</span>
-        </div>
-    </div>
-</div>
-                
                 
                 <footer class="pro-footer">
     <div class="footer-grid">
@@ -199,6 +178,30 @@
             </section>
 
             <section id="paj-echanj" class="hidden">
+                
+    <h3 class="page-title">Echanj Minit</h3>
+    <div class="kalkilatris-box">
+        <label>Montan pou konvèti</label>
+        <div class="input-calc">
+            <input type="number" id="input-montan" placeholder="0.00" oninput="kalkileEchanj()">
+            <span>HTG</span>
+        </div>
+        
+        <div class="rezilta-calc">
+            <div class="res-row">
+                <span>Frè sèvis (16.5%)</span>
+                <span id="res-fre" class="minus">0.00 HTG</span>
+            </div>
+            <div class="res-row total-row">
+                <span>W ap resevwa nèt:</span>
+                <b id="res-net">0.00 HTG</b>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="page-title" style="font-size: 14px; margin-top: 10px;">Chwazi Rezo</h3>
+                </section>
+                
                 <h3 class="page-title">Chwazi Rezo</h3>
                 <div class="provider-card" onclick="openDialer('digicel')">
                     <div class="provider-info">
