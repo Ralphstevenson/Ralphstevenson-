@@ -19,39 +19,43 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
+// ====================================
+// MODIFIKASYON INTRO AK TRANZISYON
+// ====================================
+window.addEventListener('load', () => {
+    const splash = document.getElementById('splash-screen');
+    const authPage = document.getElementById('auth-page');
+    const homePage = document.getElementById('home-page');
 
+    // 1. Nou tann 10 segond fiks
+    setTimeout(() => {
+        if (splash) {
+            // 2. Fennen splash la
+            splash.style.opacity = '0';
+            splash.style.transition = 'opacity 1s ease';
+
+            // 3. Retire l nèt apre 1s pou l pa bloke ekran an
+            setTimeout(() => {
+                splash.style.display = 'none';
+
+                // 4. DESIDE KI PAJ POU MONTRE
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        homePage.classList.remove('hidden');
+                        authPage.classList.add('hidden');
+                    } else {
+                        authPage.classList.remove('hidden');
+                        homePage.classList.add('hidden');
+                    }
+                });
+            }, 1000);
+        }
+    }, 10000); // 10 Segond
+});
 
 // ==========================================
 // II. OTANTIFIKASYON (LOGIN / SIGNUP)
 // ==========================================
-window.addEventListener('load', () => {
-    const splash = document.getElementById('splash-screen');
-    const authPage = document.getElementById('auth-page');
-
-    // 1. Nou tann 10 segond pou Intro a fini
-    setTimeout(() => {
-        if (splash) {
-            // 2. Fè l fennen dousman
-            splash.style.opacity = '0';
-            splash.style.transition = 'opacity 1s ease';
-
-            // 3. RETIRE L NÈT nan paj la apre 1 segond (lè fade la fini)
-            setTimeout(() => {
-                splash.style.display = 'none'; // Sa a enpòtan pou l pa bloke auth la
-                
-                // 4. Montre paj Auth la si moun nan pa konekte
-                onAuthStateChanged(auth, (user) => {
-                    if (!user) {
-                        authPage.classList.remove('hidden');
-                    } else {
-                        document.getElementById('home-page').classList.remove('hidden');
-                    }
-                });
-            }, 1000); 
-        }
-    }, 10000); // 10 segond
-});
-
 
 // Login
 window.handleLogin = () => {
