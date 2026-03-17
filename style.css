@@ -526,56 +526,101 @@ body.night-mode .notice-text p {
 .slide { min-width: 100%; }
 .slide img { width: 100%; display: block; }
 
-
 /* ==========================================
-   Kalkilatè Otomatik 
-/* ======≠===================================
-
+   KALKILATÈ OTOMATIK (MODERN UI)
+   ========================================== */
 .kalkilatris-box {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    border: 1px solid #e0e0e0;
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 20px;
+    margin: 15px 0 25px 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
 }
 
+.kalkilatris-box label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #42526e;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Zòn kote moun nan ap tape chif la */
 .input-calc {
     display: flex;
     align-items: center;
-    background: white;
-    padding: 10px;
-    border-radius: 10px;
-    border: 2px solid #0052cc;
-    margin: 10px 0;
+    background: #f4f5f7;
+    padding: 12px 18px;
+    border-radius: 14px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.input-calc:focus-within {
+    border-color: #0052cc;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(0, 82, 204, 0.1);
 }
 
 .input-calc input {
     border: none;
+    background: transparent;
     outline: none;
     flex: 1;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 800;
+    color: #091e42;
+    width: 100%;
 }
 
+.input-calc span {
+    font-weight: 800;
+    color: #8993a4;
+    font-size: 14px;
+}
+
+/* Zòn rezilta a */
 .rezilta-calc {
-    margin-top: 15px;
+    margin-top: 20px;
+    background: #f9fbfd;
+    padding: 15px;
+    border-radius: 12px;
 }
 
 .res-row {
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
-    margin-bottom: 5px;
+    align-items: center;
+    margin-bottom: 8px;
 }
 
-.minus { color: #de350b; font-weight: 600; }
+.res-row span:first-child {
+    font-size: 13px;
+    color: #6b778c;
+    font-weight: 500;
+}
 
-.total {
-    font-size: 17px;
-    font-weight: 800;
-    color: #00875a;
+.minus {
+    color: #de350b;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.total-row {
+    border-top: 1px dashed #dfe1e6;
     margin-top: 10px;
+    padding-top: 10px;
 }
+
+.total-row b {
+    color: #00875a; /* Vè siksè */
+    font-size: 18px;
+    font-weight: 800;
+}
+
 
 /* ==========================================
    IV. ISTORIK (Lojik 17 & 22)
