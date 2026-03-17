@@ -21,24 +21,37 @@ export const auth = getAuth(app);
 export const db = getDatabase(app);
 
 
-// Jere disparisyon Intro a
-window.addEventListener('load', () => {
-    const splash = document.getElementById('splash-screen');
-
-    // Apre 10 segond, nou kache Splash la
-    setTimeout(() => {
-        if (splash) {
-            splash.classList.add('splash-hidden');
-            
-            // Isit la, sistèm nan ap otomatikman montre paj Auth la 
-            // depi onAuthStateChanged la fin detekte si moun nan pa konekte
-        }
-    }, 10000); // 10000ms = 10 segond
-});
-
 // ==========================================
 // II. OTANTIFIKASYON (LOGIN / SIGNUP)
 // ==========================================
+window.addEventListener('load', () => {
+    const splash = document.getElementById('splash-screen');
+    const authPage = document.getElementById('auth-page');
+
+    // 1. Nou tann 10 segond pou Intro a fini
+    setTimeout(() => {
+        if (splash) {
+            // 2. Fè l fennen dousman
+            splash.style.opacity = '0';
+            splash.style.transition = 'opacity 1s ease';
+
+            // 3. RETIRE L NÈT nan paj la apre 1 segond (lè fade la fini)
+            setTimeout(() => {
+                splash.style.display = 'none'; // Sa a enpòtan pou l pa bloke auth la
+                
+                // 4. Montre paj Auth la si moun nan pa konekte
+                onAuthStateChanged(auth, (user) => {
+                    if (!user) {
+                        authPage.classList.remove('hidden');
+                    } else {
+                        document.getElementById('home-page').classList.remove('hidden');
+                    }
+                });
+            }, 1000); 
+        }
+    }, 10000); // 10 segond
+});
+
 
 // Login
 window.handleLogin = () => {
