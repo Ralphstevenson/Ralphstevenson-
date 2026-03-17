@@ -20,6 +20,22 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 
+
+// Jere disparisyon Intro a
+window.addEventListener('load', () => {
+    const splash = document.getElementById('splash-screen');
+
+    // Apre 10 segond, nou kache Splash la
+    setTimeout(() => {
+        if (splash) {
+            splash.classList.add('splash-hidden');
+            
+            // Isit la, sistèm nan ap otomatikman montre paj Auth la 
+            // depi onAuthStateChanged la fin detekte si moun nan pa konekte
+        }
+    }, 10000); // 10000ms = 10 segond
+});
+
 // ==========================================
 // II. OTANTIFIKASYON (LOGIN / SIGNUP)
 // ==========================================
