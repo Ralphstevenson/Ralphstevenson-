@@ -325,6 +325,36 @@ body.night-mode .notice-text p {
                 }
 
 
+.info-kalkil {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(0, 82, 204, 0.05); /* Yon ti ble trè pal */
+    padding: 15px;
+    border-radius: 12px;
+    border-left: 4px solid #0052cc;
+    margin-bottom: 15px;
+}
+
+.info-icon {
+    font-size: 24px;
+    color: #0052cc;
+}
+
+.info-text h4 {
+    margin: 0;
+    font-size: 15px;
+    color: #091e42;
+    font-weight: 700;
+}
+
+.info-text p {
+    margin: 5px 0 0 0;
+    font-size: 12.5px;
+    color: #42526e;
+    line-height: 1.4;
+}
+
 /* ==========================================
    CSS SANT NOTIFIKASYON - ECHANJ PLUS
    ========================================== */
