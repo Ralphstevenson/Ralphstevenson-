@@ -526,6 +526,57 @@ body.night-mode .notice-text p {
 .slide { min-width: 100%; }
 .slide img { width: 100%; display: block; }
 
+
+/* ==========================================
+   Kalkilatè Otomatik 
+/* ======≠===================================
+
+.kalkilatris-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.input-calc {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #0052cc;
+    margin: 10px 0;
+}
+
+.input-calc input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.rezilta-calc {
+    margin-top: 15px;
+}
+
+.res-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.minus { color: #de350b; font-weight: 600; }
+
+.total {
+    font-size: 17px;
+    font-weight: 800;
+    color: #00875a;
+    margin-top: 10px;
+}
+
 /* ==========================================
    IV. ISTORIK (Lojik 17 & 22)
    ========================================== */
