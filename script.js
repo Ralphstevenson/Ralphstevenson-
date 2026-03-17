@@ -63,6 +63,102 @@ window.handleSignup = () => {
 window.handleLogout = () => signOut(auth);
 
 // ==========================================
+// SISTÈM NOTIFIKASYON SEPARE
+// ==========================================
+
+let tabKouran = 'koneksyon';
+let konteNotif = 0;
+
+// Fonksyon pou ouvri/fèmen panèl la
+window.toggleNotifPanel = () => {
+    const panel = document.getElementById('notif-panel');
+    panel.classList.toggle('active');
+    
+    // Lè panèl la ouvri, nou efase nimewo wouj la
+    if (panel.classList.contains('active')) {
+        konteNotif = 0;
+        updateBadgeUI();
+    }
+};
+
+// Chanje tab (Koneksyon / Tranzaksyon)
+window.switchNotifTab = (tabName) => {
+    tabKouran = tabName;
+    document.getElementById('tab-koneksyon').classList.toggle('active', tabName === 'koneksyon');
+    document.getElementById('tab-transak').classList.toggle('active', tabName === 'transak');
+    loadNotifFromFirebase();
+};
+
+function updateBadgeUI() {
+    const badge = document.getElementById('notif-badge');
+    badge.innerText = konteNotif;
+    badge.classList.toggle('hidden', konteNotif === 0);
+}
+
+// Fonksyon TEST pou voye yon notifikasyon kounye a
+window.voyeNotifTest = async () => {
+    const uid = auth.currentUser?.uid;
+    if (!uid) return alert("Ou dwe konekte anvan!");
+
+    // Nou voye yon mesaj tès nan tab "transak" la
+    const testRef = push(ref(db, `users/${uid}/notifications/transak`));
+    await set(testRef, {
+        msg: "Bravo! Test ou a mache. Tranzaksyon ou validé! ✅",
+        timestamp: Date.now()
+    });
+
+    konteNotif++;
+    updateBadgeUI();
+    alert("Notifikasyon voye! Tcheke tab Tranzaksyon an.");
+};
+
+// Li done yo nan Firebase
+function loadNotifFromFirebase() {
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+
+    const container = document.getElementById('notif-content');
+    
+    onValue(ref(db, `users/${uid}/notifications/${tabKouran}`), (snap) => {
+        container.innerHTML = "";
+        const data = snap.val();
+
+        if (data) {
+            // Ranje notifikasyon yo (Pi nèf anlè)
+            const sortedNotifs = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+            
+            sortedNotifs.forEach(n => {
+                const icon = tabKouran === 'koneksyon' ? 'fa-shield-check' : 'fa-receipt';
+                container.innerHTML += `
+                    <div class="notif-item">
+                        <i class="fa ${icon}"></i>
+                        <div class="notif-info">
+                            <p>${n.msg}</p>
+                            <small>${new Date(n.timestamp).toLocaleString()}</small>
+                        </div>
+                    </div>`;
+            });
+        } else {
+            container.innerHTML = `<p class="empty-msg">Pa gen mesaj nan ${tabKouran}.</p>`;
+        }
+    });
+}
+
+// Lè moun nan konekte, nou aktive sistèm nan
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // Chak login, nou kreye yon notif sekirite
+        const loginRef = push(ref(db, `users/${user.uid}/notifications/koneksyon`));
+        set(loginRef, {
+            msg: "Sistèm nan detekte yon koneksyon sou kont ou.",
+            timestamp: Date.now()
+        });
+        
+        loadNotifFromFirebase();
+    }
+});
+
+// ==========================================
 // III. NAVIGASYON (BRANCHMAN PWOFESYONÈL)
 // ==========================================
 
