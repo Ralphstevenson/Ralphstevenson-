@@ -158,6 +158,22 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
+
+window.handleLogout = () => {
+    // Yon ti mesaj konfimasyon pou sekirite
+    const konfime = confirm("Èske ou sèten ou vle kite sesyon an?");
+    
+    if (konfime) {
+        // Nou itilize objè auth Firebase ou te deja genyen an
+        signOut(auth).then(() => {
+            console.log("Itilizatè a dekonekte.");
+            // Paj la ap rafrechi epi onAuthStateChanged ap remete l nan login otomatikman
+        }).catch((error) => {
+            alert("Erè lè w ap dekonekte: " + error.message);
+        });
+    }
+};
+
 // ==========================================
 // III. NAVIGASYON (BRANCHMAN PWOFESYONÈL)
 // ==========================================
