@@ -44,36 +44,33 @@ body {
 .hidden { display: none !important; }
 
 
-/* --- STYLE INTRO --- */
+/* SPLASH STYLE SENP */
 .splash-container {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
-    background: #ffffff; /* Blan pa defo */
+    background: #ffffff;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000; /* Pou l pase anlè tout bagay */
-    transition: opacity 1s ease, visibility 1s;
+    align-items: center; /* Santre horizontal */
+    justify-content: center; /* Santre vertical */
+    z-index: 10000;
 }
 
-/* Si body a gen klas night-mode, background nan ap vin nwa */
+/* Lojik pou Night Mode nan Splash la */
 body.night-mode .splash-container {
     background: #000000;
 }
 
 .splash-logo-gold {
-    width: 220px; /* Lajè logo a */
+    width: 200px;
     height: auto;
-    margin-bottom: 30px;
-    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.2));
-    animation: fadeInZoom 1.5s ease-out;
+    margin-bottom: 25px;
 }
 
 .splash-loader {
-    width: 160px;
-    height: 3px;
+    width: 180px;
+    height: 4px;
     background: rgba(212, 175, 55, 0.1);
     border-radius: 10px;
     overflow: hidden;
@@ -82,35 +79,28 @@ body.night-mode .splash-container {
 .progress-bar {
     width: 0%;
     height: 100%;
-    background: #d4af37; /* Koulè lò */
-    animation: fillBar 10s linear forwards; /* 10 segond */
+    background: #d4af37;
+    animation: loadingProgress 10s linear forwards;
 }
 
 .splash-text {
-    margin-top: 15px;
     color: #d4af37;
-    font-size: 10px;
-    letter-spacing: 4px;
+    font-size: 11px;
+    letter-spacing: 3px;
     font-weight: 700;
+    margin-top: 15px;
 }
 
-/* Animasyon yo */
-@keyframes fillBar {
+@keyframes loadingProgress {
     from { width: 0%; }
     to { width: 100%; }
 }
 
-@keyframes fadeInZoom {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
+/* Klas pou kache eleman */
+.hidden {
+    display: none !important;
 }
 
-/* Klas pou kache intro a apre 10 segond */
-.splash-hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
 
 /* ==========================================
    I. OTANTIFIKASYON (Auth Page)
