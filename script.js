@@ -355,13 +355,8 @@ window.kalkileEchanj = () => {
     }
 };
 
-    
-//=================================
-// js pou patenè yo 
-//=================================
-
-// ==========================================
-// 1. LOJIK ADAPTIF (FENWA / KLERE)
+    // ==========================================
+// 1. LOJIK ADAPTIF (FENWA / KLERE) PATENÈ 
 // ==========================================
 function adaptTheme() {
     const partnerSection = document.getElementById('partnerSection');
@@ -431,4 +426,3 @@ document.addEventListener('DOMContentLoaded', () => {
         adaptTheme();
     });
 });
-                                              
