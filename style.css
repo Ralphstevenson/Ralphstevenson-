@@ -958,6 +958,7 @@ body.night-mode .menu-item:hover:not(.active) {
 /*** SE LA CSS PATENÈ YO KOMANSE /***
 
 /* --- 1. DEFINISYON KOULÈ (VARIABLES) --- */
+
 :root {
     --p-bg: #ffffff;
     --p-text: #091e42;
@@ -1122,4 +1123,5 @@ body.night-mode .menu-item:hover:not(.active) {
     .dynamic-text {
         font-size: 26px;
     }
-}
+   }
+   
