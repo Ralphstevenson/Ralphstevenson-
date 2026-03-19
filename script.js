@@ -356,3 +356,79 @@ window.kalkileEchanj = () => {
 };
 
     
+//=================================
+// js pou patenè yo 
+//=================================
+
+// ==========================================
+// 1. LOJIK ADAPTIF (FENWA / KLERE)
+// ==========================================
+function adaptTheme() {
+    const partnerSection = document.getElementById('partnerSection');
+    const hour = new Date().getHours();
+    
+    // Tcheke si sistèm itilizatè a sou Dark Mode
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // Lojik: Si se ant 6è nan aswè ak 6è nan maten OUBYEN si sistèm nan sou Dark
+    if (hour >= 18 || hour < 6 || prefersDark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        updateThemeUI(true);
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        updateThemeUI(false);
+    }
+}
+
+function updateThemeUI(isDark) {
+    const icon = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    
+    if (isDark) {
+        icon.className = "fas fa-moon";
+        label.innerText = "Mòd Nwit Aktif";
+    } else {
+        icon.className = "fas fa-sun";
+        label.innerText = "Mòd Lajounen Aktif";
+    }
+}
+
+// ==========================================
+// 2. ANIMASYON LÈ MOUN AP SCROLL (REVEAL)
+// ==========================================
+const revealPartners = () => {
+    const cards = document.querySelectorAll('.partner-item-pro');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = "1";
+                entry.target.style.transform = "translateY(0)";
+            }
+        });
+    }, { threshold: 0.2 });
+
+    cards.forEach(card => {
+        card.style.opacity = "0";
+        card.style.transform = "translateY(30px)";
+        card.style.transition = "all 0.8s ease-out";
+        observer.observe(card);
+    });
+};
+
+// ==========================================
+// 3. LANSE TOUT FONKSYON YO
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Inisyalize tèm nan
+    adaptTheme();
+    
+    // 2. Lanse animasyon aparisyon an
+    revealPartners();
+
+    // 3. Koute si itilizatè a chanje tèm nan sistèm li (Live Change)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        adaptTheme();
+    });
+});
+                                              
