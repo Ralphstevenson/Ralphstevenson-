@@ -1,6 +1,17 @@
-<div class="header-paj">
+
+    <div class="header-paj">
         <h3 class="page-title"><i class="fa fa-clock-rotate-left"></i> Istorik Tranzaksyon</h3>
-        <p class="subtitle-paj">Swiv tout aktivite echanj ak retrè ou yo isit la.</p>
+        <p class="subtitle-paj">Swiv tout aktivite ou yo isit la.</p>
+    </div>
+
+    <div class="filter-scroll">
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filterTrans('TOUT', this)">TOUT</button>
+            <button class="filter-btn" onclick="filterTrans('Echanj', this)">ECHANJ</button>
+            <button class="filter-btn" onclick="filterTrans('Retrè', this)">RETRÈ</button>
+            <button class="filter-btn" onclick="filterTrans('Echanj Echwe', this)">ECHANJ ECHWE</button>
+            <button class="filter-btn" onclick="filterTrans('Retrè Echwe', this)">RETRÈ ECHWE</button>
+        </div>
     </div>
 
     <div id="transaction-list" class="list-container">
@@ -8,4 +19,3 @@
             <i class="fa fa-spinner fa-spin"></i> Chaje done...
         </div>
     </div>
-
