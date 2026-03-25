@@ -72,4 +72,5 @@ function createCard(t) {
                 <span class="status-badge" style="background: ${color}20; color: ${color}">${t.status}</span>
             </div>
         </div>`;
-        }
+    }
+        
