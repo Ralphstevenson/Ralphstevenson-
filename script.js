@@ -24,16 +24,13 @@ export const db = getDatabase(app);
 // II. OTANTIFIKASYON (LOGIN / SIGNUP)
 // ==========================================
 
-// Login
 window.handleLogin = () => {
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-pass').value;
     if (!email || !pass) return alert("Tanpri ranpli tout chan yo!");
-
     signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Erè: Email oswa Modpas pa bon."));
 };
 
-// Signup
 window.handleSignup = () => {
     const email = document.getElementById('sign-email').value.trim();
     const pass = document.getElementById('sign-pass').value;
@@ -59,29 +56,27 @@ window.handleSignup = () => {
     }).catch(err => alert(err.message));
 };
 
-// Logout
-window.handleLogout = () => signOut(auth);
+window.handleLogout = () => {
+    if (confirm("Èske ou sèten ou vle kite sesyon an?")) {
+        signOut(auth);
+    }
+};
 
 // ==========================================
-// SISTÈM NOTIFIKASYON SEPARE
+// III. SISTÈM NOTIFIKASYON
 // ==========================================
-
 let tabKouran = 'koneksyon';
 let konteNotif = 0;
 
-// Fonksyon pou ouvri/fèmen panèl la
 window.toggleNotifPanel = () => {
     const panel = document.getElementById('notif-panel');
     panel.classList.toggle('active');
-    
-    // Lè panèl la ouvri, nou efase nimewo wouj la
     if (panel.classList.contains('active')) {
         konteNotif = 0;
         updateBadgeUI();
     }
 };
 
-// Chanje tab (Koneksyon / Tranzaksyon)
 window.switchNotifTab = (tabName) => {
     tabKouran = tabName;
     document.getElementById('tab-koneksyon').classList.toggle('active', tabName === 'koneksyon');
@@ -91,42 +86,22 @@ window.switchNotifTab = (tabName) => {
 
 function updateBadgeUI() {
     const badge = document.getElementById('notif-badge');
-    badge.innerText = konteNotif;
-    badge.classList.toggle('hidden', konteNotif === 0);
+    if (badge) {
+        badge.innerText = konteNotif;
+        badge.classList.toggle('hidden', konteNotif === 0);
+    }
 }
 
-// Fonksyon TEST pou voye yon notifikasyon kounye a
-window.voyeNotifTest = async () => {
-    const uid = auth.currentUser?.uid;
-    if (!uid) return alert("Ou dwe konekte anvan!");
-
-    // Nou voye yon mesaj tès nan tab "transak" la
-    const testRef = push(ref(db, `users/${uid}/notifications/transak`));
-    await set(testRef, {
-        msg: "Bravo! Test ou a mache. Tranzaksyon ou validé! ✅",
-        timestamp: Date.now()
-    });
-
-    konteNotif++;
-    updateBadgeUI();
-    alert("Notifikasyon voye! Tcheke tab Tranzaksyon an.");
-};
-
-// Li done yo nan Firebase
 function loadNotifFromFirebase() {
     const uid = auth.currentUser?.uid;
     if (!uid) return;
-
     const container = document.getElementById('notif-content');
     
     onValue(ref(db, `users/${uid}/notifications/${tabKouran}`), (snap) => {
         container.innerHTML = "";
         const data = snap.val();
-
         if (data) {
-            // Ranje notifikasyon yo (Pi nèf anlè)
             const sortedNotifs = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
-            
             sortedNotifs.forEach(n => {
                 const icon = tabKouran === 'koneksyon' ? 'fa-shield-check' : 'fa-receipt';
                 container.innerHTML += `
@@ -144,64 +119,26 @@ function loadNotifFromFirebase() {
     });
 }
 
-// Lè moun nan konekte, nou aktive sistèm nan
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // Chak login, nou kreye yon notif sekirite
-        const loginRef = push(ref(db, `users/${user.uid}/notifications/koneksyon`));
-        set(loginRef, {
-            msg: "Sistèm nan detekte yon koneksyon sou kont ou.",
-            timestamp: Date.now()
-        });
-        
-        loadNotifFromFirebase();
-    }
-});
-
-
-window.handleLogout = () => {
-    // Yon ti mesaj konfimasyon pou sekirite
-    const konfime = confirm("Èske ou sèten ou vle kite sesyon an?");
-    
-    if (konfime) {
-        // Nou itilize objè auth Firebase ou te deja genyen an
-        signOut(auth).then(() => {
-            console.log("Itilizatè a dekonekte.");
-            // Paj la ap rafrechi epi onAuthStateChanged ap remete l nan login otomatikman
-        }).catch((error) => {
-            alert("Erè lè w ap dekonekte: " + error.message);
-        });
-    }
-};
-
 // ==========================================
-// III. NAVIGASYON (BRANCHMAN PWOFESYONÈL)
+// IV. NAVIGASYON PWOFESYONÈL
 // ==========================================
-
 window.showPage = async (pageId, navElement) => {
-    // 1. Kache tout seksyon
     const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container'];
     sections.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
     });
 
-    // 2. Montre paj ki klike a
     const target = document.getElementById(pageId);
     if (target) target.classList.remove('hidden');
 
-    // 3. BRANCHMAN RETRÈ (Lojik Enjeksyònman)
-    if (pageId === 'paj-retre') {
-        if (window.enjekteHtmlRetre) {
-            await window.enjekteHtmlRetre();
-        }
-    }
+    if (pageId === 'paj-retre' && window.enjekteHtmlRetre) await window.enjekteHtmlRetre();
+    
+    // BRANCHMAN ISTORIK (Rele fonksyon ki nan istorik.js la)
+    if (pageId === 'paj-trans' && window.initIstorik) window.initIstorik();
 
-    // 4. Update klas active nan navbar
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
     if (navElement) navElement.classList.add('active');
-
-    // 5. Relanse Carousel si se akey
     if (pageId === 'paj-akey') startCarousel();
 };
 
@@ -209,40 +146,20 @@ window.toggleSidebar = () => {
     document.getElementById('sidebar').classList.toggle('active');
 };
 
-window.kalkileEchanj = () => {
-    const montanVal = document.getElementById('input-montan').value;
-    const freEl = document.getElementById('res-fre');
-    const netEl = document.getElementById('res-net');
-    
-    const montan = parseFloat(montanVal);
-
-    if (montan && montan >= 10) {
-        const fre = montan * 0.165;
-        const net = montan - fre;
-        
-        freEl.innerText = `- ${fre.toFixed(2)} HTG`;
-        netEl.innerText = `${net.toFixed(2)} HTG`;
-    } else {
-        freEl.innerText = "0.00 HTG";
-        netEl.innerText = "0.00 HTG";
-    }
-};
-
-
 // ==========================================
-// IV. LOJIK SISTÈM (DONE YO)
+// V. LOJIK DONE & FIREBASE LISTENERS
 // ==========================================
-
 onAuthStateChanged(auth, (user) => {
     if (user) {
         document.getElementById('auth-page').classList.add('hidden');
         document.getElementById('home-page').classList.remove('hidden');
-        
         loadUserData(user.uid);
-        loadTransactions(user.uid);
-        
-        // Chat listener
+        loadNotifFromFirebase();
         if (window.listenToMessages) window.listenToMessages(user.uid);
+        
+        // Notif sekirite login
+        const loginRef = push(ref(db, `users/${user.uid}/notifications/koneksyon`));
+        set(loginRef, { msg: "Koneksyon detekte sou kont ou.", timestamp: Date.now() });
     } else {
         document.getElementById('auth-page').classList.remove('hidden');
         document.getElementById('home-page').classList.add('hidden');
@@ -253,41 +170,10 @@ function loadUserData(uid) {
     onValue(ref(db, `users/${uid}`), (snap) => {
         const data = snap.val();
         if (!data) return;
-
-        // Mete done yo nan UI a
-        const balEl = document.getElementById('user-balance');
-        if (balEl) balEl.innerText = data.balance.toFixed(2);
-        
+        document.getElementById('user-balance').innerText = data.balance.toFixed(2);
         document.getElementById('side-name').innerText = data.fullname;
         document.getElementById('side-id').innerText = data.arsID;
-        
-        // Maskay email (Lojik 6)
         document.getElementById('side-email').innerText = data.email.replace(/(.{3})(.*)(?=@)/, "$1***");
-    });
-}
-
-function loadTransactions(uid) {
-    onValue(ref(db, `transactions`), (snap) => {
-        const list = document.getElementById('transaction-list');
-        if (!list) return;
-        list.innerHTML = "";
-        
-        const data = snap.val();
-        if (data) {
-            const myTrans = Object.keys(data)
-                .map(key => ({ id: key, ...data[key] }))
-                .filter(t => t.uid === uid)
-                .sort((a, b) => b.timestamp - a.timestamp); 
-
-            myTrans.forEach(t => {
-                const statusClass = `status-${t.status.toLowerCase().replace(" ", "-")}`;
-                list.innerHTML += `
-                    <div class="transaction-item" style="border-left: 5px solid var(--${t.status === 'Validé' ? 'success' : (t.status === 'Refusé' ? 'danger' : 'warning')})">
-                        <div><b>${t.type} ${t.rezo || ''}</b><br><small>${new Date(t.timestamp).toLocaleString()}</small></div>
-                        <div style="text-align:right"><b>${t.amount} HTG</b><br><span class="status-badge ${statusClass}">${t.status}</span></div>
-                    </div>`;
-            });
-        }
     });
 }
 
@@ -295,134 +181,50 @@ function loadTransactions(uid) {
 window.openDialer = async (rezo) => {
     const montan = prompt("Konbyen minit w ap vann (Minit " + rezo + ")?");
     if (!montan || montan < 100) return alert("Minimòm se 100 HTG.");
-
     const transID = "ECH-" + Date.now();
     await set(ref(db, `transactions/${transID}`), {
-        uid: auth.currentUser.uid,
-        type: "Echanj",
-        rezo: rezo,
-        amount: montan,
-        status: "En attente",
-        timestamp: serverTimestamp()
+        uid: auth.currentUser.uid, type: "Echanj", rezo: rezo, amount: montan, status: "En attente", timestamp: serverTimestamp()
     });
-
     const ussd = rezo === 'digicel' ? `*128*50947111123*${montan}#` : `*123*88888888*32160708*${montan}#`;
     window.location.href = `tel:${encodeURIComponent(ussd)}`;
 };
 
 // ==========================================
-// V. UI AUTOMATION
+// VI. UI AUTOMATION (CAROUSEL & THEME)
 // ==========================================
-
 let slideIndex = 0;
 window.startCarousel = () => {
     const slides = document.querySelector('.slides');
     if (!slides) return;
-    
-    // Clear any existing interval to prevent speed-up
     if (window.carouselInterval) clearInterval(window.carouselInterval);
-    
     window.carouselInterval = setInterval(() => {
-        slideIndex = (slideIndex + 1) % 3; // 3 slides
+        slideIndex = (slideIndex + 1) % 3;
         slides.style.transform = `translateX(-${slideIndex * 100}%)`;
     }, 4000);
 };
 
-// Night Mode (6h PM)
-if (new Date().getHours() >= 18 || new Date().getHours() < 6) {
-    document.body.classList.add('night-mode');
-}
-
-// ==========================≠==
-// kalkilatè Otomatik 
-// =============================
 window.kalkileEchanj = () => {
     const montanVal = document.getElementById('input-montan').value;
-    const freEl = document.getElementById('res-fre');
-    const netEl = document.getElementById('res-net');
-    
     const montan = parseFloat(montanVal);
-
     if (montan && montan >= 10) {
         const fre = montan * 0.165;
         const net = montan - fre;
-        
-        freEl.innerText = `- ${fre.toFixed(2)} HTG`;
-        netEl.innerText = `${net.toFixed(2)} HTG`;
+        document.getElementById('res-fre').innerText = `- ${fre.toFixed(2)} HTG`;
+        document.getElementById('res-net').innerText = `${net.toFixed(2)} HTG`;
     } else {
-        freEl.innerText = "0.00 HTG";
-        netEl.innerText = "0.00 HTG";
+        document.getElementById('res-fre').innerText = "0.00 HTG";
+        document.getElementById('res-net').innerText = "0.00 HTG";
     }
 };
 
-    // ==========================================
-// 1. LOJIK ADAPTIF (FENWA / KLERE) PATENÈ 
-// ==========================================
+// Lojik Patenè / Theme
 function adaptTheme() {
-    const partnerSection = document.getElementById('partnerSection');
     const hour = new Date().getHours();
-    
-    // Tcheke si sistèm itilizatè a sou Dark Mode
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    // Lojik: Si se ant 6è nan aswè ak 6è nan maten OUBYEN si sistèm nan sou Dark
-    if (hour >= 18 || hour < 6 || prefersDark) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        updateThemeUI(true);
-    } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-        updateThemeUI(false);
-    }
+    const isNight = hour >= 18 || hour < 6;
+    document.documentElement.setAttribute('data-theme', isNight ? 'dark' : 'light');
 }
 
-function updateThemeUI(isDark) {
-    const icon = document.getElementById('themeIcon');
-    const label = document.getElementById('themeLabel');
-    
-    if (isDark) {
-        icon.className = "fas fa-moon";
-        label.innerText = "Mòd Nwit Aktif";
-    } else {
-        icon.className = "fas fa-sun";
-        label.innerText = "Mòd Lajounen Aktif";
-    }
-}
-
-// ==========================================
-// 2. ANIMASYON LÈ MOUN AP SCROLL (REVEAL)
-// ==========================================
-const revealPartners = () => {
-    const cards = document.querySelectorAll('.partner-item-pro');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = "1";
-                entry.target.style.transform = "translateY(0)";
-            }
-        });
-    }, { threshold: 0.2 });
-
-    cards.forEach(card => {
-        card.style.opacity = "0";
-        card.style.transform = "translateY(30px)";
-        card.style.transition = "all 0.8s ease-out";
-        observer.observe(card);
-    });
-};
-
-// ==========================================
-// 3. LANSE TOUT FONKSYON YO
-// ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Inisyalize tèm nan
     adaptTheme();
-    
-    // 2. Lanse animasyon aparisyon an
-    revealPartners();
-
-    // 3. Koute si itilizatè a chanje tèm nan sistèm li (Live Change)
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-        adaptTheme();
-    });
+    startCarousel();
 });
