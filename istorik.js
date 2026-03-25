@@ -9,9 +9,9 @@ window.initIstorik = () => {
         const data = snap.val();
         
         // Netwaye bwat yo
-        const IDs = ['tout', 'echanj', 'retre', 'echwe'];
-        IDs.forEach(id => {
-            const el = document.getElementById(`list-${id}`);
+        const sections = ['tout', 'echanj', 'retre', 'echwe'];
+        sections.forEach(s => {
+            const el = document.getElementById(`list-${s}`);
             if(el) el.innerHTML = "";
         });
 
@@ -22,55 +22,46 @@ window.initIstorik = () => {
                 .sort((a, b) => b.timestamp - a.timestamp);
 
             if (myTrans.length === 0) {
-                IDs.forEach(id => document.getElementById(`list-${id}`).innerHTML = "<div class='empty-msg'>Pa gen okenn tranzaksyon.</div>");
+                document.getElementById('list-tout').innerHTML = "<p class='empty-msg'>Pa gen tranzaksyon.</p>";
                 return;
             }
 
             myTrans.forEach(t => {
-                const card = createCard(t);
-                
-                // Distribisyon nan bwat yo
+                const card = createCardHTML(t);
                 document.getElementById('list-tout').innerHTML += card;
-
-                if (t.type === 'Echanj' && t.status !== 'Refusé') {
-                    document.getElementById('list-echanj').innerHTML += card;
-                } else if (t.type === 'Retrè' && t.status !== 'Refusé') {
-                    document.getElementById('list-retre').innerHTML += card;
-                }
 
                 if (t.status === 'Refusé') {
                     document.getElementById('list-echwe').innerHTML += card;
+                } else {
+                    if (t.type === 'Echanj') document.getElementById('list-echanj').innerHTML += card;
+                    if (t.type === 'Retrè') document.getElementById('list-retre').innerHTML += card;
                 }
             });
-        } else {
-            document.getElementById('list-tout').innerHTML = "<div class='empty-msg'>Istorik vid.</div>";
         }
     });
 };
 
 window.switchIstorik = (targetId, btn) => {
-    // Ranje bouton yo
+    // Retire 'active' sou tout bouton, mete l sou sa n klike a
     document.querySelectorAll('.tab-btn-ist').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
-    // Montre bon lis la
+    // Kache tout lis, montre sa n vle a
     document.querySelectorAll('.ist-content').forEach(div => div.classList.add('hidden'));
-    const target = document.getElementById(`list-${targetId}`);
-    if(target) target.classList.remove('hidden');
+    document.getElementById(`list-${targetId}`).classList.remove('hidden');
 };
 
-function createCard(t) {
+function createCardHTML(t) {
     let color = t.status === "Validé" ? "#36b37e" : (t.status === "Refusé" ? "#ff5630" : "#ffab00");
     return `
-        <div class="transaction-item" style="border-left: 5px solid ${color}">
-            <div class="trans-info">
-                <span class="trans-type">${t.type} ${t.rezo || ''}</span>
-                <small class="trans-date">${new Date(t.timestamp).toLocaleString('ht-HT')}</small>
+        <div class="transaction-item" style="border-left: 5px solid ${color}; margin-bottom:10px; background: var(--card-bg, #fff); padding:15px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <b style="color: var(--text-main); font-size:14px;">${t.type} ${t.rezo || ''}</b><br>
+                <small style="color: var(--text-soft); font-size:11px;">${new Date(t.timestamp).toLocaleString()}</small>
             </div>
-            <div class="trans-amount-status">
-                <b class="trans-price">${t.amount} HTG</b>
-                <span class="status-badge" style="background: ${color}20; color: ${color}">${t.status}</span>
+            <div style="text-align:right">
+                <b style="color: var(--text-main);">${t.amount} HTG</b><br>
+                <span class="status-badge" style="background: ${color}20; color: ${color}; font-size:9px; font-weight:800; padding:4px 8px; border-radius:6px;">${t.status}</span>
             </div>
         </div>`;
-    }
-        
+}
