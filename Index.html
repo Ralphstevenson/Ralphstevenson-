@@ -4,43 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Echanj Plus | Ofisyèl 2026</title>
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="retre.css">
     <link rel="stylesheet" href="chat.css">
+    <link rel="stylesheet" href="istorik.css">
 </head>
-<body class="light-mode"> <div id="auth-page" class="auth-container">
-    
-        
-    
-    <div class="auth-card">
-            <center>
-                <img src="https://i.postimg.cc/vTtVtB8P/20260205-163353-removebg-preview.png" class="auth-logo" alt="Echanj Plus Logo">
-            </center>
-
+<body class="light-mode">
+    <div id="auth-page" class="auth-container">
+        <div class="auth-card">
+            <center><img src="https://i.postimg.cc/vTtVtB8P/20260205-163353-removebg-preview.png" class="auth-logo"></center>
             <div id="login-section">
                 <h2 class="auth-title">Konekte</h2>
-                <div class="input-group">
-                    <i class="fa fa-envelope"></i>
-                    <input type="email" id="login-email" placeholder="Email ou">
-                </div>
-                <div class="input-group">
-                    <i class="fa fa-lock"></i>
-                    <input type="password" id="login-pass" placeholder="Modpas">
-                </div>
+                <div class="input-group"><i class="fa fa-envelope"></i><input type="email" id="login-email" placeholder="Email ou"></div>
+                <div class="input-group"><i class="fa fa-lock"></i><input type="password" id="login-pass" placeholder="Modpas"></div>
                 <button class="btn-primary-pro" onclick="handleLogin()">KONEKTE</button>
                 <p class="auth-footer">Poko gen kont? <span onclick="toggleAuth('signup')">Enskri la</span></p>
             </div>
-
             <div id="signup-section" class="hidden">
                 <h2 class="auth-title">Kreye Kont</h2>
                 <div class="input-group"><i class="fa fa-user"></i><input type="text" id="sign-name" placeholder="Non Konplè"></div>
-                <div class="input-group"><i class="fa fa-phone"></i><input type="tel" id="sign-phone" placeholder="Telefòn (MonCash/NatCash)"></div>
+                <div class="input-group"><i class="fa fa-phone"></i><input type="tel" id="sign-phone" placeholder="Telefòn"></div>
                 <div class="input-group"><i class="fa fa-envelope"></i><input type="email" id="sign-email" placeholder="Email"></div>
-                <div class="input-group"><i class="fa fa-lock"></i><input type="password" id="sign-pass" placeholder="Modpas (6+ karaktè)"></div>
+                <div class="input-group"><i class="fa fa-lock"></i><input type="password" id="sign-pass" placeholder="Modpas"></div>
                 <button class="btn-primary-pro" onclick="handleSignup()">ANREJISTRE</button>
                 <p class="auth-footer">Gen kont deja? <span onclick="toggleAuth('login')">Konekte</span></p>
             </div>
@@ -48,7 +35,6 @@
     </div>
 
     <div id="home-page" class="hidden">
-        
         <div id="sidebar" class="sidebar-pro">
             <div class="sidebar-header">
                 <div class="user-meta">
@@ -68,41 +54,21 @@
         <header class="main-header">
             <i class="fa fa-bars-staggered" onclick="toggleSidebar()"></i>
             <div class="logo-text">ECHANJ PLUS</div>
-            <i class="fa fa-bell" onclick="alert('Pa gen nouvo notifikasyon')"></i>
-
             <div class="notif-wrapper" onclick="toggleNotifPanel()">
-    <i class="fa fa-bell"></i>
-    <span id="notif-badge" class="notif-badge hidden">0</span>
-</div>
-
-<div id="notif-panel" class="notif-panel">
-    <div class="notif-header">
-        <h4><i class="fa fa-circle-dot"></i> Notifikasyon</h4>
-        <i class="fa fa-times" onclick="toggleNotifPanel()" style="cursor:pointer"></i>
-    </div>
-    
-    <div class="notif-tabs">
-        <button id="tab-koneksyon" class="tab-btn active" onclick="switchNotifTab('koneksyon')">Koneksyon</button>
-        <button id="tab-transak" class="tab-btn" onclick="switchNotifTab('transak')">Tranzaksyon</button>
-    </div>
-
-    <div id="notif-content" class="notif-content">
-        <p class="empty-msg">Chaje mesaj...</p>
-    </div>
-
-    <button onclick="voyeNotifTest()" style="margin: 10px; padding: 5px; background: #eee; border: 1px dashed #999; font-size: 10px; border-radius: 5px; cursor: pointer;">
-        🚀 Teste yon Notifikasyon
-    </button>
-</div>
-
-            <button class="logout-btn-universal" onclick="handleLogout()">
-    <i class="fa fa-right-from-bracket"></i> Dekonekte
-            </button>
-            
+                <i class="fa fa-bell"></i>
+                <span id="notif-badge" class="notif-badge hidden">0</span>
+            </div>
+            <div id="notif-panel" class="notif-panel">
+                <div class="notif-header"><h4>Notifikasyon</h4><i class="fa fa-times" onclick="toggleNotifPanel()"></i></div>
+                <div class="notif-tabs">
+                    <button id="tab-koneksyon" class="tab-btn active" onclick="switchNotifTab('koneksyon')">Koneksyon</button>
+                    <button id="tab-transak" class="tab-btn" onclick="switchNotifTab('transak')">Tranzaksyon</button>
+                </div>
+                <div id="notif-content" class="notif-content"><p class="empty-msg">Chaje mesaj...</p></div>
+            </div>
         </header>
 
         <main class="content-wrapper">
-            
             <section id="paj-akey">
                 <div class="carousel-container">
                     <div class="slides" id="carousel-slider">
@@ -111,171 +77,30 @@
                         <div class="slide"><img src="https://i.postimg.cc/qNzL8n7K/1771501473121.png"></div>
                     </div>
                 </div>
-
                 <div class="card-balance-rect">
                     <p>Balans ou disponib</p>
-                    <div class="balance-row">
-                        <h1 id="user-balance">0.00</h1> <span>HTG</span>
-                    </div>
+                    <div class="balance-row"><h1 id="user-balance">0.00</h1> <span>HTG</span></div>
                 </div>
-
-                <div class="action-card" onclick="showPage('paj-echanj', document.querySelector('.nav-item:nth-child(2)'))">
-                    <div class="action-content"><i class="fa fa-rotate"></i> <b>Kòmanse yon echanj</b></div>
-                    <i class="fa fa-chevron-right"></i>
-                </div>
-                
-                <footer class="pro-footer">
-    <div class="footer-grid">
-        <div class="footer-brand-section">
-            <h2 class="footer-logo">ECHANJ<span>PLUS</span></h2>
-            <p class="brand-mission">
-                Inovasyon nan sèvis finansye dijital an Ayiti. Nou bay priyorite ak sekirite, rapidite, ak konfidansyalite tranzaksyon ou yo atravè yon enfrastrikti teknolojik modèn.
-            </p>
-            <div class="certification-badges">
-                <span class="badge"><i class="fa fa-shield-check"></i> SSL Secure</span>
-                <span class="badge"><i class="fa fa-fingerprint"></i> Encrypted Data</span>
-            </div>
-        </div>
-
-        <div class="footer-nav-links">
-            <h3>Navigasyon</h3>
-            <ul>
-                <li><a href="#" onclick="showPage('paj-akey')">Tablo de bò</a></li>
-                <li><a href="#" onclick="showPage('paj-echanj')">Sant Echanj</a></li>
-                <li><a href="#" onclick="showPage('paj-retre')">Jesyon Retrè</a></li>
-                <li><a href="#" onclick="showPage('paj-trans')">Istorik Odit</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-contact">
-            <h3>Asistans</h3>
-            <p>Pou nenpòt asistans teknik oswa kesyon komèsyal:</p>
-            <a href="https://wa.me/50947111123" class="contact-link">
-                <i class="fab fa-whatsapp"></i> Konsiltan an liy
-            </a>
-            <p class="working-hours"><strong>Disponiblite: 24h / 7j / 365</strong></p>
-            
-            <div class="working-hours-notice">
-    <div class="notice-icon">
-        <i class="fa-solid fa-clock-rotate-left"></i>
-    </div>
-    <div class="notice-text">
-        <span class="notice-title">Orè Operasyonèl</span>
-        <p>Pou garanti sekirite fon ou yo, sèvis retrè a disponib soti <strong>9:00 AM</strong> rive <strong>10:00 PM</strong>. Nenpòt demann ki fèt andeyò lè sa yo ap trete nan pwochen sik operasyon an.</p>
-    </div>
-            </div>
-            
-        </div>
-    </div>
-
-    <div class="footer-legal">
-        <div class="legal-content">
-            <p>&copy; 2026 ECHANJ PLUS INTERACTIVE. Tout dwa rezève.</p>
-            <div class="legal-links">
-                <span>Politik Konfidansyalite</span> | <span>Kondisyon Itilizasyon</span>
-            </div>
-        </div>
-    </div>
-
-                    <section id="partnerSection" class="partners-area">
-    <div class="container-pro">
-        
-        <div class="partners-intro">
-            <span class="status-pill">
-                <i class="fas fa-shield-check"></i><strong>Patenè Verifye</strong>
-            </span>
-            <h2 class="dynamic-text">Pouvwa rezo ki bò kote nou</h2>
-            <p class="sub-text">Nou kolabore ak pi gwo jeyan telekominikasyon yo pou garanti vitès ak sekirite.</p>
-        </div>
-
-        <div class="partners-grid-pro">
-            
-            <div class="partner-item-pro">
-                <div class="logo-glass-card">
-                    <img src="https://i.postimg.cc/Yv23BrCy/1773914865494.png" alt="DÉCOUVRIR ANSE D'HAINAULT" class="img-fluid">
-                </div>
-                <h4 class="partner-name">DÉCOUVRIR ANSE D'HAINAULT</h4>
-            </div>
-
-            <div class="partner-item-pro">
-                <div class="logo-glass-card">
-                    <img src="https://i.postimg.cc/Xr2gVRrz/20260318-232254.jpg" alt="RICHE NÈT" class="img-fluid">
-                </div>
-                <h4 class="partner-name">RICHE NÈT</h4>
-            </div>
-
-        </div>
-
-        <div class="theme-toggle-mini">
-            <i id="themeIcon" class="fas fa-sun"></i>
-            <span id="themeLabel">Mòd Otomatik Aktif</span>
-        </div>
-    </div>
-                    </section>
-                    
-                </footer>
-                
-            </section>
+                </section>
 
             <section id="paj-echanj" class="hidden">
-                
-    <h3 class="page-title">Echanj Minit</h3>
-                <div class="info-kalkil">
-    <div class="info-icon">
-        <i class="fa-solid fa-calculator"></i>
-    </div>
-    <div class="info-text">
-        <h4>Kalkile Montan w</h4>
-        <p>Sèvi ak bwat anba a pou w konnen egzakteman konbe kòb k ap tonbe nan balans ou apre sistèm nan fin retire frè operasyon an (16.5%).</p>
-    </div>
+                <h3 class="page-title">Echanj Minit</h3>
+                <div class="kalkilatris-box">
+                    <input type="number" id="input-montan" placeholder="0.00" oninput="kalkileEchanj()">
+                    <div class="rezilta-calc"><b id="res-net">0.00 HTG</b></div>
                 </div>
-                
-    <div class="kalkilatris-box">
-        <label>Montan pou konvèti</label>
-        <div class="input-calc">
-            <input type="number" id="input-montan" placeholder="0.00" oninput="kalkileEchanj()">
-            <span>HTG</span>
-        </div>
-        
-        <div class="rezilta-calc">
-            <div class="res-row">
-                <span>Frè sèvis (16.5%)</span>
-                <span id="res-fre" class="minus">0.00 HTG</span>
-            </div>
-            <div class="res-row total-row">
-                <span>W ap resevwa nèt:</span>
-                <b id="res-net">0.00 HTG</b>
-            </div>
-        </div>
-    </div>
-        
-                <h3 class="page-title">Chwazi Rezo</h3>
-                <div class="provider-card" onclick="openDialer('digicel')">
-                    <div class="provider-info">
-                        <img src="https://i.postimg.cc/zvH2mMwz/Digicel.jpg" width="45">
-                        <b>Digicel (Minit > Cash)</b>
-                    </div>
-                    <i class="fa fa-phone-flip"></i>
-                </div>
-                <div class="provider-card" onclick="openDialer('natcom')">
-                    <div class="provider-info">
-                        <img src="https://i.postimg.cc/6q4bsSVK/natcom.webp" width="45">
-                        <b>Natcom (Minit > Cash)</b>
-                    </div>
-                    <i class="fa fa-phone-flip"></i>
-                </div>
+                <div class="provider-card" onclick="openDialer('digicel')"><b>Digicel</b></div>
+                <div class="provider-card" onclick="openDialer('natcom')"><b>Natcom</b></div>
             </section>
 
             <section id="paj-retre" class="hidden"></section>
 
             <section id="paj-trans" class="hidden">
                 <h3 class="page-title">Istorik Tranzaksyon</h3>
-                <div id="transaction-list" class="list-container">
-                    </div>
+                <div id="transaction-list" class="list-container"></div>
             </section>
 
             <section id="chat-container" class="hidden"></section>
-
         </main>
 
         <nav class="bottom-nav">
@@ -290,12 +115,7 @@
     <script type="module" src="script.js"></script>
     <script type="module" src="retre.js"></script>
     <script type="module" src="chat.js"></script>
-
-    <script>
-        function toggleAuth(type) {
-            document.getElementById('login-section').classList.toggle('hidden', type === 'signup');
-            document.getElementById('signup-section').classList.toggle('hidden', type === 'login');
-        }
-    </script>
+    <script type="module" src="istorik.js"></script>
 </body>
-</html>
+                                             </html>
+    
