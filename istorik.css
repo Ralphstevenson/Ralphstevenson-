@@ -1,0 +1,77 @@
+/* ==========================================
+   ESTIL ISTORIK (ADAPTIF)
+   ========================================== */
+.list-container {
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.transaction-item {
+    background: var(--card-bg, #ffffff); /* Sèvi ak varyab nan style.css la */
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+.transaction-item:active {
+    transform: scale(0.98);
+}
+
+.trans-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.trans-type {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text-main);
+}
+
+.trans-date {
+    font-size: 11px;
+    color: var(--text-soft);
+}
+
+.trans-amount-status {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.trans-price {
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--text-main);
+}
+
+.status-badge {
+    font-size: 9px;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.empty-msg, .loader-istorik {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-soft);
+    font-size: 14px;
+    font-style: italic;
+}
+
+/* Modifikasyon pou Mòd Nwit si l pa nan style.css deja */
+[data-theme="dark"] .transaction-item {
+    background: #1c2128;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
