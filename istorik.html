@@ -1,12 +1,15 @@
 <div class="header-paj">
         <h3 class="page-title"><i class="fa fa-clock-rotate-left"></i> Istorik Tranzaksyon</h3>
+        <p class="subtitle-paj">Jere tout echanj ak retrè ou yo.</p>
     </div>
 
-    <div class="tabs-istorik">
-        <button class="tab-btn-ist active" onclick="switchIstorik('tout')">TOUT</button>
-        <button class="tab-btn-ist" onclick="switchIstorik('echanj')">ECHANJ</button>
-        <button class="tab-btn-ist" onclick="switchIstorik('retre')">RETRÈ</button>
-        <button class="tab-btn-ist" onclick="switchIstorik('echwe')">ECHWE</button>
+    <div class="tabs-istorik-wrapper">
+        <div class="tabs-istorik">
+            <button class="tab-btn-ist active" onclick="switchIstorik('tout', this)">TOUT</button>
+            <button class="tab-btn-ist" onclick="switchIstorik('echanj', this)">ECHANJ</button>
+            <button class="tab-btn-ist" onclick="switchIstorik('retre', this)">RETRÈ</button>
+            <button class="tab-btn-ist" onclick="switchIstorik('echwe', this)">ECHWE</button>
+        </div>
     </div>
 
     <div class="list-wrapper-istorik">
