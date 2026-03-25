@@ -1,21 +1,17 @@
-
-    <div class="header-paj">
+<div class="header-paj">
         <h3 class="page-title"><i class="fa fa-clock-rotate-left"></i> Istorik Tranzaksyon</h3>
-        <p class="subtitle-paj">Swiv tout aktivite ou yo isit la.</p>
     </div>
 
-    <div class="filter-scroll">
-        <div class="filter-container">
-            <button class="filter-btn active" onclick="filterTrans('TOUT', this)">TOUT</button>
-            <button class="filter-btn" onclick="filterTrans('Echanj', this)">ECHANJ</button>
-            <button class="filter-btn" onclick="filterTrans('Retrè', this)">RETRÈ</button>
-            <button class="filter-btn" onclick="filterTrans('Echanj Echwe', this)">ECHANJ ECHWE</button>
-            <button class="filter-btn" onclick="filterTrans('Retrè Echwe', this)">RETRÈ ECHWE</button>
-        </div>
+    <div class="tabs-istorik">
+        <button class="tab-btn-ist active" onclick="switchIstorik('tout')">TOUT</button>
+        <button class="tab-btn-ist" onclick="switchIstorik('echanj')">ECHANJ</button>
+        <button class="tab-btn-ist" onclick="switchIstorik('retre')">RETRÈ</button>
+        <button class="tab-btn-ist" onclick="switchIstorik('echwe')">ECHWE</button>
     </div>
 
-    <div id="transaction-list" class="list-container">
-        <div class="loader-istorik">
-            <i class="fa fa-spinner fa-spin"></i> Chaje done...
-        </div>
+    <div class="list-wrapper-istorik">
+        <div id="list-tout" class="ist-content"></div>
+        <div id="list-echanj" class="ist-content hidden"></div>
+        <div id="list-retre" class="ist-content hidden"></div>
+        <div id="list-echwe" class="ist-content hidden"></div>
     </div>
