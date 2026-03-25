@@ -1,85 +1,182 @@
-/* Header Paj */
+/* ==========================================
+   1. LAYOUT JENERAL ISTORIK
+   ========================================== */
+#paj-trans {
+    padding: 20px;
+    padding-bottom: 100px; /* Pou bottom nav la pa kache dènye kat la */
+    min-height: 100vh;
+    background-color: var(--bg-light, #f4f7fe);
+}
+
 .header-paj {
-    padding: 20px 0;
-    text-align: left;
+    margin-bottom: 20px;
 }
+
 .page-title {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 800;
-    color: var(--text-main);
+    color: var(--text-main, #172b4d);
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
+
 .subtitle-paj {
     font-size: 13px;
-    color: var(--text-soft);
+    color: var(--text-soft, #6b778c);
     margin-top: 5px;
 }
 
-/* Stil Bouton Filtè yo */
+/* ==========================================
+   2. SISTÈM BOUTON (TABS) - SA KI TE MANKE A
+   ========================================== */
 .tabs-istorik-wrapper {
     overflow-x: auto;
-    padding-bottom: 15px;
-    margin-bottom: 10px;
-    scrollbar-width: none;
+    display: flex;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
 }
-.tabs-istorik-wrapper::-webkit-scrollbar { display: none; }
+
+.tabs-istorik-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
 
 .tabs-istorik {
     display: flex;
     gap: 10px;
-    width: max-content;
+    white-space: nowrap;
 }
 
 .tab-btn-ist {
-    padding: 10px 18px;
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    padding: 10px 22px;
     border-radius: 12px;
-    border: 1px solid var(--border-color, #eee);
-    background: var(--card-bg, #fff);
-    color: var(--text-soft);
+    font-size: 12px;
     font-weight: 700;
-    font-size: 11px;
-    text-transform: uppercase;
+    color: var(--text-soft, #4a5568);
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
 .tab-btn-ist.active {
     background: var(--primary, #0052cc);
-    color: #fff;
+    color: #ffffff !important;
     border-color: var(--primary, #0052cc);
-    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.25);
 }
 
-/* Kat Tranzaksyon */
+/* ==========================================
+   3. KAT TRANZAKSYON YO (ADAPTIF)
+   ========================================== */
+.list-wrapper-istorik {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ist-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ist-content.hidden {
+    display: none !important;
+}
+
 .transaction-item {
-    background: var(--card-bg, #fff);
-    padding: 15px;
-    border-radius: 16px;
-    margin-bottom: 12px;
+    background: var(--card-bg, #ffffff);
+    border-radius: 18px;
+    padding: 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s;
+    border: 1px solid var(--border-color, transparent);
 }
 
-.trans-info { display: flex; flex-direction: column; gap: 4px; }
-.trans-type { font-weight: 700; font-size: 14px; color: var(--text-main); }
-.trans-date { font-size: 11px; color: var(--text-soft); }
+.transaction-item:active {
+    transform: scale(0.97);
+}
 
-.trans-amount-status { text-align: right; }
-.trans-price { display: block; font-weight: 800; font-size: 15px; color: var(--text-main); margin-bottom: 4px; }
+.trans-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.trans-type {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-main, #172b4d);
+    text-transform: capitalize;
+}
+
+.trans-date {
+    font-size: 11px;
+    color: var(--text-soft, #6b778c);
+}
+
+.trans-amount-status {
+    text-align: right;
+}
+
+.trans-price {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-main, #172b4d);
+}
 
 .status-badge {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 800;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 8px;
+    margin-top: 6px;
+    display: inline-block;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-/* Mesaj lè l vid */
-.empty-msg {
-    text-align: center;
-    padding: 50px 20px;
-    color: var(--text-soft);
-    font-size: 14px;
+/* ==========================================
+   4. MOD NWIT (DARK MODE)
+   ========================================== */
+[data-theme="dark"] #paj-trans {
+    background-color: #0d1117;
 }
+
+[data-theme="dark"] .tab-btn-ist {
+    background: #1c2128;
+    border-color: #30363d;
+    color: #8b949e;
+}
+
+[data-theme="dark"] .transaction-item {
+    background: #1c2128;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border-color: #30363d;
+}
+
+/* ==========================================
+   5. ETA VID & CHARGEMENT
+   ========================================== */
+.empty-msg, .loader-istorik {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-soft, #6b778c);
+    font-size: 14px;
+    width: 100%;
+}
+
+.loader-istorik i {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: var(--primary);
+    }
+    
