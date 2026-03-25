@@ -100,7 +100,30 @@
                 <div id="transaction-list" class="list-container"></div>
             </section>
 
-            <section id="chat-container" class="hidden"></section>
+            <section id="chat-container" class="hidden">
+    <div class="header-paj">
+        <h3 class="page-title"><i class="fa fa-clock-rotate-left"></i> Istorik Tranzaksyon</h3>
+        <p class="subtitle-paj">Swiv tout echanj ak retrè ou yo pa kategori.</p>
+    </div>
+
+    <div class="tabs-istorik-wrapper">
+        <div class="tabs-istorik">
+            <button class="tab-btn-ist active" onclick="switchIstorik('tout', this)">TOUT</button>
+            <button class="tab-btn-ist" onclick="switchIstorik('echanj', this)">ECHANJ</button>
+            <button class="tab-btn-ist" onclick="switchIstorik('retre', this)">RETRÈ</button>
+            <button class="tab-btn-ist" onclick="switchIstorik('echwe', this)">ECHWE</button>
+        </div>
+    </div>
+
+    <div class="list-wrapper-istorik">
+        <div id="list-tout" class="ist-content">
+            <p class="empty-msg">Chaje done...</p>
+        </div>
+        <div id="list-echanj" class="ist-content hidden"></div>
+        <div id="list-retre" class="ist-content hidden"></div>
+        <div id="list-echwe" class="ist-content hidden"></div>
+    </div>
+                 </section>
         </main>
 
         <nav class="bottom-nav">
