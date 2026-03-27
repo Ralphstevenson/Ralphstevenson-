@@ -940,20 +940,63 @@ body.night-mode .menu-item:hover:not(.active) {
 
 .btn-primary-pro:active { transform: scale(0.98); }
 
-/* Provider Cards (Echanj) */
-.provider-card {
-    background: var(--card-white);
-    padding: 15px;
-    border-radius: 16px;
+/* KONTENÈ KI METE YO SOU MENM LIY LAN */
+.provider-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    border: 1px solid rgba(0,0,0,0.05);
+    gap: 15px; /* Espas ant de rektang yo */
+    justify-content: center; /* Santre yo nan mitan paj la */
+    padding: 20px 10px;
 }
 
-.provider-info { display: flex; align-items: center; gap: 15px; }
-.provider-info img { border-radius: 8px; }
+/* MODÈL REKTANG YO */
+.provider-card {
+    flex: 1; /* Fè yo pran menm lajè */
+    max-width: 160px; /* Lajè maksimòm pou chak */
+    height: 200px; /* Wotè rektang lan */
+    background: #ffffff;
+    border-radius: 15px; /* Bor yon ti jan won pou l bèl */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #f0f0f0;
+}
+
+/* EFÈ LÈ MOUN NAN KLIKÉ OUBYEN PASÉ SOU LI  ECHANJ PLUS */
+.provider-card:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* BWA KI KENBE FOTO YO */
+.card-img-box {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.card-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Fè foto a antre nèt san l pa koupe */
+}
+
+/* TEKS OPERATÈ YO ANBA A */
+.provider-card b {
+    font-size: 16px;
+    color: #333;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 
 /*** SE LA CSS PATENÈ YO KOMANSE /***
 
