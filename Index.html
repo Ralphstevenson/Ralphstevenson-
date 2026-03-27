@@ -231,7 +231,83 @@
     
 </section>
     
-            
+
+
+            <section id="paj-parennaj" class="hidden">
+    <div class="header-paj">
+        <h3 class="page-title"><i class="fas fa-users-viewfinder"></i> Pwogram Parennaj</h3>
+        <p class="subtitle-paj">Fè 4.5% komisyon sou premye echanj chak moun ou envite.</p>
+    </div>
+
+    <div class="card-balance-rect referral-card">
+        <div class="referral-badge"><i class="fas fa-award"></i> Partner</div>
+        <p>Balans Komisyon</p>
+        <div class="balance-row">
+            <h1 id="komisyon-balans">0.00</h1> <span>HTG</span>
+        </div>
+        <button id="btn-transfer-komisyon" class="btn-withdraw" onclick="demannTransfere()">
+            <i class="fas fa-exchange-alt"></i> Transfere nan Balans Prensipal
+        </button>
+    </div>
+
+    <div class="kalkilatris-box">
+        <div class="info-kalkil-ref">
+            <div class="info-icon"><i class="fas fa-shield-check"></i></div>
+            <div class="info-text">
+                <h4>Lojik Komisyon</h4>
+                <p>Moun ou envite a jwenn <strong>2% rabè</strong> otomatik. Komisyon pa w la ap parèt depi tranzaksyon an <strong>Validé</strong>.</p>
+            </div>
+        </div>
+
+        <label>Kòd ARS Ou Pou Envite</label>
+        <div class="input-calc">
+            <input type="text" id="my-ref-code" value="ARS-ID-ITILIZATE" readonly>
+            <span onclick="kopiyeKod()" class="copy-btn"><i class="fas fa-copy"></i></span>
+        </div>
+        
+        <div class="share-options">
+            <p>Pataje lyen an dirèkteman :</p>
+            <button class="btn-whatsapp" onclick="patajeWhatsApp()">
+                <i class="fab fa-whatsapp"></i> Pataje sou WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <div class="team-section">
+        <div class="section-header-row">
+            <h4 class="section-subtitle">Moun ou envite yo</h4>
+            <span id="total-invites" class="count-badge">0</span>
+        </div>
+        
+        <div class="list-wrapper-istorik" id="container-lis-envite">
+            <div class="empty-msg">
+                <i class="fas fa-user-plus" style="display:block; font-size:30px; margin-bottom:10px;"></i>
+                <p>Ou poko gen okenn moun nan ekip ou a.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="modal-rabe" class="modal-overlay hidden">
+    <div class="modal-card" style="border-top: 6px solid #36b37e;">
+        <div class="modal-body" style="text-align: center; padding-top: 40px;">
+            <div style="font-size: 50px; color: #36b37e; margin-bottom: 20px;">
+                <i class="fas fa-gift"></i>
+            </div>
+            <h3 style="color: #091e42; font-weight: 800;">Felisitasyon!</h3>
+            <p style="font-size: 15px; color: #42526e; margin: 15px 0;">
+                Ou gen yon rabè **2%** sou premye echanj ou paske ou gen yon sponsor.
+            </p>
+            <div style="background: #e3fcef; padding: 10px; border-radius: 10px;">
+                <span id="display-sponsor-id" style="font-weight: 800; color: #00875a;"></span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-accept-pro" style="background: #36b37e;" onclick="toggleModal('modal-rabe')">KONTINYE</button>
+        </div>
+    </div>
+    </div>
+                
     
         </main>
 
