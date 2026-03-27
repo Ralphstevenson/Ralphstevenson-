@@ -1,0 +1,173 @@
+/* --- SECTION PARENNAJ --- */
+#paj-parennaj {
+    padding: 20px;
+    background: #f4f7f9;
+    min-height: 100vh;
+}
+
+.header-paj {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.page-title {
+    color: #091e42;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.subtitle-paj {
+    color: #6b778c;
+    font-size: 14px;
+}
+
+/* Card Balans Komisyon */
+.referral-card {
+    background: linear-gradient(135deg, #0052cc 0%, #0747a6 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 20px rgba(7, 71, 166, 0.2);
+}
+
+.referral-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.balance-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.balance-row h1 {
+    font-size: 40px;
+    font-weight: 900;
+}
+
+/* Kalkilatris & Input Box */
+.kalkilatris-box {
+    background: white;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.info-kalkil-ref {
+    display: flex;
+    gap: 15px;
+    background: #e3fcef;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.info-icon { color: #00875a; font-size: 20px; }
+.info-text h4 { color: #006644; margin-bottom: 3px; }
+.info-text p { font-size: 13px; color: #172b4d; }
+
+.input-calc {
+    display: flex;
+    background: #f4f5f7;
+    border-radius: 10px;
+    padding: 5px;
+    margin-top: 10px;
+    border: 2px solid #ebecf0;
+}
+
+.input-calc input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 12px;
+    font-weight: 700;
+    color: #091e42;
+    font-family: 'Poppins', sans-serif;
+}
+
+.copy-btn {
+    background: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #0052cc;
+    transition: 0.3s;
+}
+
+.copy-btn:active { transform: scale(0.9); }
+
+/* Bouton WhatsApp */
+.btn-whatsapp {
+    width: 100%;
+    background: #25d366;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 700;
+    margin-top: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- MODAL (FENÈT K AP PARÈT LA) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(9, 30, 66, 0.85); /* Kouvri tout sit la nan nwa */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000; /* Asire l pi wo pase tout bagay */
+    backdrop-filter: blur(5px); /* Flou rès sit la */
+}
+
+.modal-overlay.hidden {
+    display: none !important;
+}
+
+.modal-card {
+    background: white;
+    width: 85%;
+    max-width: 380px;
+    border-radius: 25px;
+    padding: 30px;
+    text-align: center;
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.btn-accept-pro {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
