@@ -203,30 +203,3 @@ window.startCarousel = () => {
     }, 4000);
 };
 
-window.kalkileEchanj = () => {
-    const montanVal = document.getElementById('input-montan').value;
-    const montan = parseFloat(montanVal);
-    if (montan && montan >= 10) {
-        const fre = montan * 0.165;
-        const net = montan - fre;
-        document.getElementById('res-fre').innerText = `- ${fre.toFixed(2)} HTG`;
-        document.getElementById('res-net').innerText = `${net.toFixed(2)} HTG`;
-    } else {
-        document.getElementById('res-fre').innerText = "0.00 HTG";
-        document.getElementById('res-net').innerText = "0.00 HTG";
-    }
-};
-
-// Lojik Patenè / Theme
-function adaptTheme() {
-    const hour = new Date().getHours();
-    const isNight = hour >= 18 || hour < 6;
-    document.documentElement.setAttribute('data-theme', isNight ? 'dark' : 'light');
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    adaptTheme();
-    startCarousel();
-});
-
-
