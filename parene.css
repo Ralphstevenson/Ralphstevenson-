@@ -171,3 +171,45 @@
     margin-top: 20px;
 }
 
+
+
+        /* SA A PRAL FÈ MODAL LA SISPANN MONTE NAN PAJ LA */
+.modal-overlay {
+    position: fixed; /* Li dekole l nan kò paj la */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8); /* Nwa dèyè a pou kache balans lan */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000; /* Pi wo nivo nèt */
+}
+
+/* POU L DISPARÈT LÈ L PA BEZEN */
+.modal-overlay.hidden {
+    display: none !important;
+}
+
+.modal-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.btn-accept-pro {
+    width: 100%;
+    background: #36b37e;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    margin-top: 20px;
+    cursor: pointer;
+    }
