@@ -117,4 +117,35 @@ window.toggleModal = (id) => {
 document.addEventListener('DOMContentLoaded', () => {
     window.detecterSponsorURL();
 });
-       
+
+
+
+
+
+window.detecterSponsorURL = () => {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+    
+    // Tcheke si gen yon kòd epi si li kòmanse ak ARS-
+    if (ref && ref.startsWith('ARS-')) {
+        localStorage.setItem('pending_sponsor_code', ref);
+        
+        const modalRabe = document.getElementById('modal-rabe');
+        const displaySponsor = document.getElementById('display-sponsor-id');
+        
+        if (modalRabe && displaySponsor) {
+            // METE VRE ID A AVAN MODAL LA LOUVRI
+            displaySponsor.innerText = "Kòd Sponsor: " + ref;
+            
+            // SÈLMAN SI GEN KÒD NOU LOUVRI MODAL LA
+            setTimeout(() => {
+                modalRabe.classList.remove('hidden');
+            }, 1000);
+        }
+    } else {
+        // SI PA GEN KÒD, NOU ASURE NOU MODAL LA KACHE NÈT
+        const modalRabe = document.getElementById('modal-rabe');
+        if (modalRabe) modalRabe.classList.add('hidden');
+    }
+};
+
