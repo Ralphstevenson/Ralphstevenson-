@@ -1,146 +1,76 @@
 /* ==========================================
-   JS ELITE - SISTÈM PARENNAJ ECHANJ PLUS
+   VII. SISTÈM PARENNAJ INTEGRÉ (ELITE)
    ========================================== */
 
-// 1. DETEKTE SPONSOR NAN URL (Eg: ?ref=ARS-123)
+// Detekte si moun nan klike sou yon lyen (Eg: ?ref=ARS-1234)
 window.detecterSponsorURL = () => {
     const params = new URLSearchParams(window.location.search);
-    const ref = params.get('ref');
+    const refCode = params.get('ref');
     
-    if (ref && ref.startsWith('ARS-')) {
-        // Sere kòd la nan memwa navigatè a
-        localStorage.setItem('pending_sponsor_code', ref);
+    if (refCode && refCode.startsWith('ARS-')) {
+        // Sere kòd la pou lè l ap kreye kont
+        localStorage.setItem('pending_sponsor_code', refCode);
         
-        // Ranpli input nan seksyon Auth la si l egziste
+        // Ranpli input nan Signup la si l egziste
         const sInput = document.getElementById('sponsor-input');
-        const badge = document.getElementById('badge-ref-status');
         if (sInput) {
-            sInput.value = ref;
-            if(badge) badge.style.display = "block"; // Montre ti vèt la
+            sInput.value = refCode;
+            const badge = document.getElementById('badge-ref-status');
+            if(badge) badge.style.display = "block";
         }
 
-        // Prepare ak Montre Modal Felisitasyon an
+        // Montre Modal Felisitasyon an
         const displaySponsor = document.getElementById('display-sponsor-id');
-        if (displaySponsor) {
-            displaySponsor.innerText = "Kòd: " + ref;
-        }
+        if (displaySponsor) displaySponsor.innerText = "Sponsor: " + refCode;
         
-        // Louvri modal la apre 1.5 segonn pou moun nan fin wè paj la
         setTimeout(() => {
-            const modalRabe = document.getElementById('modal-rabe');
-            if (modalRabe) modalRabe.classList.remove('hidden');
-        }, 1500);
-    }
-};
-
-// 2. CHANGER PAJ (SIDEBAR)
-window.showPage = (pageId) => {
-    // Kache tout seksyon
-    document.querySelectorAll('section').forEach(sec => {
-        sec.classList.add('hidden');
-    });
-
-    // Montre paj ki klike a
-    const page = document.getElementById(pageId);
-    if (page) {
-        page.classList.remove('hidden');
-        
-        // Si se paj parennaj, mete ID itilizatè a nan input la
-        if (pageId === 'paj-parennaj') {
-            const myARS = localStorage.getItem('user_ars_id') || "ARS-CHACHE";
-            document.getElementById('my-ref-code').value = myARS;
-        }
-    }
-
-    // Fèmen Sidebar la otomatikman
-    const sidebar = document.querySelector('.sidebar-pro');
-    const overlay = document.querySelector('.sidebar-overlay');
-    if (sidebar) {
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
-    }
-};
-
-// 3. KOPIYE KÒD ARS
-window.kopiyeKod = () => {
-    const kodInput = document.getElementById('my-ref-code');
-    kodInput.select();
-    kodInput.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(kodInput.value);
-    
-    alert("Kòd ou kopiye! Koulye a, pataje l pou w fè kòb.");
-};
-
-// 4. PATAJE SOU WHATSAPP
-window.patajeWhatsApp = () => {
-    const myCode = document.getElementById('my-ref-code').value;
-    const siteLink = `https://echanjplus064.netlify.app/?ref=${myCode}`;
-    const message = `Bonjou! M ap envite w sou Echanj Plus. Sèvi ak kòd mwen an (${myCode}) pou w jwenn 2% rabè sou premye echanj ou. Enskri isit la: ${siteLink}`;
-    
-    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
-};
-
-// 5. DEMANN TRANSFÈ KOMISYON (Lojik Sekirite)
-window.demannTransfere = () => {
-    const balansKomisyon = parseFloat(document.getElementById('komisyon-balans').innerText);
-    const btn = document.getElementById('btn-transfer-komisyon');
-
-    if (balansKomisyon < 50) {
-        alert("Atansyon: Ou bezwen omwen 50 HTG nan komisyon pou w fè transfè sa a.");
-        return;
-    }
-
-    const konfime = confirm(`Èske ou vle voye ${balansKomisyon} HTG nan balans prensipal ou?`);
-    
-    if (konfime) {
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Operasyon ap fèt...';
-
-        // Simulation Firebase (W ap bezwen kòd Firestore la isit la)
-        setTimeout(() => {
-            alert("Transfè reyisi! Kòb la moute nan balans ou.");
-            document.getElementById('komisyon-balans').innerText = "0.00";
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-exchange-alt"></i> Transfere nan Balans Prensipal';
+            const modal = document.getElementById('modal-rabe');
+            if (modal) modal.classList.remove('hidden');
         }, 2000);
     }
 };
 
-// 6. AFICHE LIS EKIP LA (Done ki soti nan Firebase)
-window.renderTeamList = (dataFromFirebase) => {
-    const container = document.getElementById('container-lis-envite');
-    const badge = document.getElementById('total-invites');
-
-    if (!dataFromFirebase || dataFromFirebase.length === 0) {
-        container.innerHTML = '<p class="empty-msg">Ou poko gen okenn moun nan ekip ou a.</p>';
-        badge.innerText = "0";
-        return;
-    }
-
-    badge.innerText = dataFromFirebase.length;
-    container.innerHTML = ""; 
-
-    dataFromFirebase.forEach(moun => {
-        const item = document.createElement('div');
-        item.className = 'invite-item';
-        item.innerHTML = `
-            <span class="user-id-ref">${moun.id}</span>
-            <span class="status-first-trans ${moun.status === 'validé' ? 'done' : 'pending'}">
-                ${moun.status === 'validé' ? 'Touche' : 'An tann'}
-            </span>
-        `;
-        container.appendChild(item);
-    });
+// Fonksyon pou kopye kòd ARS la
+window.kopiyeKod = () => {
+    const kodInput = document.getElementById('my-ref-code');
+    if (!kodInput) return;
+    kodInput.select();
+    kodInput.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(kodInput.value);
+    alert("Kòd ou kopiye ak siksè!");
 };
 
-// 7. FONKSYON POU TOOGLE MODAL YO
+// Fonksyon pou pataje sou WhatsApp ak vre ID a
+window.patajeWhatsApp = () => {
+    const myCode = document.getElementById('my-ref-code').value;
+    if (!myCode || myCode === "ARS-ID") return alert("Tanpri konekte pou jwenn kòd ou.");
+    
+    const siteLink = `https://echanjplus064.netlify.app/?ref=${myCode}`;
+    const message = `Bonjou! M ap envite w sou Echanj Plus. Sèvi ak kòd mwen an (${myCode}) pou w jwenn 2% rabè sou premye echanj ou. Enskri la: ${siteLink}`;
+    
+    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+};
+
+// Lojik transfè komisyon (Senp)
+window.demannTransfere = () => {
+    const balansKomisyon = parseFloat(document.getElementById('komisyon-balans').innerText);
+    if (balansKomisyon < 50) {
+        alert("Ou bezwen omwen 50 HTG pou w fè transfè.");
+        return;
+    }
+    if (confirm(`Voye ${balansKomisyon} HTG nan balans prensipal ou?`)) {
+        alert("Transfè a voye bay Admin pou validasyon!");
+        // Isit la ou ka ajoute push Firebase pou Admin validé l
+    }
+};
+
+// Fonksyon jeneral pou Modal
 window.toggleModal = (id) => {
     const modal = document.getElementById(id);
     if (modal) modal.classList.toggle('hidden');
 };
 
-// INITIALISATION LÈ PAJ LA LOUVRI
-document.addEventListener('DOMContentLoaded', () => {
+// RELE DETEKSYON AN LÈ PAJ LA LOUVRI
+window.addEventListener('load', () => {
     window.detecterSponsorURL();
 });
-
