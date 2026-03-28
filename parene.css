@@ -172,7 +172,6 @@
 }
 
 
-
         /* SA A PRAL FÈ MODAL LA SISPANN MONTE NAN PAJ LA */
 .modal-overlay {
     position: fixed; /* Li dekole l nan kò paj la */
@@ -213,3 +212,52 @@
     margin-top: 20px;
     cursor: pointer;
     }
+
+
+/* ============================================================
+   STYLE ESPESYAL POU INPUT SPONSOR
+   ============================================================ */
+
+#sponsor-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 2px solid #e1e1e1;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+    outline: none;
+    box-sizing: border-box; /* Garanti padding pa debòde lajè a */
+}
+
+/* Lè itilizatè a klike sou li pou l ekri */
+#sponsor-input:focus {
+    border-color: #0052cc;
+    box-shadow: 0 0 8px rgba(0, 82, 204, 0.15);
+    background-color: #fcfdff;
+}
+
+/* Stil lè kòd la detekte otomatikman (Readonly) */
+#sponsor-input[readonly] {
+    background-color: #f0fdf4 !important; /* Yon vèt trè pal */
+    border-color: #22c55e !important;    /* Vèt siksè */
+    color: #15803d;                      /* Tèks vèt fonse */
+    cursor: not-allowed;                 /* Montre moun nan li pa ka chanje l */
+    border-style: dashed;                /* Diferansye l ak lòt yo */
+}
+
+/* Style pou Placeholder la (Tèks ki di "Kòd Sponsor" la) */
+#sponsor-input::placeholder {
+    color: #a0aec0;
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* Ti animasyon si kòd la bon (opsyonèl) */
+#sponsor-input:not(:placeholder-shown):not([readonly]) {
+    border-color: #0052cc;
+    }
+    
