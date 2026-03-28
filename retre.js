@@ -1,38 +1,19 @@
 /* ============================================================
-   JS RETRÈ - ECHANJ PLUS V3 - KONEKTE AK GWO JS (FIXED)
+   JS RETRÈ - ECHANJ PLUS V3 - KONEKTE AK GWO JS
    ============================================================ */
 import { auth, db } from './script.js';
 import { ref, get, update, serverTimestamp, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"; // NOU AJOUTE SA
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-// 1. CHAJE PAJ HTML LA
-window.enjekteHtmlRetre = async function() {
-    const seksyonVid = document.getElementById('paj-retre');
-    if (!seksyonVid) return;
-
-    try {
-        const repons = await fetch('retre.html');
-        const html = await repons.text();
-        seksyonVid.innerHTML = html;
-
-        // --- KLE A SE ISIT LA ---
-        // Nou koute si Auth la pare anvan nou chache done
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log("Koneksyon etabli pou:", user.uid);
-                kouteDoneFirebase(user.uid); 
-                konekteBoutonRetre();
-            } else {
-                console.warn("Itilizatè a poko konekte nan Firebase");
-            }
-        });
-
-    } catch (erè) {
-        console.error("Erè nan chaje retre.html:", erè);
+// 1. KOUTE DONE FIREBASE (POU BALANS AK ID PARET)
+// Nou mete sa deyò pou l kouri le pli vit ke Firebase pare
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        kouteDoneFirebase(user.uid);
+        konekteLojikBouton(); // Aktive bouton yo
     }
-};
+});
 
-// 2. KOUTE DONE (POU BALANS AK ID)
 function kouteDoneFirebase(uid) {
     const userRef = ref(db, `users/${uid}`);
     onValue(userRef, (snapshot) => {
@@ -40,29 +21,30 @@ function kouteDoneFirebase(uid) {
         if (data) {
             const balEl = document.getElementById('display-balance');
             const idEl = document.getElementById('display-ars-id');
-            const balansKounyeA = parseFloat(data.balance || 0);
+            const balansDatabase = parseFloat(data.balance || 0);
 
-            if (balEl) balEl.innerText = balansKounyeA.toFixed(2) + " HTG";
+            // Ranpli bwat ble yo (Si yo nan HTML la kounye a)
+            if (balEl) balEl.innerText = balansDatabase.toFixed(2) + " HTG";
             if (idEl) idEl.innerText = data.arsID || "---";
 
-            // Lojik bouton an (Bloke/Debloke)
+            // Sekirite: Bloke bouton si montan an twòp
             const inputMontan = document.getElementById('retre-amount');
-            const btnRetre = document.getElementById('btn-konfime-retre');
+            const btnMain = document.getElementById('btn-konfime-retre');
 
-            if (inputMontan && btnRetre) {
+            if (inputMontan && btnMain) {
                 inputMontan.oninput = () => {
-                    const valè = parseFloat(inputMontan.value);
-                    if (valè > balansKounyeA) {
-                        btnRetre.disabled = true;
-                        btnRetre.innerText = "Balans ensifizan";
-                        btnRetre.style.opacity = "0.5";
-                    } else if (valè < 100 || isNaN(valè)) {
-                        btnRetre.disabled = true;
-                        btnRetre.innerText = "Minimòm 100 HTG";
+                    const m = parseFloat(inputMontan.value);
+                    if (m > balansDatabase) {
+                        btnMain.disabled = true;
+                        btnMain.innerText = "Balans ensifizan";
+                        btnMain.style.background = "#ccc";
+                    } else if (m < 100 || isNaN(m)) {
+                        btnMain.disabled = true;
+                        btnMain.innerText = "Minimòm 100 HTG";
                     } else {
-                        btnRetre.disabled = false;
-                        btnRetre.innerText = "RETIRE KÒB LA";
-                        btnRetre.style.opacity = "1";
+                        btnMain.disabled = false;
+                        btnMain.innerText = "RETIRE KÒB LA";
+                        btnMain.style.background = "var(--primary-blue)";
                     }
                 };
             }
@@ -70,80 +52,95 @@ function kouteDoneFirebase(uid) {
     });
 }
 
-// 3. LOGIK MODAL YO
-function konekteBoutonRetre() {
-    const btnKonfime = document.getElementById('btn-konfime-retre');
-    const nextBtn = document.getElementById('next-to-step2');
+// 2. LOGIK BOUTON AK MODAL YO
+function konekteLojikBouton() {
+    const btnMain = document.getElementById('btn-konfime-retre');
+    const btnNext = document.getElementById('next-to-step2');
 
-    if (btnKonfime) {
-        btnKonfime.onclick = () => {
+    if (btnMain) {
+        btnMain.onclick = () => {
             const non = document.getElementById('retre-name').value;
             const tel = document.getElementById('retre-phone').value;
             const metod = document.getElementById('retre-method').value;
             const montan = document.getElementById('retre-amount').value;
 
-            if (!non || !tel || !montan || montan < 100) {
-                return alert("Tanpri ranpli tout chan yo byen!");
-            }
+            if (!non || !tel || !montan) return alert("Ranpli tout chan yo!");
 
-            document.getElementById('info-recap').innerHTML = `
-                <p><b>Reseptè:</b> ${non}</p>
-                <p><b>Telefòn:</b> ${tel}</p>
-                <p><b>Metòd:</b> ${metod}</p>
-                <p><b>Montan:</b> ${montan} HTG</p>
-            `;
+            // Ranpli recap la anvan modal la louvri
+            const recapBox = document.getElementById('info-recap');
+            if (recapBox) {
+                recapBox.innerHTML = `
+                    <p><b>Reseptè:</b> ${non}</p>
+                    <p><b>Telefòn:</b> ${tel}</p>
+                    <p><b>Metòd:</b> ${metod}</p>
+                    <p><b>Montan:</b> ${montan} HTG</p>
+                `;
+            }
             document.getElementById('amount-recap').innerText = montan + " HTG";
             document.getElementById('modal-step1').classList.remove('hidden');
         };
     }
 
-    if (nextBtn) {
-        nextBtn.onclick = () => {
+    if (btnNext) {
+        btnNext.onclick = () => {
             document.getElementById('modal-step1').classList.add('hidden');
             document.getElementById('modal-step2').classList.remove('hidden');
         };
     }
 }
 
-// 4. FINALIZASYON
+// 3. FINALIZASYON (SOVRE NAN FIREBASE)
 window.finaliseRetre = async () => {
-    const uid = auth.currentUser?.uid;
-    const montan = parseFloat(document.getElementById('retre-amount').value);
-    if(!uid) return;
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const montanInput = document.getElementById('retre-amount').value;
+    const montan = parseFloat(montanInput);
 
     document.getElementById('modal-step2').classList.add('hidden');
 
     try {
-        const userRef = ref(db, `users/${uid}`);
-        const userSnap = await get(userRef);
-        const data = userSnap.val();
-        const balansDatabase = parseFloat(data.balance || 0);
+        const userRef = ref(db, `users/${user.uid}`);
+        const snap = await get(userRef);
+        const userData = snap.val();
 
-        if (balansDatabase < montan) return alert("Balans ou ensifizan!");
+        if (userData.balance < montan) return alert("Balans ou fin chanje, eseye ankò.");
 
         const transID = "RET-" + Date.now();
         const updates = {};
+        
+        // Tranzaksyon
         updates[`/transactions/${transID}`] = {
-            uid: uid, arsID: data.arsID, type: "Retrè",
+            uid: user.uid,
+            arsID: userData.arsID,
+            type: "Retrè",
             receiver: document.getElementById('retre-name').value,
             phone: document.getElementById('retre-phone').value,
             method: document.getElementById('retre-method').value,
-            amount: montan, status: "En attente", timestamp: serverTimestamp()
+            amount: montan,
+            status: "En attente",
+            timestamp: serverTimestamp()
         };
-        updates[`/users/${uid}/balance`] = balansDatabase - montan;
+        // Soustrè kòb
+        updates[`/users/${user.uid}/balance`] = userData.balance - montan;
 
         await update(ref(db), updates);
+        
+        // Siksè
         document.getElementById('modal-final').classList.remove('hidden');
-
         setTimeout(() => {
-            window.showPage('paj-akey');
             document.getElementById('modal-final').classList.add('hidden');
+            window.showPage('paj-akey'); // Retounen nan akèy
         }, 4000);
-    } catch (err) { alert("Erè teknik, eseye ankò."); }
+
+    } catch (erè) {
+        alert("Gen yon erè: " + erè.message);
+    }
 };
 
+// Fonksyon Global pou bouton "ANILE"
 window.closeAllModals = () => {
     document.getElementById('modal-step1').classList.add('hidden');
     document.getElementById('modal-step2').classList.add('hidden');
 };
-            
+   
