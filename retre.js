@@ -8,9 +8,10 @@ window.enjekteHtmlRetre = async function() {
     const seksyonVid = document.getElementById('paj-retre');
     if (!seksyonVid) return;
 
+    // Si HTML la deja la, nou sèlman rekonekte lojik yo
     if (seksyonVid.innerHTML.trim() !== "") {
-        konekteBoutonRetre();
         kouteDoneFirebase();
+        konekteBoutonRetre();
         return;
     }
 
@@ -18,134 +19,138 @@ window.enjekteHtmlRetre = async function() {
         const repons = await fetch('retre.html');
         const html = await repons.text();
         seksyonVid.innerHTML = html;
-        konekteBoutonRetre();
+        
+        // Deklanche lojik yo apre HTML fin chaje
         kouteDoneFirebase();
+        konekteBoutonRetre();
     } catch (erè) {
         console.error("Erè nan chaje retre.html:", erè);
     }
 };
 
 // ==========================================
-// 2. KOUTE DONE (BALANS & VERIFIKASYON BOUTON)
+// 2. KOUTE DONE (BALANS & ID KONT)
 // ==========================================
 function kouteDoneFirebase() {
-    if (auth.currentUser) {
-        const userRef = ref(db, `users/${auth.currentUser.uid}`);
-        onValue(userRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                const balEl = document.getElementById('display-balance');
-                const idEl = document.getElementById('display-ars-id');
-                const balansKounyeA = parseFloat(data.balance || 0);
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
 
-                if (balEl) balEl.innerText = balansKounyeA.toFixed(2) + " HTG";
-                if (idEl) idEl.innerText = data.arsID;
+    const userRef = ref(db, `users/${uid}`);
+    onValue(userRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            // Nou itilize .balance (menm jan ak Gwo JS la)
+            const balansKounyeA = parseFloat(data.balance || 0);
+            
+            // Mizajou UI anwo a (Si eleman sa yo nan retre.html)
+            const balEl = document.getElementById('display-balance');
+            const idEl = document.getElementById('display-ars-id');
 
-                // --- SISTÈM BLOKE BOUTON SI BALANS PA ASE ---
-                const inputMontan = document.getElementById('retre-amount');
-                const btnRetre = document.getElementById('btn-konfime-retre');
+            if (balEl) balEl.innerText = balansKounyeA.toFixed(2) + " HTG";
+            if (idEl) idEl.innerText = data.arsID || "---";
 
-                if (inputMontan && btnRetre) {
-                    inputMontan.oninput = () => {
-                        const valè = parseFloat(inputMontan.value);
-                        if (valè > balansKounyeA) {
-                            btnRetre.disabled = true;
-                            btnRetre.innerText = "Balans ensifizan";
-                            btnRetre.style.opacity = "0.5";
-                            btnRetre.style.cursor = "not-allowed";
-                        } else if (valè < 100 || isNaN(valè)) {
-                            btnRetre.disabled = true;
-                            btnRetre.innerText = "Minimòm 100 HTG";
-                        } else {
-                            btnRetre.disabled = false;
-                            btnRetre.innerText = "RETIRE KÒB LA";
-                            btnRetre.style.opacity = "1";
-                            btnRetre.style.cursor = "pointer";
-                        }
-                    };
-                }
+            // --- SISTÈM BLOKE BOUTON ---
+            const inputMontan = document.getElementById('retre-amount');
+            const btnPwofesyonel = document.getElementById('btn-konfime-retre');
+
+            if (inputMontan && btnPwofesyonel) {
+                inputMontan.oninput = () => {
+                    const valè = parseFloat(inputMontan.value);
+                    if (valè > balansKounyeA) {
+                        btnPwofesyonel.disabled = true;
+                        btnPwofesyonel.innerText = "Balans ensifizan";
+                        btnPwofesyonel.style.opacity = "0.5";
+                    } else if (valè < 100 || isNaN(valè)) {
+                        btnPwofesyonel.disabled = true;
+                        btnPwofesyonel.innerText = "Minimòm 100 HTG";
+                    } else {
+                        btnPwofesyonel.disabled = false;
+                        btnPwofesyonel.innerText = "RETIRE KÒB LA";
+                        btnPwofesyonel.style.opacity = "1";
+                    }
+                };
             }
-        });
-    }
+        }
+    });
 }
 
 // ==========================================
-// 3. LOGIK MODAL YO
+// 3. LOGIK BOUTON AK MODAL
 // ==========================================
 function konekteBoutonRetre() {
-    const btn = document.getElementById('btn-konfime-retre');
-    const nextBtn = document.getElementById('next-to-step2');
-
-    if (nextBtn) {
-        nextBtn.onclick = () => {
-            const montan = document.getElementById('retre-amount').value;
-            document.getElementById('amount-recap').innerText = montan + " HTG";
-            document.getElementById('modal-step1').classList.add('hidden');
-            document.getElementById('modal-step2').classList.remove('hidden');
-        };
-    }
-
-    if (btn) {
-        btn.onclick = () => {
+    const btnKonfime = document.getElementById('btn-konfime-retre');
+    
+    if (btnKonfime) {
+        btnKonfime.onclick = () => {
             const non = document.getElementById('retre-name').value;
             const tel = document.getElementById('retre-phone').value;
             const metod = document.getElementById('retre-method').value;
             const montan = document.getElementById('retre-amount').value;
 
             if (!non || !tel || !montan || montan < 100) {
-                alert("Tanpri ranpli tout chan yo byen (Minimòm 100 HTG)");
+                alert("Ranpli tout chan yo (Minimòm 100 HTG)");
                 return;
             }
 
-            const recap = `
+            // Ranpli Recap la
+            const recapHtml = `
                 <p><b>Reseptè:</b> ${non}</p>
                 <p><b>Telefòn:</b> ${tel}</p>
                 <p><b>Metòd:</b> ${metod}</p>
                 <p><b>Montan:</b> ${montan} HTG</p>
             `;
-            document.getElementById('info-recap').innerHTML = recap;
-            document.getElementById('modal-step1').classList.remove('hidden');
+            const infoRecap = document.getElementById('info-recap');
+            if(infoRecap) infoRecap.innerHTML = recapHtml;
+
+            // Montre Modal Step 1
+            const modal1 = document.getElementById('modal-step1');
+            if(modal1) modal1.classList.remove('hidden');
+        };
+    }
+
+    // Bouton pou pase nan Step 2 (Konfimasyon final)
+    const nextBtn = document.getElementById('next-to-step2');
+    if (nextBtn) {
+        nextBtn.onclick = () => {
+            document.getElementById('modal-step1').classList.add('hidden');
+            document.getElementById('modal-step2').classList.remove('hidden');
         };
     }
 }
 
-window.closeAllModals = () => {
-    document.getElementById('modal-step1').classList.add('hidden');
-    document.getElementById('modal-step2').classList.add('hidden');
-};
-
 // ==========================================
-// 4. FINALIZASYON & SOUSTRÈ OTOMATIK
+// 4. FINALIZASYON & TRANZAKSYON FIREBASE
 // ==========================================
 window.finaliseRetre = async () => {
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+
     const non = document.getElementById('retre-name').value;
     const tel = document.getElementById('retre-phone').value;
     const metod = document.getElementById('retre-method').value;
     const montan = parseFloat(document.getElementById('retre-amount').value);
-    const arsID = document.getElementById('display-ars-id').innerText;
-    const uid = auth.currentUser.uid;
-
+    
+    // Nou kache modal la pandan n ap travay
     document.getElementById('modal-step2').classList.add('hidden');
 
     try {
-        // 1. Double chèk sekirite nan Database
         const userRef = ref(db, `users/${uid}`);
         const userSnap = await get(userRef);
-        const balansDatabase = parseFloat(userSnap.val().balance || 0);
+        const data = userSnap.val();
+        const balansDatabase = parseFloat(data.balance || 0);
 
         if (balansDatabase < montan) {
-            alert("Fwod detekte: Ou pa gen ase kòb!");
+            alert("Erè: Balans ou ensifizan!");
             return;
         }
 
-        // 2. Operasyon Atomik (Soustrè + Kreye Tranzaksyon)
-        const nouvoBalans = balansDatabase - montan;
         const transID = "RET-" + Date.now();
-        
         const updates = {};
+        
+        // 1. Kreye Tranzaksyon an
         updates[`/transactions/${transID}`] = {
             uid: uid,
-            arsID: arsID,
+            arsID: data.arsID || "N/A",
             type: "Retrè",
             receiver: non,
             phone: tel,
@@ -154,22 +159,33 @@ window.finaliseRetre = async () => {
             status: "En attente",
             timestamp: serverTimestamp()
         };
-        updates[`/users/${uid}/balance`] = nouvoBalans;
+
+        // 2. Soustrè kòb la (Mizajou balans)
+        updates[`/users/${uid}/balance`] = balansDatabase - montan;
 
         await update(ref(db), updates);
 
-        // 3. Montre Siksè
-        document.getElementById('modal-final').classList.remove('hidden');
+        // 3. Montre Siksè Final
+        const modalFinal = document.getElementById('modal-final');
+        if(modalFinal) modalFinal.classList.remove('hidden');
 
         setTimeout(() => {
-            window.showPage('paj-akey');
-            document.getElementById('modal-final').classList.add('hidden');
+            if(modalFinal) modalFinal.classList.add('hidden');
+            if(window.showPage) window.showPage('paj-akey');
+            // Netwaye fòm lan
             document.getElementById('retre-amount').value = "";
-        }, 5000);
+            document.getElementById('retre-name').value = "";
+        }, 4000);
 
     } catch (erè) {
-        console.error("Erè:", erè);
-        alert("Sistèm nan gen yon pwoblèm tcheke koneksyon ou.");
+        console.error("Erè nan finalizasyon:", erè);
+        alert("Gen yon pwoblèm teknik. Eseye ankò.");
     }
 };
-            
+
+window.closeAllModals = () => {
+    document.getElementById('modal-step1')?.classList.add('hidden');
+    document.getElementById('modal-step2')?.classList.add('hidden');
+    document.getElementById('modal-final')?.classList.add('hidden');
+};
+                    
