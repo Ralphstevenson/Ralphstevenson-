@@ -1186,4 +1186,50 @@ body.night-mode .menu-item:hover:not(.active) {
         font-size: 26px;
     }
    }
-   
+
+
+
+/* =========================================================================
+   STYLE POU FOOTER OTANTIFIKASYON (LOGIN / SIGNUP) LIEN YO ANBA AUTH LA 
+   ========================================================================= */
+
+.auth-footer {
+    margin-top: 25px;
+    font-size: 14px;
+    color: #666; /* Yon gri dou pou tèks nòmal la */
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+}
+
+.auth-footer span {
+    color: #0052cc; /* Ble Echanj Plus la */
+    font-weight: 700; /* Mete l an gra pou l parèt byen */
+    cursor: pointer;
+    margin-left: 5px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+}
+
+/* Ti liy ki parèt anba l lè ou pase sourit sou li */
+.auth-footer span:hover {
+    color: #003d99;
+    text-decoration: underline;
+}
+
+/* Efè "Active" lè moun nan klike sou li */
+.auth-footer span:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+/* Si w vle l parèt plis tankou yon ti bouton segondè (Opsyonèl) */
+/*
+.auth-footer span {
+    background: #f0f7ff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid #d0e5ff;
+}
+*/
+
