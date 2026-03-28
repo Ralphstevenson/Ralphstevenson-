@@ -132,6 +132,12 @@ onAuthStateChanged(auth, (user) => {
     } else {
         document.getElementById('auth-page').classList.remove('hidden');
         document.getElementById('home-page').classList.add('hidden');
+        
+        // --- MIZAJOU PARENNAJ ---
+        // Lè paj la louvri epi moun nan poko konekte, n ap tcheke si gen yon kòd nan URL la
+        setTimeout(() => {
+            if (window.detecterSponsorURL) window.detecterSponsorURL();
+        }, 1000); // Nou bay yon ti delè 1s pou tout JS yo chaje
     }
 });
 
@@ -139,12 +145,23 @@ function loadUserData(uid) {
     onValue(ref(db, `users/${uid}`), (snap) => {
         const data = snap.val();
         if (!data) return;
-        document.getElementById('user-balance').innerText = data.balance.toFixed(2);
-        document.getElementById('side-name').innerText = data.fullname;
-        document.getElementById('side-id').innerText = data.arsID;
-        document.getElementById('side-email').innerText = data.email.replace(/(.{3})(.*)(?=@)/, "$1***");
+        document.getElementById('user-balance').innerText = (data.balance || 0).toFixed(2);
+        document.getElementById('side-name').innerText = data.fullname || "...";
+        document.getElementById('side-id').innerText = data.arsID || "---";
+        document.getElementById('side-email').innerText = data.email ? data.email.replace(/(.{3})(.*)(?=@)/, "$1***") : "...";
     });
 }
+
+// Chanje paj ant LOGIN ak SIGNUP
+window.toggleAuth = (type) => {
+    if (type === 'signup') {
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('signup-section').classList.remove('hidden');
+    } else {
+        document.getElementById('signup-section').classList.add('hidden');
+        document.getElementById('login-section').classList.remove('hidden');
+    }
+};
 
 window.showPage = async (pageId, navElement) => {
     const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj'];
@@ -188,4 +205,3 @@ window.startCarousel = () => {
         slides.style.transform = `translateX(-${slideIndex * 100}%)`;
     }, 4000);
 };
-        
