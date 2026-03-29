@@ -1,5 +1,5 @@
 /* ============================================================
-   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V3 - KORIJE NET
+   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V3 - MASTER KONPLE
    ============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -21,12 +21,45 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 
-// --- II. SISTÈM NOTIFIKASYON (KLÒCH) ---
+// --- II. SISTÈM ENTÊTE DINAMIK (NEW) ---
+function initDynamicHeader(data) {
+    const container = document.getElementById('header-dynamic-container');
+    if (!container) return;
+
+    container.innerHTML = `
+    <div id="dynamic-header" class="dynamic-header">
+        <div class="header-top-row">
+            <div class="user-greeting">
+                <span class="greeting-text">Bonjou, <b>${data.fullname.split(' ')[0]}</b>! 👋</span>
+                <span class="security-status"><i class="fas fa-shield-alt"></i> Kont ou an sekirite</span>
+            </div>
+            <div class="quick-balance">
+                <div class="bal-item">
+                    <small>Balans</small>
+                    <span>${(data.balance || 0).toFixed(2)} HTG</span>
+                </div>
+                <div class="bal-divider"></div>
+                <div class="bal-item">
+                    <small>Komisyon</small>
+                    <span style="color: #e67e22;">${(data.referral_data?.balance || 0).toFixed(2)} HTG</span>
+                </div>
+            </div>
+        </div>
+        <div class="flash-info-bar">
+            <div class="flash-label">INFO:</div>
+            <marquee behavior="scroll" direction="left">
+                🚀 Nouvo pousantaj disponib pou Digicel! | ⚠️ Pa janm bay pèsonn kòd sekirite ou. | 🎁 Rekòmande yon zanmi pou touche 4.5% komisyon.
+            </marquee>
+        </div>
+    </div>`;
+}
+
+// --- III. SISTÈM NOTIFIKASYON (KLÒCH) ---
 let tabKouran = 'koneksyon'; 
 
 window.voyeNotifikasyon = async (uid, tit, mesaj) => {
-    // Nou sove l nan chemen kote script.js ou a te konn li l la
-    const notifRef = push(ref(db, `users/${uid}/notifications/${tit.toLowerCase().includes('konekte') || tit.toLowerCase().includes('byenveni') ? 'koneksyon' : 'transak'}`));
+    const path = tit.toLowerCase().includes('konekte') || tit.toLowerCase().includes('byenveni') ? 'koneksyon' : 'transak';
+    const notifRef = push(ref(db, `users/${uid}/notifications/${path}`));
     await set(notifRef, {
         title: tit,
         msg: mesaj,
@@ -35,16 +68,12 @@ window.voyeNotifikasyon = async (uid, tit, mesaj) => {
     });
 };
 
-window.toggleNotifPanel = () => {
-    document.getElementById('notif-panel').classList.toggle('active');
-};
+window.toggleNotifPanel = () => document.getElementById('notif-panel').classList.toggle('active');
 
 window.switchNotifTab = (tabName) => {
     tabKouran = tabName === 'koneksyon' ? 'koneksyon' : 'transak';
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    // Ajiste id yo pou yo match ak HTML ou (tab-koneksyon oswa tab-transak)
-    const btnId = tabName === 'koneksyon' ? 'tab-koneksyon' : 'tab-transak';
-    document.getElementById(btnId)?.classList.add('active');
+    document.getElementById(tabName === 'koneksyon' ? 'tab-koneksyon' : 'tab-transak')?.classList.add('active');
     chajeNotifikasyonUI();
 };
 
@@ -52,7 +81,6 @@ function chajeNotifikasyonUI() {
     const uid = auth.currentUser?.uid;
     if (!uid) return;
 
-    // Nou koute branch kote notifikasyon yo sove a
     onValue(ref(db, `users/${uid}/notifications/${tabKouran}`), (snap) => {
         const container = document.getElementById('notif-content');
         const badge = document.getElementById('notif-badge');
@@ -60,21 +88,19 @@ function chajeNotifikasyonUI() {
         
         if (!data) {
             container.innerHTML = `<p class="empty-msg">Pa gen mesaj nan ${tabKouran}.</p>`;
-            badge?.classList.add('hidden');
+            if(badge) badge.classList.add('hidden');
             return;
         }
 
         const notifList = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
-        
-        // Update badge (sèlman sa ki poko li)
         const unread = notifList.filter(n => n.read === false).length;
+        
         if (badge) {
             badge.innerText = unread;
             badge.classList.toggle('hidden', unread === 0);
         }
 
         const icon = tabKouran === 'koneksyon' ? 'fa-shield-check' : 'fa-receipt';
-        
         container.innerHTML = notifList.map(n => `
             <div class="notif-item">
                 <i class="fa ${icon}"></i>
@@ -83,22 +109,19 @@ function chajeNotifikasyonUI() {
                     <p>${n.msg}</p>
                     <small>${new Date(n.timestamp).toLocaleString('fr-FR')}</small>
                 </div>
-            </div>
-        `).join('');
+            </div>`).join('');
     });
 }
 
-// --- III. OTANTIFIKASYON (LOGIN / SIGNUP) ---
+// --- IV. OTANTIFIKASYON ---
 window.handleLogin = () => {
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-pass').value;
-    if (!email || !pass) return alert("Tanpri ranpli tout chan yo!");
+    if (!email || !pass) return alert("Ranpli tout chan yo!");
     
     signInWithEmailAndPassword(auth, email, pass)
-        .then((u) => {
-            window.voyeNotifikasyon(u.user.uid, "Bon retou!", "Ou konekte ak siksè.");
-        })
-        .catch(() => alert("Erè: Email oswa Modpas pa bon."));
+        .then((u) => window.voyeNotifikasyon(u.user.uid, "Bon retou!", "Ou konekte ak siksè."))
+        .catch(() => alert("Email oswa Modpas pa bon."));
 };
 
 window.handleSignup = async () => {
@@ -106,7 +129,7 @@ window.handleSignup = async () => {
     const pass = document.getElementById('sign-pass').value;
     const name = document.getElementById('sign-name').value.trim();
     const phone = document.getElementById('sign-phone').value.trim();
-    const sponsorInput = document.getElementById('sponsor-input')?.value.trim();
+    const sponsor = document.getElementById('sponsor-input')?.value.trim();
 
     if (pass.length < 6 || !/[A-Z]/.test(pass)) return alert("Modpas la dwe gen 6 karaktè ak yon Majiskil.");
 
@@ -117,23 +140,21 @@ window.handleSignup = async () => {
 
         await set(ref(db, `users/${uid}`), {
             fullname: name, email: email, phone: phone, arsID: arsID,
-            balance: 0.00, status: "active", sponsor_id: sponsorInput || null,
+            balance: 0.00, status: "active", sponsor_id: sponsor || null,
             bonus_claimed: false, createdAt: serverTimestamp()
         });
-
         await set(ref(db, `ars_mapping/${arsID}`), { uid: uid });
-        
-        window.voyeNotifikasyon(uid, "Byenveni!", `Byenveni sou Echanj Plus! Kòd ARS ou se ${arsID}.`);
-    } catch (err) { alert("Erè: " + err.message); }
+        window.voyeNotifikasyon(uid, "Byenveni!", `Kòd ARS ou se ${arsID}.`);
+    } catch (err) { alert(err.message); }
 };
 
-// --- IV. NAVIGASYON & LISTENERS ---
+// --- V. NAVIGASYON & LISTENERS ---
 onAuthStateChanged(auth, (user) => {
     if (user) {
         document.getElementById('auth-page').classList.add('hidden');
         document.getElementById('home-page').classList.remove('hidden');
         loadUserData(user.uid);
-        chajeNotifikasyonUI(); // Lanse klòch la
+        chajeNotifikasyonUI();
         if (window.listenToMessages) window.listenToMessages(user.uid);
     } else {
         document.getElementById('auth-page').classList.remove('hidden');
@@ -148,7 +169,10 @@ function loadUserData(uid) {
         document.getElementById('user-balance').innerText = (data.balance || 0).toFixed(2);
         document.getElementById('side-name').innerText = data.fullname || "...";
         document.getElementById('side-id').innerText = data.arsID || "---";
-        document.getElementById('side-email').innerText = data.email ? data.email.replace(/(.{3})(.*)(?=@)/, "$1***") : "...";
+        document.getElementById('side-email').innerText = data.email.replace(/(.{3})(.*)(?=@)/, "$1***");
+        
+        // LANSE ENTÊTE DINAMIK LA
+        initDynamicHeader(data);
     });
 }
 
@@ -156,29 +180,25 @@ window.handleLogout = () => { if (confirm("Dekonekte?")) signOut(auth); };
 
 window.showPage = (pageId, navElement) => {
     const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj'];
-    sections.forEach(id => { document.getElementById(id)?.classList.add('hidden'); });
+    sections.forEach(id => document.getElementById(id)?.classList.add('hidden'));
     document.getElementById(pageId)?.classList.remove('hidden');
-    
     if (pageId === 'paj-trans' && window.initIstorik) window.initIstorik();
-    
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
     if (navElement) navElement.classList.add('active');
 };
 
-// --- V. LOJIK ECHANJ ---
+// --- VI. LOJIK ECHANJ ---
 window.openDialer = async (rezo) => {
     const montan = prompt("Konbyen minit w ap vann (" + rezo + ")?");
     if (!montan || montan < 100) return alert("Minimòm se 100 HTG.");
     const transID = "ECH-" + Date.now();
-    
     await set(ref(db, `transactions/${transID}`), {
         uid: auth.currentUser.uid, type: "Echanj", rezo, amount: parseFloat(montan), status: "En attente", timestamp: serverTimestamp()
     });
-    
     window.voyeNotifikasyon(auth.currentUser.uid, "Tranzaksyon", `Echanj ${montan} HTG ap tann validasyon.`);
     const ussd = rezo === 'digicel' ? `*128*50947111123*${montan}#` : `*123*88888888*32160708*${montan}#`;
     window.location.href = `tel:${encodeURIComponent(ussd)}`;
 };
 
 window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('active');
-           
+       
