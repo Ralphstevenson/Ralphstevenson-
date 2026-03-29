@@ -1234,19 +1234,26 @@ body.night-mode .menu-item:hover:not(.active) {
 */
 
 
-/* --- STYLE POU NOUVO ENTÊTE LA --- */
+
+/* ==========================================
+   FIX POU ENTÊTE V3 (DINAMIK)
+   ========================================== */
+
+/* Kontenè prensipal la */
 .header-v3 {
-    background: #ffffff;
-    padding: 15px 15px 5px 15px;
-    border-bottom: 2px solid #f1f3f4;
-    font-family: 'Poppins', sans-serif;
+    background: var(--card-white);
+    padding: 15px 20px 10px 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
+/* Premye liy (Non + Balans) */
 .header-top-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
 }
 
 .user-greeting {
@@ -1255,88 +1262,82 @@ body.night-mode .menu-item:hover:not(.active) {
 }
 
 .greeting-text {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #202124;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
 }
 
 .security-status {
-    font-size: 0.75rem;
-    color: #188038; /* Vèt sekirite */
-    font-weight: 500;
-    margin-top: 3px;
+    font-size: 11px;
+    color: var(--success);
+    font-weight: 600;
     display: flex;
     align-items: center;
+    gap: 4px;
 }
 
-.security-status i {
-    margin-right: 5px;
-}
-
-/* --- Balans Rapid --- */
+/* Zòn Balans Rapid la */
 .quick-balance {
     display: flex;
-    background: #f8f9fa;
-    padding: 10px 15px;
-    border-radius: 15px;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    align-items: center;
+    background: var(--bg-light);
+    padding: 8px 12px;
+    border-radius: 12px;
 }
 
 .bal-item {
     display: flex;
     flex-direction: column;
-    text-align: center;
+    text-align: right;
 }
 
 .bal-item small {
-    font-size: 0.6rem;
-    color: #5f6368;
+    font-size: 9px;
+    color: var(--text-soft);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .bal-item span {
+    font-size: 13px;
     font-weight: 800;
-    font-size: 0.95rem;
-    color: #1a73e8; /* Ble Echanj Plus */
+    color: var(--primary-blue);
 }
 
 .bal-divider {
     width: 1px;
-    background: #dadce0;
-    margin: 0 12px;
+    height: 20px;
+    background: #dfe1e6;
+    margin: 0 10px;
 }
 
-/* --- Flash Info Bar --- */
+/* Flash Info Bar (Marquee) */
 .flash-info-bar {
     display: flex;
     align-items: center;
-    background: #1a73e8;
+    background: var(--primary-blue);
     color: white;
-    border-radius: 10px;
-    padding: 6px 12px;
-    font-size: 0.8rem;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 12px;
     overflow: hidden;
-    margin-bottom: 10px;
 }
 
 .flash-label {
-    background: #fbbc04; /* Jòn fflash */
-    color: #202124;
-    font-weight: 900;
-    padding: 2px 8px;
-    border-radius: 5px;
-    margin-right: 12px;
-    font-size: 0.7rem;
+    background: var(--warning);
+    color: #000;
+    font-weight: 800;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 10px;
+    white-space: nowrap;
 }
 
-marquee {
-    font-weight: 400;
+/* Fix pou evite debòdman nan Night Mode */
+body.night-mode .quick-balance {
+    background: rgba(255,255,255,0.05);
 }
 
-.header-loader {
-    text-align: center;
-    padding: 20px;
-    color: #5f6368;
-    font-style: italic;
-}
+body.night-mode .bal-divider {
+    background: rgba(255,255,255,0.1);
+   }
