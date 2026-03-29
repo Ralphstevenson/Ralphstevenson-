@@ -1404,3 +1404,67 @@ body.night-mode .flash-info-bar {
 body.night-mode .flash-content::after {
     background: linear-gradient(to right, transparent, #0f172a);
    }
+
+
+
+/* ============================================================
+   USER META - GREETING & SECURITY (SIDEBAR PRO)
+   ============================================================ */
+
+/* 1. Veso Salitasyon an */
+.user-greeting {
+    margin-bottom: 5px;
+}
+
+.greeting-text {
+    font-size: 16px;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    display: block;
+}
+
+.greeting-text b {
+    color: #109121; /* Vèt Echanj Plus la pou non an */
+    font-weight: 700;
+}
+
+/* 2. Estati Sekirite a */
+.security-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(16, 145, 33, 0.15); /* Ti background vèt transparan */
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    color: #2ecc71;
+    font-weight: 600;
+    margin-bottom: 12px;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.security-status i {
+    font-size: 12px;
+    /* Ti animasyon batman pou plak sekirite a */
+    animation: shield-pulse 2s infinite;
+}
+
+/* Animasyon batman kè pou ikòn sekirite a */
+@keyframes shield-pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Ajusteman pou Side ID a pa kole ak sekirite a */
+#side-id {
+    margin-top: 5px;
+    display: inline-block;
+}
+
+/* --- NIGHT MODE --- */
+body.night-mode .greeting-text {
+    color: #f8fafc;
+}
