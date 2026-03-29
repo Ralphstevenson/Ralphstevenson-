@@ -1,5 +1,5 @@
 /* ============================================================
-   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V3 - KONPLE NET
+   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V3 - KONPLE NET (KORIJE)
    ============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -62,12 +62,19 @@ function chajeNotifikasyonUI() {
         }
 
         const notifList = Object.values(data).reverse();
+        
+        // FILTRAJ KORIJE: Nou asire nou kouvri plis mo kle
         const filtred = notifList.filter(n => {
             const t = n.title.toLowerCase();
+            const m = n.message.toLowerCase(); // Nou gade nan mesaj la tou
+            
             if (currentNotifTab === 'koneksyon') {
-                return t.includes("byenveni") || t.includes("retou") || t.includes("konekte");
+                return t.includes("byenveni") || t.includes("retou") || t.includes("konekte") || t.includes("koneksyon");
             } else {
-                return t.includes("tranzaksyon") || t.includes("bonis") || t.includes("komisyon") || t.includes("echanj") || t.includes("retrè");
+                // Lis mo kle pou tranzaksyon yo pi laj
+                return t.includes("tranzaksyon") || t.includes("bonis") || t.includes("komisyon") || 
+                       t.includes("echanj") || t.includes("retrè") || t.includes("voye") || 
+                       m.includes("htg") || t.includes("validasyon");
             }
         });
 
@@ -100,7 +107,9 @@ window.handleLogin = () => {
     if (!email || !pass) return alert("Tanpri ranpli tout chan yo!");
     
     signInWithEmailAndPassword(auth, email, pass)
-        .then((u) => window.voyeNotifikasyon(u.user.uid, "Bon retou!", "Ou konekte ak siksè."))
+        .then((u) => {
+            window.voyeNotifikasyon(u.user.uid, "Koneksyon Reyisi", "Ou konekte ak siksè sou kont Echanj Plus ou.");
+        })
         .catch(() => alert("Erè: Email oswa Modpas pa bon."));
 };
 
@@ -133,10 +142,10 @@ window.handleSignup = async () => {
                 const inviteRef = push(ref(db, `users/${sponsorUid}/referral_data/invite_list`));
                 await set(inviteRef, { uid, name, arsID, date: new Date().toLocaleDateString(), status: "Pending" });
                 await update(ref(db, `users/${sponsorUid}/referral_data`), { total_invites: increment(1) });
-                window.voyeNotifikasyon(sponsorUid, "Nouvo Envite!", `${name} enskri ak kòd ou.`);
+                window.voyeNotifikasyon(sponsorUid, "Nouvo Envite Tranzaksyon", `${name} enskri ak kòd ou.`);
             }
         }
-        window.voyeNotifikasyon(uid, "Byenveni!", `Byenveni ${name}! Kòd ou se ${arsID}.`);
+        window.voyeNotifikasyon(uid, "Byenveni Koneksyon", `Byenveni ${name}! Kòd ou se ${arsID}.`);
     } catch (err) { alert("Erè: " + err.message); }
 };
 
@@ -150,13 +159,13 @@ window.distribyeBonisOtomatik = async (uid, montantHTG) => {
             const komisyonParenn = montantHTG * 0.045;
 
             await update(ref(db, `users/${uid}`), { balance: increment(bonusKliyan), bonus_claimed: true });
-            window.voyeNotifikasyon(uid, "Bonis Aktive!", `Ou resevwa ${bonusKliyan.toFixed(2)} HTG (2%).`);
+            window.voyeNotifikasyon(uid, "Bonis Tranzaksyon", `Ou resevwa ${bonusKliyan.toFixed(2)} HTG (2%) rabè.`);
 
             const mappingSnap = await get(ref(db, `ars_mapping/${userData.sponsor_id}`));
             if (mappingSnap.exists()) {
                 const sUid = mappingSnap.val().uid;
                 await update(ref(db, `users/${sUid}/referral_data`), { balance: increment(komisyonParenn), total_earned: increment(komisyonParenn) });
-                window.voyeNotifikasyon(sUid, "Komisyon!", `Ou fè ${komisyonParenn.toFixed(2)} HTG sou ${userData.fullname}.`);
+                window.voyeNotifikasyon(sUid, "Komisyon Tranzaksyon", `Ou fè ${komisyonParenn.toFixed(2)} HTG sou ${userData.fullname}.`);
             }
         }
     } catch (err) { console.error(err); }
@@ -168,7 +177,7 @@ onAuthStateChanged(auth, (user) => {
         document.getElementById('auth-page').classList.add('hidden');
         document.getElementById('home-page').classList.remove('hidden');
         loadUserData(user.uid);
-        chajeNotifikasyonUI();
+        chajeNotifikasyonUI(); // Lanse sistèm notifikasyon an
         if (window.listenToMessages) window.listenToMessages(user.uid);
     } else {
         document.getElementById('auth-page').classList.remove('hidden');
@@ -230,4 +239,4 @@ window.startCarousel = () => {
         slides.style.transform = `translateX(-${slideIndex * 100}%)`;
     }, 4000);
 };
-           
+       
