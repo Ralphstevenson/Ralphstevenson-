@@ -1468,3 +1468,59 @@ body.night-mode .flash-content::after {
 body.night-mode .greeting-text {
     color: #f8fafc;
 }
+
+
+
+/* ==========================================
+   HEADER PAJ - STYLE ELITE (PARENNAJ)
+   ========================================== */
+.header-paj {
+    background: linear-gradient(135deg, #ffffff, #f8fafc); /* Yon gradyan blan ki trè dous */
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border-left: 5px solid #109121; /* Liy vèt idantite mak la */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Tit paj la (Parennaj) */
+.page-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #1e293b; /* Nwa ble pwofesyonèl */
+    margin: 0 0 8px 0;
+}
+
+/* Ikòn nan (itilize koulè mak la) */
+.page-title i {
+    color: #109121;
+    font-size: 22px;
+}
+
+/* Soutit la (Eksplikasyon komisyon an) */
+.subtitle-paj {
+    font-size: 14px;
+    color: #64748b; /* Koulè gri-ble ki pa agresif */
+    margin: 0;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+/* --- ADAPTASYON POU NIGHT MODE --- */
+body.night-mode .header-paj {
+    background: #1e293b;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.night-mode .page-title {
+    color: #ffffff;
+}
+
+body.night-mode .subtitle-paj {
+    color: #94a3b8;
+   }
