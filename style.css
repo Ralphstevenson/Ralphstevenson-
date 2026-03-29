@@ -1236,46 +1236,80 @@ body.night-mode .menu-item:hover:not(.active) {
 
 
 /*. MANAGER 
-
 /* ==========================================
-   WIDGET BALANS VÈT - ECHANJ PLUS PRO
+   HEADER BALANCE PILL - STYLE 161845
    ========================================== */
-.quick-balance {
+.header-bal-pill {
     display: flex;
-    flex-direction: column; /* Mete yo an kolòn */
-    gap: 12px;              /* Espas ant Balans ak Komisyon */
-    padding: 15px 20px;
-    background: #109121;    /* Background Vèt Echanj Plus la */
-    border-radius: 12px;
+    align-items: center;
+    background: #109121; /* Vèt Echanj Plus */
+    padding: 4px 12px 4px 4px; /* Mwens espas agoch poutèt ti wonn lan */
+    border-radius: 50px;       /* Fè l tankou yon ti grenn */
+    gap: 10px;
     width: fit-content;
-    min-width: 200px;
-    box-shadow: 0 4px 12px rgba(16, 145, 33, 0.2); /* Yon ti lonbraj vèt trè dous */
-    font-family: Arial, Helvetica, sans-serif;    /* Font Arial jan ou mande l la */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
 }
 
-.bal-item {
+/* Ti wonn zoranj lan ak siy + */
+.bal-icon-circle {
+    background: #ff9800; /* Zoranj jan l te ye nan foto a */
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
     display: flex;
-    flex-direction: column; /* Tèks ak Montan an an kolòn tou */
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
 }
 
-/* Stil pou Non yo (Balans, Komisyon) */
-.bal-item small {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.8); /* Blan yon ti jan transparan pou etikèt la */
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 2px;
+/* Zòn kote chif yo ye a (an kolon) */
+.bal-values {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-/* Stil pou Kantite Kòb la (HTG) */
-.bal-item span {
-    font-size: 20px;
-    font-weight: 900;       /* Ekri byen gra */
-    color: #ffffff;         /* Blan pou l ka parèt byen sou vèt la */
+/* Balans Prensipal (Blan ak Gra) */
+.main-amt {
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 14px;
+    line-height: 1;
 }
 
-/* Pou nou fè diferans ak Komisyon an */
-.bal-item .komisyon-valè {
-    color: #ffcc00;         /* Yon jòn "Gold" pou komisyon an ka briye sou vèt la */
+.main-amt small {
+    font-size: 9px;
+    font-weight: normal;
+    margin-left: 2px;
 }
+
+/* Komisyon an (Jòn pou l ka parèt) */
+.comm-amt {
+    color: #ffcc00; /* Jòn gold */
+    font-weight: 700;
+    font-size: 11px;
+    margin-top: 1px;
+}
+
+.comm-amt small {
+    font-size: 8px;
+    opacity: 0.9;
+}
+
+/* FIX POU HEADER A: 
+   Nan foto Screenshot 074012 ou a, header a chaje. 
+   Mete sa pou ranje pozisyon an */
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    height: auto !important; /* Kite l pran wotè kontni an */
+}
+
+#header-dynamic-container {
+    margin-left: auto; /* Pouse balans lan sou bò dwat nèt */
+   }
