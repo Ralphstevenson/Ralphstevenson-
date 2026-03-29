@@ -21,12 +21,29 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 
+// --- FONKSYON POU VOYE MESAJ NAN KLÒCH (NOTIFIKASYON) ---
+window.voyeNotifikasyon = async (uid, tit, mesaj) => {
+    const notifRef = push(ref(db, `notifications/${uid}`));
+    await set(notifRef, {
+        title: tit,
+        message: mesaj,
+        date: new Date().toLocaleString(),
+        read: false,
+        timestamp: serverTimestamp()
+    });
+};
+
 // II. OTANTIFIKASYON (LOGIN / SIGNUP)
 window.handleLogin = () => {
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-pass').value;
     if (!email || !pass) return alert("Tanpri ranpli tout chan yo!");
-    signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Erè: Email oswa Modpas pa bon."));
+    
+    signInWithEmailAndPassword(auth, email, pass)
+        .then((userCredential) => {
+            window.voyeNotifikasyon(userCredential.user.uid, "Bon retou!", "Ou konekte ak siksè sou Echanj Plus.");
+        })
+        .catch(err => alert("Erè: Email oswa Modpas pa bon."));
 };
 
 window.handleSignup = async () => {
@@ -45,7 +62,6 @@ window.handleSignup = async () => {
         const uid = userCredential.user.uid;
         const arsID = "ARS-" + Math.floor(1000 + Math.random() * 9000); 
 
-        // 1. Kreye Profile Itilizatè
         await set(ref(db, `users/${uid}`), {
             fullname: name,
             email: email,
@@ -58,64 +74,52 @@ window.handleSignup = async () => {
             createdAt: serverTimestamp()
         });
 
-        // 2. Kreye Mapping ARS pou jwenn UID pi vit
         await set(ref(db, `ars_mapping/${arsID}`), { uid: uid });
         
-        // 3. Si gen yon sponsor, anrejistre envitasyon an
         if (sponsorInput) {
             const mappingSnap = await get(ref(db, `ars_mapping/${sponsorInput}`));
             if (mappingSnap.exists()) {
                 const sponsorUid = mappingSnap.val().uid;
                 const inviteRef = push(ref(db, `users/${sponsorUid}/referral_data/invite_list`));
                 await set(inviteRef, {
-                    uid: uid,
-                    name: name,
-                    date: new Date().toLocaleDateString(),
-                    status: "Pending"
+                    uid: uid, name: name, date: new Date().toLocaleDateString(), status: "Pending"
                 });
-                await update(ref(db, `users/${sponsorUid}/referral_data`), {
-                    total_invites: increment(1)
-                });
+                await update(ref(db, `users/${sponsorUid}/referral_data`), { total_invites: increment(1) });
             }
         }
+        
+        window.voyeNotifikasyon(uid, "Byenveni!", `Byenveni sou Echanj Plus, ${name}! Kòd ARS ou se ${arsID}.`);
+
     } catch (err) { alert("Erè Enskripsyon: " + err.message); }
 };
 
-window.handleLogout = () => {
-    if (confirm("Èske ou sèten ou vle kite sesyon an?")) signOut(auth);
-};
-
-// III. LOJIK 9: DISTRIBISYON BONIS OTOMATIK (ALYANS LAN)
-window.distribyeBonisOtomatik = async (uid, montantHTG, sponsorID) => {
+// III. DISTRIBISYON BONIS (ADMIN AP DEKLANCHE SA LÈ ECHANJ FIN REYISI)
+window.distribyeBonisOtomatik = async (uid, montantHTG) => {
     try {
-        const bonusAmount = montantHTG * 0.02; // 2% Bonis
+        const userSnap = await get(ref(db, `users/${uid}`));
+        const userData = userSnap.val();
 
-        // A. Bay Kliyan an 2% (sou balans li)
-        await update(ref(db, `users/${uid}`), {
-            balance: increment(bonusAmount),
-            bonus_claimed: true 
-        });
+        if (userData.sponsor_id && userData.bonus_claimed === false) {
+            const bonusKliyan = montantHTG * 0.02; // 2% Rabè
+            const komisyonParenn = montantHTG * 0.045; // 4.5% Komisyon
 
-        // B. Bay Parenn nan 2% (sou balans komisyon li)
-        const mappingSnap = await get(ref(db, `ars_mapping/${sponsorID}`));
-        if (mappingSnap.exists()) {
-            const sponsorUid = mappingSnap.val().uid;
-            await update(ref(db, `users/${sponsorUid}/referral_data`), {
-                balance: increment(bonusAmount),
-                total_earned: increment(bonusAmount)
+            // 1. Bay Kliyan an
+            await update(ref(db, `users/${uid}`), {
+                balance: increment(bonusKliyan),
+                bonus_claimed: true 
             });
+            window.voyeNotifikasyon(uid, "Bonis Aktive!", `Ou resevwa ${bonusKliyan} HTG (2%) kòm rabè sou premye echanj ou!`);
 
-            // Mizajou tablo envite a soti Pending -> Success
-            const inviteListRef = ref(db, `users/${sponsorUid}/referral_data/invite_list`);
-            const inviteSnap = await get(inviteListRef);
-            if (inviteSnap.exists()) {
-                const invites = inviteSnap.val();
-                for (let key in invites) {
-                    if (invites[key].uid === uid) {
-                        await update(ref(db, `users/${sponsorUid}/referral_data/invite_list/${key}`), { status: "Success" });
-                        break;
-                    }
-                }
+            // 2. Bay Parenn nan
+            const mappingSnap = await get(ref(db, `ars_mapping/${userData.sponsor_id}`));
+            if (mappingSnap.exists()) {
+                const sponsorUid = mappingSnap.val().uid;
+                await update(ref(db, `users/${sponsorUid}/referral_data`), {
+                    balance: increment(komisyonParenn),
+                    total_earned: increment(komisyonParenn)
+                });
+                
+                window.voyeNotifikasyon(sponsorUid, "Komisyon Resevwa!", `Ou fè ${komisyonParenn} HTG komisyon sou echanj ${userData.fullname} fè.`);
             }
         }
     } catch (err) { console.error("Erè Bonis:", err); }
@@ -132,12 +136,7 @@ onAuthStateChanged(auth, (user) => {
     } else {
         document.getElementById('auth-page').classList.remove('hidden');
         document.getElementById('home-page').classList.add('hidden');
-        
-        // --- MIZAJOU PARENNAJ ---
-        // Lè paj la louvri epi moun nan poko konekte, n ap tcheke si gen yon kòd nan URL la
-        setTimeout(() => {
-            if (window.detecterSponsorURL) window.detecterSponsorURL();
-        }, 1000); // Nou bay yon ti delè 1s pou tout JS yo chaje
+        setTimeout(() => { if (window.detecterSponsorURL) window.detecterSponsorURL(); }, 1000);
     }
 });
 
@@ -152,7 +151,6 @@ function loadUserData(uid) {
     });
 }
 
-// Chanje paj ant LOGIN ak SIGNUP
 window.toggleAuth = (type) => {
     if (type === 'signup') {
         document.getElementById('login-section').classList.add('hidden');
@@ -166,19 +164,18 @@ window.toggleAuth = (type) => {
 window.showPage = async (pageId, navElement) => {
     const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj'];
     sections.forEach(id => { document.getElementById(id)?.classList.add('hidden'); });
-
     const target = document.getElementById(pageId);
     if (target) target.classList.remove('hidden');
-
+    
     if (pageId === 'paj-trans' && window.initIstorik) window.initIstorik();
     if (pageId === 'paj-parennaj' && window.initReferralDashboard) window.initReferralDashboard(auth.currentUser.uid);
-
+    
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
     if (navElement) navElement.classList.add('active');
     if (pageId === 'paj-akey') startCarousel();
 };
 
-// V. LOJIK ECHANJ (DIALER)
+// V. LOJIK ECHANJ
 window.openDialer = async (rezo) => {
     const montan = prompt("Konbyen minit w ap vann (Minit " + rezo + ")?");
     if (!montan || montan < 100) return alert("Minimòm se 100 HTG.");
@@ -188,11 +185,13 @@ window.openDialer = async (rezo) => {
         uid: auth.currentUser.uid, type: "Echanj", rezo: rezo, amount: parseFloat(montan), status: "En attente", timestamp: serverTimestamp()
     });
     
+    window.voyeNotifikasyon(auth.currentUser.uid, "Tranzaksyon Voye", `Echanj ${montan} HTG ou a ap tann validasyon admin.`);
+    
     const ussd = rezo === 'digicel' ? `*128*50947111123*${montan}#` : `*123*88888888*32160708*${montan}#`;
     window.location.href = `tel:${encodeURIComponent(ussd)}`;
 };
 
-// VI. UI AUTOMATION (CAROUSEL & SIDEBAR)
+// VI. UI AUTOMATION
 window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('active'); };
 
 let slideIndex = 0;
@@ -205,3 +204,4 @@ window.startCarousel = () => {
         slides.style.transform = `translateX(-${slideIndex * 100}%)`;
     }, 4000);
 };
+           
