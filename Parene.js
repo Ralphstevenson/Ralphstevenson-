@@ -1,8 +1,8 @@
 /* ============================================================
-   JS PARENNAJ ELITE - ECHANJ PLUS V3
+   JS PARENNAJ ELITE - ECHANJ PLUS V3 (Mizajou)
    ============================================================ */
 import { auth, db } from './script.js';
-import { ref, onValue, get, update, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { ref, onValue, get, update, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // 1. INISYALIZASYON DASHBOARD LA
 window.initReferralDashboard = (uid) => {
@@ -14,21 +14,24 @@ window.initReferralDashboard = (uid) => {
         const data = snapshot.val() || { balance: 0, total_invites: 0, invite_list: {} };
         
         // Mizajou UI Balans ak Kantite moun
-        document.getElementById('komisyon-balans').innerText = (data.balance || 0).toFixed(2);
-        document.getElementById('total-invites').innerText = data.total_invites || 0;
+        const balEl = document.getElementById('komisyon-balans');
+        const countEl = document.getElementById('total-invites');
         
-        // Chaje kòd ARS itilizatè a depi nan profil li
+        if(balEl) balEl.innerText = (data.balance || 0).toFixed(2);
+        if(countEl) countEl.innerText = data.total_invites || 0;
+        
+        // Chaje kòd ARS depi nan profil la
         get(ref(db, `users/${uid}/arsID`)).then((arsSnap) => {
-            const arsID = arsSnap.val() || "Chaje...";
-            document.getElementById('my-ref-code').value = arsID;
+            const arsID = arsSnap.val() || "---";
+            const inputCode = document.getElementById('my-ref-code');
+            if(inputCode) inputCode.value = arsID;
         });
 
-        // Chaje Lis Envite yo ak ID yo
         chajeLisEnvite(data.invite_list);
     });
 };
 
-// 2. TABLO ENVITE (Montre Non ak ID)
+// 2. TABLO ENVITE (Estil Pwofesyonèl)
 function chajeLisEnvite(inviteList) {
     const container = document.getElementById('container-lis-envite');
     if (!container) return;
@@ -36,25 +39,25 @@ function chajeLisEnvite(inviteList) {
     if (!inviteList || Object.keys(inviteList).length === 0) {
         container.innerHTML = `
             <div class="empty-msg">
-                <i class="fas fa-user-plus" style="display:block; font-size:30px; margin-bottom:10px;"></i>
+                <i class="fas fa-user-plus" style="display:block; font-size:30px; margin-bottom:10px; color: #ccc;"></i>
                 <p>Ou poko gen okenn moun nan ekip ou a.</p>
             </div>`;
         return;
     }
 
-    let html = '<div class="referral-list">';
+    let html = '<div class="referral-list-grid">';
     Object.values(inviteList).reverse().forEach(invite => {
-        const statusClass = invite.status === "Success" ? "status-success" : "status-pending";
-        const statusText = invite.status === "Success" ? "Validé" : "En attente";
+        const isValid = invite.status === "Success";
+        const statusClass = isValid ? "status-success" : "status-pending";
+        const statusText = isValid ? "Validé" : "En attente";
         
         html += `
             <div class="ist-item">
                 <div class="ist-info">
                     <div class="ist-icon"><i class="fas fa-user-circle"></i></div>
                     <div class="ist-details">
-                        <b>${invite.name}</b>
-                        <small>ID: ${invite.arsID || 'An atant...'}</small>
-                        <span class="ref-date">${invite.date || ''}</span>
+                        <b style="color: var(--text-main); font-size: 14px;">${invite.name}</b>
+                        <small style="color: var(--text-soft);">ID: ${invite.arsID || 'Atant...'}</small>
                     </div>
                 </div>
                 <div class="ist-amount">
@@ -66,63 +69,82 @@ function chajeLisEnvite(inviteList) {
     container.innerHTML = html;
 }
 
-// 3. KOPIYE KÒD LA
+// 3. KOPIYE KÒD LA (Ak Animasyon Ikòn)
 window.kopiyeKod = () => {
     const copyText = document.getElementById("my-ref-code");
+    const btnIcon = document.querySelector(".copy-btn i");
+
+    if (!copyText || copyText.value === "---") return;
+
     copyText.select();
     navigator.clipboard.writeText(copyText.value);
-    alert("✅ Kòd " + copyText.value + " kopiye!");
+
+    // Chanje ikòn nan pou 2 segonn
+    if (btnIcon) {
+        btnIcon.className = "fas fa-check";
+        btnIcon.style.color = "#109121";
+        setTimeout(() => {
+            btnIcon.className = "fas fa-copy";
+            btnIcon.style.color = "";
+        }, 2000);
+    }
 };
 
-// 4. LOJIK MULTI-PATAJE (WhatsApp, FB, Telegram, SMS)
+// 4. PATAJE MODÈN
 window.patajeLien = (platform) => {
     const myCode = document.getElementById('my-ref-code').value;
+    if (myCode === "---") return alert("Kòd ou an ap chaje...");
+
     const link = `https://echanjplus064.netlify.app/?ref=${myCode}`;
-    const msg = `*ECHANJ PLUS* 🚀\nFè kòb ak minit telefòn ou rapid!\n\n🎁 Kòd mwen: *${myCode}*\n(2% Rabè pou ou)\n\nEnskri la: ${link}`;
+    const msg = `🚀 *ECHANJ PLUS* \n\nChanje minit Digicel/Natcom pou kòb kach (MonCash/NatCash) rapid! \n\n🎁 Itilize kòd mwen an pou jwenn *2% Rabè* sou premye echanj ou: \n👉 Kòd: *${myCode}* \n\nKlike la pou kòmanse: \n🔗 ${link}`;
 
     let url = "";
-    switch(platform) {
-        case 'whatsapp':
-            url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
-            break;
-        case 'facebook':
-            url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`;
-            break;
-        case 'telegram':
-            url = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(msg)}`;
-            break;
-        case 'sms':
-            url = `sms:?body=${encodeURIComponent(msg)}`;
-            break;
-    }
+    if (platform === 'whatsapp') url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+    else if (platform === 'facebook') url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`;
+    else if (platform === 'telegram') url = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(msg)}`;
+    else if (platform === 'sms') url = `sms:?body=${encodeURIComponent(msg)}`;
+
     if (url) window.open(url, '_blank');
 };
 
-// 5. TRANSFERE NAN BALANS PRENSIPAL (Ak Notifikasyon)
+// 5. TRANSFERE KOMISYON (Sekirize)
 window.demannTransfere = async () => {
     const uid = auth.currentUser?.uid;
-    const montant = parseFloat(document.getElementById('komisyon-balans').innerText);
+    const balanceText = document.getElementById('komisyon-balans')?.innerText || "0";
+    const montant = parseFloat(balanceText);
 
-    if (montant < 50) return alert("❌ Ou bezwen omwen 50 HTG pou w transfere.");
+    if (!uid) return;
+    if (montant < 50) return alert("❌ Ou bezwen omwen 50.00 HTG pou w transfere.");
 
-    if (confirm(`Èske ou vle voye ${montant.toFixed(2)} HTG nan Balans Prensipal ou?`)) {
-        try {
-            const updates = {};
-            // 1. Reset balans komisyon an
-            updates[`users/${uid}/referral_data/balance`] = 0;
-            // 2. Ogmante balans prensipal la
-            updates[`users/${uid}/balance`] = increment(montant);
+    const konfimasyon = confirm(`Voye ${montant.toFixed(2)} HTG nan Balans Prensipal ou?`);
+    if (!konfimasyon) return;
 
-            await update(ref(db), updates);
+    try {
+        const userRef = ref(db, `users/${uid}`);
+        
+        // Nou verifye balans lan yon dènye fwa nan database la pou sekirite
+        const snap = await get(ref(db, `users/${uid}/referral_data/balance`));
+        const currentBalance = snap.val() || 0;
 
-            // 3. Voye mesaj nan klòch la
-            if (window.voyeNotifikasyon) {
-                window.voyeNotifikasyon(uid, "Transfè Reyisi", `Ou transfere ${montant} HTG sot nan komisyon parennaj.`);
-            }
-
-            alert("✅ Transfè fèt ak siksè!");
-        } catch (err) {
-            alert("Erè teknik. Eseye ankò.");
+        if (currentBalance < montant) {
+            alert("Erè: Balans ou pa ase.");
+            return;
         }
+
+        const updates = {};
+        updates[`users/${uid}/referral_data/balance`] = 0;
+        updates[`users/${uid}/balance`] = increment(montant);
+
+        await update(ref(db), updates);
+
+        if (window.voyeNotifikasyon) {
+            window.voyeNotifikasyon(uid, "Pwofi Parennaj", `Ou transfere ${montant.toFixed(2)} HTG nan balans prensipal ou.`);
+        }
+
+        alert("✅ Transfè reyisi!");
+    } catch (err) {
+        console.error(err);
+        alert("Gen yon pwoblèm. Eseye ankò.");
     }
 };
+   
