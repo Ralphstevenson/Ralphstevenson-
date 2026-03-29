@@ -1235,109 +1235,24 @@ body.night-mode .menu-item:hover:not(.active) {
 
 
 
-/* ==========================================
-   FIX POU ENTÊTE V3 (DINAMIK)
-   ========================================== */
+/*. MANAGER 
 
-/* Kontenè prensipal la */
-.header-v3 {
-    background: var(--card-white);
-    padding: 15px 20px 10px 20px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+/* Pou asire ke si yo andan yon liy yo aliyen byen */
+.user-greeting, .quick-balance, .flash-info-bar {
+    margin-bottom: 10px; /* Pou yo pa kole si yo yonn anba lòt */
 }
 
-/* Premye liy (Non + Balans) */
-.header-top-row {
+/* Nou asire Flash Info a toujou gen yon lajè ki kòrèk */
+.flash-info-bar {
+    width: 100%; 
+    min-height: 35px;
+}
+
+/* Si ou mete yo nan yon liy (Flex), sa ap ede */
+.header-row-custom {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
 }
-
-.user-greeting {
-    display: flex;
-    flex-direction: column;
-}
-
-.greeting-text {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text-main);
-}
-
-.security-status {
-    font-size: 11px;
-    color: var(--success);
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-/* Zòn Balans Rapid la */
-.quick-balance {
-    display: flex;
-    align-items: center;
-    background: var(--bg-light);
-    padding: 8px 12px;
-    border-radius: 12px;
-}
-
-.bal-item {
-    display: flex;
-    flex-direction: column;
-    text-align: right;
-}
-
-.bal-item small {
-    font-size: 9px;
-    color: var(--text-soft);
-    text-transform: uppercase;
-}
-
-.bal-item span {
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--primary-blue);
-}
-
-.bal-divider {
-    width: 1px;
-    height: 20px;
-    background: #dfe1e6;
-    margin: 0 10px;
-}
-
-/* Flash Info Bar (Marquee) */
-.flash-info-bar {
-    display: flex;
-    align-items: center;
-    background: var(--primary-blue);
-    color: white;
-    border-radius: 8px;
-    padding: 5px 10px;
-    font-size: 12px;
-    overflow: hidden;
-}
-
-.flash-label {
-    background: var(--warning);
-    color: #000;
-    font-weight: 800;
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-right: 10px;
-    white-space: nowrap;
-}
-
-/* Fix pou evite debòdman nan Night Mode */
-body.night-mode .quick-balance {
-    background: rgba(255,255,255,0.05);
-}
-
-body.night-mode .bal-divider {
-    background: rgba(255,255,255,0.1);
-   }
