@@ -1238,58 +1238,44 @@ body.night-mode .menu-item:hover:not(.active) {
 /*. MANAGER 
 
 /* ==========================================
-   WIDGET BALANS PRO - ECHANJ PLUS
+   WIDGET BALANS VÈT - ECHANJ PLUS PRO
    ========================================== */
 .quick-balance {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 12px 16px;
-    background: #ffffff;
+    flex-direction: column; /* Mete yo an kolòn */
+    gap: 12px;              /* Espas ant Balans ak Komisyon */
+    padding: 15px 20px;
+    background: #109121;    /* Background Vèt Echanj Plus la */
     border-radius: 12px;
-    /* Yon ti lonbraj trè lejè pou l detache sou background blan an */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    width: fit-content; /* Li pran sèlman lajè li bezwen */
-    min-width: 180px;
+    width: fit-content;
+    min-width: 200px;
+    box-shadow: 0 4px 12px rgba(16, 145, 33, 0.2); /* Yon ti lonbraj vèt trè dous */
+    font-family: Arial, Helvetica, sans-serif;    /* Font Arial jan ou mande l la */
 }
 
 .bal-item {
     display: flex;
-    justify-content: space-between; /* Mete mo a agoch, kòb la adwat */
-    align-items: center;
+    flex-direction: column; /* Tèks ak Montan an an kolòn tou */
+    align-items: flex-start;
 }
 
-/* Stil pou Etikèt (Balans / Komisyon) */
+/* Stil pou Non yo (Balans, Komisyon) */
 .bal-item small {
-    font-size: 13px;
-    color: #64748b; /* Yon koulè gri/ble ki dous pou je a */
-    font-weight: 500;
-    letter-spacing: 0.3px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8); /* Blan yon ti jan transparan pou etikèt la */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
 }
 
-/* Stil pou chif yo (HTG) */
+/* Stil pou Kantite Kòb la (HTG) */
 .bal-item span {
-    font-size: 15px;
-    font-weight: 700;
-    color: #1e293b; /* Nwa fonse pou lekti fasil */
-    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 900;       /* Ekri byen gra */
+    color: #ffffff;         /* Blan pou l ka parèt byen sou vèt la */
 }
 
-/* Koulè oranj pou Komisyon an sèlman */
+/* Pou nou fè diferans ak Komisyon an */
 .bal-item .komisyon-valè {
-    color: #f59e0b; 
+    color: #ffcc00;         /* Yon jòn "Gold" pou komisyon an ka briye sou vèt la */
 }
-
-/* --- FIX POU NIGHT MODE --- */
-body.night-mode .quick-balance {
-    background: #1e293b;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-body.night-mode .bal-item small {
-    color: #94a3b8;
-}
-
-body.night-mode .bal-item span {
-    color: #f8fafc;
-   }
