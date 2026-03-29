@@ -1318,37 +1318,36 @@ body.night-mode .menu-item:hover:not(.active) {
 /* ==========================================
    FLASH INFO BAR - STYLE NEWS TICKER
    ========================================== */
-/* ==========================================
-   FLASH INFO BAR - STYLE NEWS TICKER (PRO)
-   ========================================== */
+/* ============================================================
+   FLASH INFO BAR - STYLE NEWS TICKER (VERSION KONPLÈ)
+   ============================================================ */
 .flash-info-bar {
     display: flex;
     align-items: center;
     background: #1e293b; /* Ble fonse pwofesyonèl */
-    height: 38px;        /* Yon ti kras pi wo pou l respire */
+    height: 40px;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 8px;
     margin: 12px 0;
     position: relative;
-    border-left: 5px solid #109121; /* Liy vèt Echanj Plus */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #109121; /* Vèt Echanj Plus */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    font-family: Arial, Helvetica, sans-serif; /* Font Arial jan ou mande l la */
 }
 
-/* Etikèt INFO ki fiks la */
+/* Etikèt INFO ki fiks sou bò gòch la */
 .flash-label {
-    background: linear-gradient(135deg, #109121, #0d751a); /* Gradyan vèt */
-    color: #ffffff;
+    background: linear-gradient(135deg, #109121, #0d751a);
+    color: #ffffff !important; /* Blan nèt */
     padding: 0 15px;
     height: 100%;
     display: flex;
     align-items: center;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 900;
-    z-index: 5;
-    box-shadow: 8px 0 15px rgba(0, 0, 0, 0.3);
-    gap: 6px;
-    font-family: Arial, sans-serif;
-    letter-spacing: 0.5px;
+    z-index: 10; /* Pou l toujou anlè tèks k ap pase a */
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
+    letter-spacing: 1px;
 }
 
 /* Kontenè kote tèks la ap defile a */
@@ -1356,59 +1355,52 @@ body.night-mode .menu-item:hover:not(.active) {
     flex: 1;
     overflow: hidden;
     white-space: nowrap;
-    position: relative;
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.02); /* Ti briyan lejè */
+    position: relative;
 }
 
-/* Animasyon Tèks la (Blan nèt ak Arial) */
+/* Tèks k ap defile a (BLAN NÈT) */
 .flash-text {
     display: inline-block;
-    padding-left: 100%;
-    color: #ffffff;          /* Tèks blan nèt jan ou mande l la */
-    font-size: 14px;         /* Gwosè pafè pou lekti */
-    font-family: Arial, Helvetica, sans-serif; /* Font Arial */
+    padding-left: 100%; /* Kòmanse nèt sou bò dwat */
+    color: #ffffff !important; /* KOULÈ BLAN ASURE */
+    font-size: 14px;
     font-weight: 500;
-    line-height: 38px;
-    animation: marquee-pro 25s linear infinite; /* 25s pou l defile dousman */
+    white-space: nowrap;
+    animation: marquee-pro 25s linear infinite; /* Animasyon dous */
 }
 
-/* Animasyon an */
+/* Lojik Animasyon an */
 @keyframes marquee-pro {
     0%   { transform: translateX(0); }
     100% { transform: translateX(-100%); }
 }
 
-/* Kanpe animasyon an si moun nan peze l */
+/* Si yon moun touche l, li kanpe pou l ka li pi byen */
+.flash-info-bar:hover .flash-text,
 .flash-info-bar:active .flash-text {
     animation-play-state: paused;
 }
 
-/* --- NIGHT MODE SUPPORT --- */
-body.night-mode .flash-info-bar {
-    background: #0f172a;
-    border-left-color: #15b328;
-}
-
-body.night-mode .flash-text {
-    color: #ffffff; /* Toujou blan nan Night Mode */
-}
-
-/* Ti efè pou fè l parèt pi pro: Gradyan sou bò dwat pou tèks la disparèt dous */
+/* Efè "Fade" nan bout la pou tèks la disparèt dousman */
 .flash-content::after {
     content: '';
     position: absolute;
     top: 0;
     right: 0;
-    width: 40px;
+    width: 50px;
     height: 100%;
     background: linear-gradient(to right, transparent, #1e293b);
-    z-index: 4;
+    z-index: 5;
     pointer-events: none;
+}
+
+/* --- ADAPTASYON POU NIGHT MODE --- */
+body.night-mode .flash-info-bar {
+    background: #0f172a;
 }
 
 body.night-mode .flash-content::after {
     background: linear-gradient(to right, transparent, #0f172a);
    }
-   
