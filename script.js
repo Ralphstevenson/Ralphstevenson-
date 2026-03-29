@@ -1,9 +1,12 @@
 /* ============================================================
-   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V3 - MASTER KONPLE
+   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V3.2 - MASTER
    ============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getDatabase, ref, set, onValue, update, push, serverTimestamp, get, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+// --- ENPÒTE SISTÈM ENTÊTE LA (MODIL SEPARE) ---
+import { activateDynamicHeader } from './header-manager.js';
 
 // I. KONFIGIRASYON FIREBASE
 const firebaseConfig = {
@@ -21,44 +24,13 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 
-// --- II. SISTÈM ENTÊTE DINAMIK (NEW) ---
-function initDynamicHeader(data) {
-    const container = document.getElementById('header-dynamic-container');
-    if (!container) return;
-
-    container.innerHTML = `
-    <div id="dynamic-header" class="dynamic-header">
-        <div class="header-top-row">
-            <div class="user-greeting">
-                <span class="greeting-text">Bonjou, <b>${data.fullname.split(' ')[0]}</b>! 👋</span>
-                <span class="security-status"><i class="fas fa-shield-alt"></i> Kont ou an sekirite</span>
-            </div>
-            <div class="quick-balance">
-                <div class="bal-item">
-                    <small>Balans</small>
-                    <span>${(data.balance || 0).toFixed(2)} HTG</span>
-                </div>
-                <div class="bal-divider"></div>
-                <div class="bal-item">
-                    <small>Komisyon</small>
-                    <span style="color: #e67e22;">${(data.referral_data?.balance || 0).toFixed(2)} HTG</span>
-                </div>
-            </div>
-        </div>
-        <div class="flash-info-bar">
-            <div class="flash-label">INFO:</div>
-            <marquee behavior="scroll" direction="left">
-                🚀 Nouvo pousantaj disponib pou Digicel! | ⚠️ Pa janm bay pèsonn kòd sekirite ou. | 🎁 Rekòmande yon zanmi pou touche 4.5% komisyon.
-            </marquee>
-        </div>
-    </div>`;
-}
-
-// --- III. SISTÈM NOTIFIKASYON (KLÒCH) ---
+// --- II. SISTÈM NOTIFIKASYON (KLÒCH) ---
 let tabKouran = 'koneksyon'; 
 
 window.voyeNotifikasyon = async (uid, tit, mesaj) => {
-    const path = tit.toLowerCase().includes('konekte') || tit.toLowerCase().includes('byenveni') ? 'koneksyon' : 'transak';
+    const isSecurity = tit.toLowerCase().includes('konekte') || tit.toLowerCase().includes('byenveni');
+    const path = isSecurity ? 'koneksyon' : 'transak';
+    
     const notifRef = push(ref(db, `users/${uid}/notifications/${path}`));
     await set(notifRef, {
         title: tit,
@@ -68,7 +40,9 @@ window.voyeNotifikasyon = async (uid, tit, mesaj) => {
     });
 };
 
-window.toggleNotifPanel = () => document.getElementById('notif-panel').classList.toggle('active');
+window.toggleNotifPanel = () => {
+    document.getElementById('notif-panel')?.classList.toggle('active');
+};
 
 window.switchNotifTab = (tabName) => {
     tabKouran = tabName === 'koneksyon' ? 'koneksyon' : 'transak';
@@ -87,7 +61,7 @@ function chajeNotifikasyonUI() {
         const data = snap.val();
         
         if (!data) {
-            container.innerHTML = `<p class="empty-msg">Pa gen mesaj nan ${tabKouran}.</p>`;
+            if(container) container.innerHTML = `<p class="empty-msg">Pa gen mesaj nan ${tabKouran}.</p>`;
             if(badge) badge.classList.add('hidden');
             return;
         }
@@ -101,27 +75,29 @@ function chajeNotifikasyonUI() {
         }
 
         const icon = tabKouran === 'koneksyon' ? 'fa-shield-check' : 'fa-receipt';
-        container.innerHTML = notifList.map(n => `
-            <div class="notif-item">
-                <i class="fa ${icon}"></i>
-                <div class="notif-info">
-                    <b>${n.title || (tabKouran === 'koneksyon' ? 'Sekirite' : 'Tranzaksyon')}</b>
-                    <p>${n.msg}</p>
-                    <small>${new Date(n.timestamp).toLocaleString('fr-FR')}</small>
-                </div>
-            </div>`).join('');
+        if(container) {
+            container.innerHTML = notifList.map(n => `
+                <div class="notif-item">
+                    <i class="fa ${icon}"></i>
+                    <div class="notif-info">
+                        <b>${n.title || (tabKouran === 'koneksyon' ? 'Sekirite' : 'Tranzaksyon')}</b>
+                        <p>${n.msg}</p>
+                        <small>${new Date(n.timestamp).toLocaleString('fr-FR')}</small>
+                    </div>
+                </div>`).join('');
+        }
     });
 }
 
-// --- IV. OTANTIFIKASYON ---
+// --- III. OTANTIFIKASYON ---
 window.handleLogin = () => {
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-pass').value;
-    if (!email || !pass) return alert("Ranpli tout chan yo!");
+    if (!email || !pass) return alert("Tanpri ranpli tout chan yo!");
     
     signInWithEmailAndPassword(auth, email, pass)
         .then((u) => window.voyeNotifikasyon(u.user.uid, "Bon retou!", "Ou konekte ak siksè."))
-        .catch(() => alert("Email oswa Modpas pa bon."));
+        .catch(() => alert("Erè: Email oswa Modpas pa bon."));
 };
 
 window.handleSignup = async () => {
@@ -144,17 +120,22 @@ window.handleSignup = async () => {
             bonus_claimed: false, createdAt: serverTimestamp()
         });
         await set(ref(db, `ars_mapping/${arsID}`), { uid: uid });
-        window.voyeNotifikasyon(uid, "Byenveni!", `Kòd ARS ou se ${arsID}.`);
-    } catch (err) { alert(err.message); }
+        window.voyeNotifikasyon(uid, "Byenveni!", `Byenveni sou Echanj Plus! Kòd ARS ou se ${arsID}.`);
+    } catch (err) { alert("Erè: " + err.message); }
 };
 
-// --- V. NAVIGASYON & LISTENERS ---
+// --- IV. NAVIGASYON & LISTENERS ---
 onAuthStateChanged(auth, (user) => {
     if (user) {
         document.getElementById('auth-page').classList.add('hidden');
         document.getElementById('home-page').classList.remove('hidden');
-        loadUserData(user.uid);
-        chajeNotifikasyonUI();
+        
+        loadUserData(user.uid); // Chaje done Sidebar
+        chajeNotifikasyonUI(); // Chaje Klòch
+        
+        // --- LANSE SISTÈM ENTÊTE SEPARE A ---
+        activateDynamicHeader(user.uid);
+        
         if (window.listenToMessages) window.listenToMessages(user.uid);
     } else {
         document.getElementById('auth-page').classList.remove('hidden');
@@ -166,13 +147,18 @@ function loadUserData(uid) {
     onValue(ref(db, `users/${uid}`), (snap) => {
         const data = snap.val();
         if (!data) return;
-        document.getElementById('user-balance').innerText = (data.balance || 0).toFixed(2);
+        
+        // Mizajou Sidebar (Non, Balans, ID)
+        const balEl = document.getElementById('user-balance');
+        if(balEl) balEl.innerText = (data.balance || 0).toFixed(2);
+        
         document.getElementById('side-name').innerText = data.fullname || "...";
         document.getElementById('side-id').innerText = data.arsID || "---";
-        document.getElementById('side-email').innerText = data.email.replace(/(.{3})(.*)(?=@)/, "$1***");
         
-        // LANSE ENTÊTE DINAMIK LA
-        initDynamicHeader(data);
+        const sideEmail = document.getElementById('side-email');
+        if(sideEmail && data.email) {
+             sideEmail.innerText = data.email.replace(/(.{3})(.*)(?=@)/, "$1***");
+        }
     });
 }
 
@@ -181,24 +167,37 @@ window.handleLogout = () => { if (confirm("Dekonekte?")) signOut(auth); };
 window.showPage = (pageId, navElement) => {
     const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj'];
     sections.forEach(id => document.getElementById(id)?.classList.add('hidden'));
-    document.getElementById(pageId)?.classList.remove('hidden');
+    
+    const target = document.getElementById(pageId);
+    if(target) target.classList.remove('hidden');
+    
     if (pageId === 'paj-trans' && window.initIstorik) window.initIstorik();
+    
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
     if (navElement) navElement.classList.add('active');
 };
 
-// --- VI. LOJIK ECHANJ ---
+// --- V. LOJIK ECHANJ ---
 window.openDialer = async (rezo) => {
     const montan = prompt("Konbyen minit w ap vann (" + rezo + ")?");
     if (!montan || montan < 100) return alert("Minimòm se 100 HTG.");
+    
     const transID = "ECH-" + Date.now();
     await set(ref(db, `transactions/${transID}`), {
-        uid: auth.currentUser.uid, type: "Echanj", rezo, amount: parseFloat(montan), status: "En attente", timestamp: serverTimestamp()
+        uid: auth.currentUser.uid, 
+        type: "Echanj", 
+        rezo, 
+        amount: parseFloat(montan), 
+        status: "En attente", 
+        timestamp: serverTimestamp()
     });
+    
     window.voyeNotifikasyon(auth.currentUser.uid, "Tranzaksyon", `Echanj ${montan} HTG ap tann validasyon.`);
+    
     const ussd = rezo === 'digicel' ? `*128*50947111123*${montan}#` : `*123*88888888*32160708*${montan}#`;
     window.location.href = `tel:${encodeURIComponent(ussd)}`;
 };
 
-window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('active');
-       
+window.toggleSidebar = () => {
+    document.getElementById('sidebar')?.classList.toggle('active');
+};
