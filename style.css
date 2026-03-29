@@ -1237,22 +1237,50 @@ body.night-mode .menu-item:hover:not(.active) {
 
 /*. MANAGER 
 
-/* Pou asire ke si yo andan yon liy yo aliyen byen */
-.user-greeting, .quick-balance, .flash-info-bar {
-    margin-bottom: 10px; /* Pou yo pa kole si yo yonn anba lòt */
-}
+/* ==========================================
+   CSS POU BALANS AK KOMISYON (MODILÈ)
+   ========================================== */
 
-/* Nou asire Flash Info a toujou gen yon lajè ki kòrèk */
-.flash-info-bar {
-    width: 100%; 
-    min-height: 35px;
-}
-
-/* Si ou mete yo nan yon liy (Flex), sa ap ede */
-.header-row-custom {
+.quick-balance {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-direction: column; /* Mete yo yonn anba lòt jan sa parèt nan foto a */
+    gap: 8px;              /* Bay yon ti espas ant liy Balans ak liy Komisyon */
+    padding: 10px;
+    background: transparent; /* Ou ka mete yon background si ou vle l detache */
+    font-family: 'Inter', sans-serif;
+}
+
+/* Stil pou chak liy (Balans / Komisyon) */
+.bal-item {
+    display: flex;
+    align-items: baseline;  /* Aliyen tèks yo sou menm liy anba */
+    gap: 10px;              /* Espas ant mo "Balans" la ak "5800.00 HTG" la */
+}
+
+/* Stil pou Etikèt yo (Balans, Komisyon) */
+.bal-item small {
+    font-size: 14px;
+    color: #2c3e50;         /* Yon koulè ble fonse/nwa pou etikèt la */
+    font-weight: 500;
+    text-transform: none;   /* Kenbe l nòmal, pa mete l an majiskil nèt */
+}
+
+/* Stil pou valè HTG yo */
+.bal-item span {
+    font-size: 18px;        /* Pi gwo pou moun nan ka wè kòb li byen */
+    font-weight: 700;       /* Mete l an gra */
+    color: #1a2a40;         /* Koulè Balans Prensipal la */
+}
+
+/* Koulè espesyal pou Komisyon an jan sa parèt nan foto a */
+.bal-item .komisyon-valè {
+    color: #e67e22;         /* Koulè oranj pou diferansye l ak balans prensipal la */
+}
+
+/* Si ou nan Night Mode, nou chanje koulè tèks yo */
+body.night-mode .bal-item small {
+    color: #bdc3c7;
+}
+body.night-mode .bal-item span {
+    color: #ffffff;
 }
