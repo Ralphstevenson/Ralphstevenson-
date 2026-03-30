@@ -252,75 +252,74 @@
 </section>
     
 
-
-            <section id="paj-parennaj" class="hidden">
-    <div class="header-paj">
+<section id="paj-parennaj" class="hidden">
+    <div class="premium-header">
         <h3 class="page-title"><i class="fas fa-users-viewfinder"></i> Pwogram Parennaj</h3>
         <p class="subtitle-paj">Fè 4.5% komisyon sou premye echanj chak moun ou envite.</p>
     </div>
 
-    <div class="referral-card">
-        <div class="referral-badge"><i class="fas fa-award"></i> Patnè ARS</div>
-        
-        <p class="ref-main-label">Balans Komisyon</p>
-        <div class="balance-row">
-            <h1 id="komisyon-balans">0.00</h1> <span>HTG</span>
+    <div class="referral-card-glass">
+        <div class="referral-badge">Patnè ARS</div>
+        <p class="ref-label">Balans Komisyon</p>
+        <div class="balance-display">
+            <h1 id="komisyon-balans">0.00</h1> <small>HTG</small>
         </div>
 
-        <div class="referral-stats-grid">
-            <div class="stat-item">
-                <small>Parenn mwen</small>
+        <div class="stats-grid-glass">
+            <div class="stat-box">
+                <span>Parenn mwen</span>
                 <b id="my-sponsor">---</b>
             </div>
-            <div class="stat-item">
-                <small>Ekip mwen</small>
+            <div class="stat-box">
+                <span>Ekip mwen</span>
                 <b id="total-invites">0</b>
             </div>
-            <div class="stat-item">
-                <small>Nivo</small>
+            <div class="stat-box">
+                <span>Nivo</span>
                 <b>Elite</b>
             </div>
         </div>
 
-        <button id="btn-transfer-komisyon" class="btn-withdraw" onclick="demannTransfere()">
-            <i class="fas fa-money-bill-transfer"></i> Transfere nan Balans Prensipal
+        <button class="btn-premium-transfer" onclick="demannTransfere()">
+            <i class="fas fa-bolt"></i> Transfere kounye a
         </button>
     </div>
 
-    <div class="kalkilatris-box">
-        <div class="info-kalkil-ref">
-            <div class="info-icon"><i class="fas fa-shield-halved"></i></div>
-            <div class="info-text">
+    <div class="glass-container">
+        <div class="logic-info">
+            <div class="logic-icon"><i class="fas fa-gem"></i></div>
+            <div class="logic-text">
                 <h4>Lojik Rabè & Komisyon</h4>
-                <p>Moun ou envite a jwenn <strong>2% rabè</strong> otomatik. Komisyon pa w la ap disponib depi tranzaksyon an <strong>Validé</strong>.</p>
+                <p>Envite w la jwenn <b>2% rabè</b>. Ou touche komisyon w depi tranzaksyon an <b>Validé</b>.</p>
             </div>
         </div>
 
-        <label class="input-label">Kòd ARS Pèsonèl Ou</label>
-        <div class="input-calc">
+        <label class="premium-label">Kòd ARS Pèsonèl Ou</label>
+        <div class="input-transparent-box">
             <input type="text" id="my-ref-code" value="ARS-..." readonly>
-            <span onclick="kopiyeKod()" class="copy-btn"><i class="fas fa-copy"></i></span>
+            <button onclick="kopiyeKod()" class="copy-premium-btn">
+                <i class="fas fa-copy"></i>
+            </button>
         </div>
         
-        <div class="share-options">
-            <p>Pataje lyen an kounye a :</p>
-            <div class="share-buttons">
-                <button class="btn-whatsapp" onclick="patajeLien('whatsapp')"><i class="fab fa-whatsapp"></i></button>
-                <button class="btn-fb" onclick="patajeLien('facebook')"><i class="fab fa-facebook"></i></button>
-                <button class="btn-tg" onclick="patajeLien('telegram')"><i class="fab fa-telegram"></i></button>
-                <button class="btn-sms" onclick="patajeLien('sms')"><i class="fas fa-comment-dots"></i></button>
+        <div class="share-premium-section">
+            <p>Pataje lyen an sou :</p>
+            <div class="share-grid">
+                <div class="share-icon wa" onclick="patajeLien('whatsapp')"><i class="fab fa-whatsapp"></i></div>
+                <div class="share-icon fb" onclick="patajeLien('facebook')"><i class="fab fa-facebook"></i></div>
+                <div class="share-icon tg" onclick="patajeLien('telegram')"><i class="fab fa-telegram"></i></div>
+                <div class="share-icon sms" onclick="patajeLien('sms')"><i class="fas fa-comment-alt"></i></div>
             </div>
         </div>
     </div>
 
-    <div class="team-section">
-        <div class="section-header-row">
-            <h4 class="section-subtitle">Moun ou envite yo</h4>
-        </div>
-        <div id="container-lis-envite" class="list-wrapper-ref">
+    <div class="glass-container team-list-section">
+        <h4 class="section-subtitle">Moun ou envite yo</h4>
+        <div id="container-lis-envite" class="list-wrapper">
             </div>
     </div>
-                    </section>
+            </section>
+                
             
 
             
