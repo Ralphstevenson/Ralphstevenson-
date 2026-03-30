@@ -1,12 +1,36 @@
 /* ============================================================
-   STYLE PAJ PARAMÈTRES - ECHANJ PLUS V3.2 (PREMIUM)
+   STYLE PAJ PARAMÈTRES - ECHANJ PLUS V3.2 (ELITE UPDATE)
    ============================================================ */
+
+:root {
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #0f172a;
+    --text-sub: #64748b;
+    --primary: #109121;
+    --border-color: #f1f5f9;
+}
+
+/* KLAS POU DARK MODE (LÈ JS LA AKTIVE L) */
+.dark-theme {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --text-main: #f8fafc;
+    --text-sub: #94a3b8;
+    --border-color: #334155;
+}
+
+#paj-parametre {
+    background-color: var(--bg-color);
+    min-height: 100vh;
+    transition: background 0.3s ease;
+}
 
 .settings-container {
     padding: 20px;
     max-width: 450px;
     margin: 0 auto;
-    padding-bottom: 120px; /* Espas pou nav bar anba a */
+    padding-bottom: 120px;
     animation: fadeIn 0.4s ease-out;
 }
 
@@ -18,7 +42,7 @@
 .page-title {
     font-size: 24px;
     font-weight: 800;
-    color: #0f172a;
+    color: var(--text-main);
     margin-bottom: 30px;
     display: flex;
     align-items: center;
@@ -26,10 +50,10 @@
 }
 
 .page-title i {
-    color: #109121;
+    color: var(--primary);
 }
 
-/* GWOUPMAN SEKIRITE, SISTÈM, ELATRIYE */
+/* GWOUPMAN */
 .settings-group {
     margin-bottom: 25px;
 }
@@ -38,25 +62,31 @@
     display: block;
     font-size: 11px;
     font-weight: 700;
-    color: #64748b;
+    color: var(--text-sub);
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin-bottom: 12px;
     padding-left: 5px;
 }
 
-/* KAT PROFIL GLASSMORPHISM */
+/* KAT PROFIL GLASSMORPHISM OPTIMIZÉ */
 .setting-item-glass {
     display: flex;
     align-items: center;
     padding: 20px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
     margin-bottom: 20px;
+}
+
+/* Si se dark mode, glass la vin pi fonse */
+.dark-theme .setting-item-glass {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .avatar-circle {
@@ -64,8 +94,7 @@
     height: 65px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid #109121;
-    background: #f8fafc;
+    border: 3px solid var(--primary);
     box-shadow: 0 4px 10px rgba(16, 145, 33, 0.2);
 }
 
@@ -82,13 +111,13 @@
 .item-info b {
     display: block;
     font-size: 18px;
-    color: #0f172a;
+    color: var(--text-main);
     font-weight: 700;
 }
 
 .item-info p {
     font-size: 13px;
-    color: #64748b;
+    color: var(--text-sub);
     margin: 2px 0 0 0;
 }
 
@@ -98,22 +127,18 @@
     justify-content: space-between;
     align-items: center;
     padding: 16px 20px;
-    background: #ffffff;
+    background: var(--card-bg);
     border-radius: 18px;
     margin-bottom: 10px;
     cursor: pointer;
     transition: all 0.2s ease;
-    border: 1px solid #f1f5f9;
+    border: 1px solid var(--border-color);
     text-decoration: none;
 }
 
 .setting-row:hover {
-    background: #f8fafc;
-    border-color: #e2e8f0;
-}
-
-.setting-row:active {
-    transform: scale(0.97);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
 .row-left {
@@ -123,11 +148,11 @@
 }
 
 .row-left i {
-    width: 32px;
-    height: 32px;
+    width: 35px;
+    height: 35px;
     background: rgba(16, 145, 33, 0.1);
-    color: #109121;
-    border-radius: 10px;
+    color: var(--primary);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -137,31 +162,33 @@
 .row-left span {
     font-size: 15px;
     font-weight: 600;
-    color: #334155;
+    color: var(--text-main);
 }
 
 .fa-chevron-right {
     font-size: 12px;
-    color: #cbd5e1;
+    color: var(--text-sub);
+    opacity: 0.5;
 }
 
-/* VERSION TAG & SWITCHES */
+/* VERSION TAG */
 .version-tag {
-    background: #f1f5f9;
-    color: #475569;
+    background: var(--bg-color);
+    color: var(--text-sub);
     padding: 4px 12px;
     border-radius: 10px;
     font-size: 12px;
     font-weight: 700;
+    border: 1px solid var(--border-color);
 }
 
-/* CUSTOM TOGGLE SWITCH */
+/* CUSTOM TOGGLE SWITCH (APPLE STYLE) */
 input[type="checkbox"] {
     position: relative;
-    width: 44px;
-    height: 24px;
+    width: 46px;
+    height: 26px;
     appearance: none;
-    background: #e2e8f0;
+    background: #cbd5e1;
     outline: none;
     border-radius: 20px;
     transition: 0.3s;
@@ -169,20 +196,19 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"]:checked {
-    background: #109121;
+    background: var(--primary);
 }
 
 input[type="checkbox"]::before {
     content: "";
     position: absolute;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     top: 3px;
     left: 3px;
     background: white;
     transition: 0.3s;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 input[type="checkbox"]:checked::before {
@@ -190,11 +216,7 @@ input[type="checkbox"]:checked::before {
 }
 
 /* WHATSAPP SPESIFIK */
-.no-style {
-    color: inherit;
-}
 .setting-row .fa-whatsapp {
     background: rgba(37, 211, 102, 0.1);
     color: #25d366;
    }
-       
