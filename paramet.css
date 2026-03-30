@@ -1,25 +1,35 @@
 /* ============================================================
-   STYLE PAJ PARAMÈTRES - ECHANJ PLUS V3.2
+   STYLE PAJ PARAMÈTRES - ECHANJ PLUS V3.2 (PREMIUM)
    ============================================================ */
 
 .settings-container {
     padding: 20px;
-    max-width: 500px;
+    max-width: 450px;
     margin: 0 auto;
-    padding-bottom: 100px; /* Pou nav la pa kache l */
+    padding-bottom: 120px; /* Espas pou nav bar anba a */
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .page-title {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 800;
-    color: #1e293b;
-    margin-bottom: 25px;
+    color: #0f172a;
+    margin-bottom: 30px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
-/* GWOUPMAN ELEMAN YO */
+.page-title i {
+    color: #109121;
+}
+
+/* GWOUPMAN SEKIRITE, SISTÈM, ELATRIYE */
 .settings-group {
     margin-bottom: 25px;
 }
@@ -28,33 +38,35 @@
     display: block;
     font-size: 11px;
     font-weight: 700;
-    color: #94a3b8;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-    margin-left: 5px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    padding-left: 5px;
 }
 
-/* KAT PROFIL (GLASS EFFECT) */
+/* KAT PROFIL GLASSMORPHISM */
 .setting-item-glass {
     display: flex;
     align-items: center;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-    margin-bottom: 15px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    margin-bottom: 20px;
 }
 
 .avatar-circle {
-    width: 60px;
-    height: 60px;
+    width: 65px;
+    height: 65px;
     border-radius: 50%;
     overflow: hidden;
     border: 3px solid #109121;
-    background: #f1f5f9;
-    flex-shrink: 0;
+    background: #f8fafc;
+    box-shadow: 0 4px 10px rgba(16, 145, 33, 0.2);
 }
 
 .avatar-circle img {
@@ -64,55 +76,68 @@
 }
 
 .item-info {
-    margin-left: 15px;
+    margin-left: 18px;
 }
 
 .item-info b {
     display: block;
-    font-size: 16px;
-    color: #1e293b;
+    font-size: 18px;
+    color: #0f172a;
+    font-weight: 700;
 }
 
 .item-info p {
-    font-size: 12px;
+    font-size: 13px;
     color: #64748b;
-    margin: 0;
+    margin: 2px 0 0 0;
 }
 
-/* Ranje Opsyon (Rows) */
+/* RANJE OPSYON YO (ROWS) */
 .setting-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 18px;
-    background: white;
-    border-radius: 16px;
-    margin-bottom: 8px;
+    padding: 16px 20px;
+    background: #ffffff;
+    border-radius: 18px;
+    margin-bottom: 10px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.2s ease;
     border: 1px solid #f1f5f9;
-    text-decoration: none; /* Pou lyen WhatsApp la */
+    text-decoration: none;
+}
+
+.setting-row:hover {
+    background: #f8fafc;
+    border-color: #e2e8f0;
 }
 
 .setting-row:active {
-    transform: scale(0.98);
-    background: #f8fafc;
+    transform: scale(0.97);
 }
 
 .row-left {
     display: flex;
     align-items: center;
     gap: 15px;
-    color: #334155;
-    font-size: 14px;
-    font-weight: 600;
 }
 
 .row-left i {
-    width: 20px;
+    width: 32px;
+    height: 32px;
+    background: rgba(16, 145, 33, 0.1);
     color: #109121;
-    font-size: 16px;
-    text-align: center;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.row-left span {
+    font-size: 15px;
+    font-weight: 600;
+    color: #334155;
 }
 
 .fa-chevron-right {
@@ -120,23 +145,23 @@
     color: #cbd5e1;
 }
 
-/* Vèsyon Tag */
+/* VERSION TAG & SWITCHES */
 .version-tag {
     background: #f1f5f9;
-    color: #64748b;
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 11px;
+    color: #475569;
+    padding: 4px 12px;
+    border-radius: 10px;
+    font-size: 12px;
     font-weight: 700;
 }
 
-/* --- TOGGLE SWITCH (Custom) --- */
+/* CUSTOM TOGGLE SWITCH */
 input[type="checkbox"] {
     position: relative;
-    width: 40px;
-    height: 20px;
+    width: 44px;
+    height: 24px;
     appearance: none;
-    background: #cbd5e1;
+    background: #e2e8f0;
     outline: none;
     border-radius: 20px;
     transition: 0.3s;
@@ -150,21 +175,26 @@ input[type="checkbox"]:checked {
 input[type="checkbox"]::before {
     content: "";
     position: absolute;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    top: 2px;
-    left: 2px;
+    top: 3px;
+    left: 3px;
     background: white;
     transition: 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 input[type="checkbox"]:checked::before {
-    left: 22px;
+    left: 23px;
 }
 
-/* Style pou lyen WhatsApp la pou l pa gen liy anba */
+/* WHATSAPP SPESIFIK */
 .no-style {
-    text-decoration: none;
     color: inherit;
 }
+.setting-row .fa-whatsapp {
+    background: rgba(37, 211, 102, 0.1);
+    color: #25d366;
+   }
+       
