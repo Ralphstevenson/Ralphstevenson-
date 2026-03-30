@@ -72,15 +72,27 @@
             <div id="header-quick-balance" class="quick-balance"></div>
             
             <div id="notif-panel" class="notif-panel">
-                <div class="notif-header"><h4>Notifikasyon</h4><i class="fa fa-times" onclick="toggleNotifPanel()">
-                          <div class="menu-item logout-btn" onclick="handleLogout()"><i class="fa fa-right-from-bracket"></i> Dekonekte</div>
-                </i></div>
-                <div class="notif-tabs">
-                    <button id="tab-koneksyon" class="tab-btn active" onclick="switchNotifTab('koneksyon')">Koneksyon</button>
-                    <button id="tab-transak" class="tab-btn" onclick="switchNotifTab('transak')">Tranzaksyon</button>
-                </div>
-                <div id="notif-content" class="notif-content"><p class="empty-msg">Chaje mesaj...</p></div>
+    <div class="notif-header">
+        <h4><i class="fa fa-bell"></i> Notifikasyon</h4>
+        <i class="fa fa-times close-notif" onclick="toggleNotifPanel()"></i>
+    </div>
+
+    <div class="notif-tabs">
+        <button id="tab-koneksyon" class="tab-btn active" onclick="switchNotifTab('koneksyon')">Koneksyon</button>
+        <button id="tab-transak" class="tab-btn" onclick="switchNotifTab('transak')">Tranzaksyon</button>
+    </div>
+
+    <div id="notif-content" class="notif-content">
+        <p class="empty-msg">Chaje mesaj...</p>
+    </div>
+
+    <div class="notif-footer">
+        <div class="logout-btn-elite" onclick="handleLogout()">
+            <i class="fa fa-right-from-bracket"></i> Dekonekte
+        </div>
+    </div>
             </div>
+            
             
             
         </header>
