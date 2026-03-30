@@ -5,7 +5,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getDatabase, ref, set, onValue, update, push, serverTimestamp, get, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// --- ENPÒTE MODIL ANTÈT LA (NEW) ---
+// --- ENPÒTE MODIL YO ---
 import { activateDynamicHeader } from './header-manager.js';
 
 // I. KONFIGIRASYON FIREBASE
@@ -130,10 +130,14 @@ onAuthStateChanged(auth, (user) => {
         chajeNotifikasyonUI();
         activateDynamicHeader(user.uid, db);
 
-        // --- MIZAJOU ENPÒTAN POU PARENE.JS ---
-        // Sa deklanche lojik parennaj la depi itilizatè a konekte
+        // 1. Lanse Lojik Parennaj
         if (window.initReferralDashboard) {
             window.initReferralDashboard(user.uid);
+        }
+
+        // 2. Lanse Lojik Paramètres (NEW)
+        if (window.initSettings) {
+            window.initSettings(user.uid);
         }
         
         if (window.listenToMessages) window.listenToMessages(user.uid);
@@ -155,7 +159,6 @@ function loadUserData(uid) {
         document.getElementById('side-id').innerText = data.arsID || "---";
         document.getElementById('side-email').innerText = data.email ? data.email.replace(/(.{3})(.*)(?=@)/, "$1***") : "...";
         
-        // POU INSTANT SYNC PARENE.JS: Si paj la deja louvri, nou mete ID a kach
         const refInput = document.getElementById('my-ref-code');
         if (refInput && data.arsID) refInput.value = data.arsID;
     });
@@ -164,13 +167,15 @@ function loadUserData(uid) {
 window.handleLogout = () => { if (confirm("Dekonekte?")) signOut(auth); };
 
 window.showPage = (pageId, navElement) => {
-    const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj'];
+    // Te ajoute 'paj-parametre' nan lis sa a
+    const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj', 'paj-parametre'];
     sections.forEach(id => document.getElementById(id)?.classList.add('hidden'));
-    document.getElementById(pageId)?.classList.remove('hidden');
+    
+    const targetPage = document.getElementById(pageId);
+    if (targetPage) targetPage.classList.remove('hidden');
     
     if (pageId === 'paj-trans' && window.initIstorik) window.initIstorik();
     
-    // MIZAJOU: Si itilizatè a klike sou Parennaj, asire ID a senkronize nèt
     if (pageId === 'paj-parennaj') {
         const sideID = document.getElementById('side-id').innerText;
         const refInput = document.getElementById('my-ref-code');
@@ -179,6 +184,9 @@ window.showPage = (pageId, navElement) => {
 
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
     if (navElement) navElement.classList.add('active');
+    
+    // Fèmen sidebar si se sou mobil li ye
+    document.getElementById('sidebar')?.classList.remove('active');
 };
 
 // --- V. LOJIK ECHANJ ---
@@ -195,3 +203,4 @@ window.openDialer = async (rezo) => {
 };
 
 window.toggleSidebar = () => document.getElementById('sidebar')?.classList.toggle('active');
+       
