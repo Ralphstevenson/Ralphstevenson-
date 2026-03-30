@@ -1,0 +1,170 @@
+/* ============================================================
+   STYLE PAJ PARAMÈTRES - ECHANJ PLUS V3.2
+   ============================================================ */
+
+.settings-container {
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    padding-bottom: 100px; /* Pou nav la pa kache l */
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* GWOUPMAN ELEMAN YO */
+.settings-group {
+    margin-bottom: 25px;
+}
+
+.group-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+}
+
+/* KAT PROFIL (GLASS EFFECT) */
+.setting-item-glass {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
+}
+
+.avatar-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #109121;
+    background: #f1f5f9;
+    flex-shrink: 0;
+}
+
+.avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-info {
+    margin-left: 15px;
+}
+
+.item-info b {
+    display: block;
+    font-size: 16px;
+    color: #1e293b;
+}
+
+.item-info p {
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Ranje Opsyon (Rows) */
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    background: white;
+    border-radius: 16px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 1px solid #f1f5f9;
+    text-decoration: none; /* Pou lyen WhatsApp la */
+}
+
+.setting-row:active {
+    transform: scale(0.98);
+    background: #f8fafc;
+}
+
+.row-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.row-left i {
+    width: 20px;
+    color: #109121;
+    font-size: 16px;
+    text-align: center;
+}
+
+.fa-chevron-right {
+    font-size: 12px;
+    color: #cbd5e1;
+}
+
+/* Vèsyon Tag */
+.version-tag {
+    background: #f1f5f9;
+    color: #64748b;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* --- TOGGLE SWITCH (Custom) --- */
+input[type="checkbox"] {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    appearance: none;
+    background: #cbd5e1;
+    outline: none;
+    border-radius: 20px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+    background: #109121;
+}
+
+input[type="checkbox"]::before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    background: white;
+    transition: 0.3s;
+}
+
+input[type="checkbox"]:checked::before {
+    left: 22px;
+}
+
+/* Style pou lyen WhatsApp la pou l pa gen liy anba */
+.no-style {
+    text-decoration: none;
+    color: inherit;
+}
