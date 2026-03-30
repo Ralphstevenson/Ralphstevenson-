@@ -1,5 +1,5 @@
 /* ============================================================
-   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V3.2 - MASTER
+   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V3.2 - MASTER (UPDATED)
    ============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -128,9 +128,13 @@ onAuthStateChanged(auth, (user) => {
         
         loadUserData(user.uid);
         chajeNotifikasyonUI();
-        
-        // LANSE ANTÈT LA AK "db" KÒM PARAMÈT (POU FILTRE DONE)
         activateDynamicHeader(user.uid, db);
+
+        // --- MIZAJOU ENPÒTAN POU PARENE.JS ---
+        // Sa deklanche lojik parennaj la depi itilizatè a konekte
+        if (window.initReferralDashboard) {
+            window.initReferralDashboard(user.uid);
+        }
         
         if (window.listenToMessages) window.listenToMessages(user.uid);
     } else {
@@ -150,6 +154,10 @@ function loadUserData(uid) {
         document.getElementById('side-name').innerText = data.fullname || "...";
         document.getElementById('side-id').innerText = data.arsID || "---";
         document.getElementById('side-email').innerText = data.email ? data.email.replace(/(.{3})(.*)(?=@)/, "$1***") : "...";
+        
+        // POU INSTANT SYNC PARENE.JS: Si paj la deja louvri, nou mete ID a kach
+        const refInput = document.getElementById('my-ref-code');
+        if (refInput && data.arsID) refInput.value = data.arsID;
     });
 }
 
@@ -159,7 +167,16 @@ window.showPage = (pageId, navElement) => {
     const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj'];
     sections.forEach(id => document.getElementById(id)?.classList.add('hidden'));
     document.getElementById(pageId)?.classList.remove('hidden');
+    
     if (pageId === 'paj-trans' && window.initIstorik) window.initIstorik();
+    
+    // MIZAJOU: Si itilizatè a klike sou Parennaj, asire ID a senkronize nèt
+    if (pageId === 'paj-parennaj') {
+        const sideID = document.getElementById('side-id').innerText;
+        const refInput = document.getElementById('my-ref-code');
+        if (refInput && sideID !== "---") refInput.value = sideID;
+    }
+
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
     if (navElement) navElement.classList.add('active');
 };
@@ -178,4 +195,3 @@ window.openDialer = async (rezo) => {
 };
 
 window.toggleSidebar = () => document.getElementById('sidebar')?.classList.toggle('active');
-       
