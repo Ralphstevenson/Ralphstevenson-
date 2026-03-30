@@ -1,190 +1,220 @@
-/* ============================================================
-   PARENNAJ ELITE UI - ECHANJ PLUS V3
-   ============================================================ */
+/* ==========================================
+   ECHANJ PLUS - PARENNAJ ELITE V3 UI
+   ========================================== */
 
-/* 1. Kat Balans Komisyon an (Referral Card) */
+:root {
+    --green-primary: #109121;
+    --green-dark: #0d751a;
+    --bg-light: #f8fafc;
+    --text-main: #1e293b;
+    --text-sub: #64748b;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.12);
+}
+
+/* 1. Kat Prensipal la (The Hero Card) */
 .referral-card {
-    background: linear-gradient(135deg, #109121, #0d751a); /* Vèt mak la */
-    padding: 25px 20px;
-    border-radius: 20px;
-    color: white;
+    background: linear-gradient(135deg, var(--green-primary), var(--green-dark));
+    padding: 28px 22px;
+    border-radius: 24px;
+    color: var(--white);
     position: relative;
     overflow: hidden;
-    margin-bottom: 20px;
-    box-shadow: 0 10px 20px rgba(16, 145, 33, 0.2);
+    box-shadow: 0 12px 30px rgba(16, 145, 33, 0.3);
+    margin: 15px;
 }
 
-.referral-badge {
+/* Ti dekorasyon pwofesyonèl nan background nan */
+.referral-card::before {
+    content: "";
     position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 5px 12px;
-    border-radius: 50px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
 }
 
-.referral-card p {
-    font-size: 14px;
-    opacity: 0.9;
-    margin-bottom: 5px;
+.ref-main-label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.85;
+    font-weight: 600;
 }
 
 .balance-row {
     display: flex;
     align-items: baseline;
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin: 8px 0 20px 0;
 }
 
 .balance-row h1 {
-    font-size: 36px;
-    font-weight: 900;
+    font-size: 38px;
+    font-weight: 900; /* Tèks an gra pou rann li pwofesyonèl */
     margin: 0;
-    font-family: Arial, sans-serif;
+    letter-spacing: -1px;
 }
 
+.balance-row span {
+    font-size: 16px;
+    font-weight: 700;
+    opacity: 0.9;
+}
+
+/* 2. Grid Statistik (Parenn, Ekip, Nivo) */
+.referral-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: var(--glass);
+    backdrop-filter: blur(10px); /* Efè Glassmorphism */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 15px 5px;
+    border-radius: 18px;
+    margin-bottom: 22px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.stat-item:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-item small {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.stat-item b {
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* 3. Bouton Transfè a */
 .btn-withdraw {
     width: 100%;
-    background: #ffffff;
-    color: #109121;
+    height: 52px;
+    background: var(--white);
+    color: var(--green-primary);
     border: none;
-    padding: 12px;
-    border-radius: 12px;
+    border-radius: 14px;
+    font-size: 15px;
     font-weight: 800;
-    font-size: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    transition: 0.3s;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .btn-withdraw:active {
-    transform: scale(0.97);
+    transform: scale(0.96);
 }
 
-/* 2. Zòn Kòd ARS ak Kalkilatris */
+/* 4. Zòn Kòd ARS la */
 .kalkilatris-box {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
+    background: var(--white);
+    margin: 15px;
+    padding: 22px;
+    border-radius: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
-.info-kalkil-ref {
-    display: flex;
-    gap: 15px;
-    background: #f0fdf4;
-    padding: 15px;
-    border-radius: 15px;
-    margin-bottom: 20px;
+.input-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-sub);
+    margin-bottom: 10px;
+    display: block;
 }
-
-.info-icon { color: #109121; font-size: 20px; }
-.info-text h4 { margin: 0 0 5px 0; font-size: 15px; color: #1e293b; }
-.info-text p { margin: 0; font-size: 13px; color: #64748b; line-height: 1.4; }
 
 .input-calc {
     display: flex;
     background: #f1f5f9;
     padding: 5px;
-    border-radius: 12px;
+    border-radius: 15px;
     border: 2px solid #e2e8f0;
-    margin-top: 10px;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+}
+
+.input-calc:focus-within {
+    border-color: var(--green-primary);
 }
 
 .input-calc input {
     flex: 1;
     background: transparent;
     border: none;
-    padding: 10px;
-    font-weight: 700;
-    font-size: 16px;
-    color: #1e293b;
+    outline: none;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--text-main);
     text-align: center;
+    font-family: 'Inter', sans-serif;
 }
 
 .copy-btn {
-    background: #109121;
-    color: white;
-    width: 45px;
+    background: var(--green-primary);
+    color: var(--white);
+    width: 48px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
     cursor: pointer;
+    transition: 0.2s;
 }
 
-/* 3. Pataje Buttons */
-.share-options p {
-    font-size: 13px;
-    font-weight: 700;
-    color: #64748b;
-    margin: 20px 0 10px 0;
-    text-align: center;
-}
+.copy-btn:hover { background: var(--green-dark); }
 
-.share-buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-}
-
-.share-buttons button {
-    height: 50px;
-    border-radius: 12px;
-    border: none;
-    font-size: 20px;
-    color: white;
-    transition: 0.3s;
-}
-
-.btn-whatsapp { background: #25D366; }
-.btn-fb { background: #1877F2; }
-.btn-tg { background: #0088cc; }
-.btn-sms { background: #34495e; }
-
-/* 4. Lis Envite yo (Team Section) */
+/* 5. Lis Envite yo (List UI) */
 .team-section {
-    background: #ffffff;
+    margin: 15px;
+    background: var(--white);
     padding: 20px;
-    border-radius: 20px;
+    border-radius: 24px;
 }
 
-.section-header-row {
+.ist-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    padding: 14px;
+    background: #f8fafc;
+    border-radius: 16px;
+    margin-bottom: 10px;
+    border: 1px solid #edf2f7;
 }
 
-.count-badge {
-    background: #109121;
-    color: white;
-    padding: 4px 12px;
-    border-radius: 50px;
-    font-size: 12px;
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 10px;
     font-weight: 800;
+    text-transform: uppercase;
 }
 
-.referral-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+.success { background: #dcfce7; color: #166534; }
+.pending { background: #fef9c3; color: #854d0e; }
 
-/* --- NIGHT MODE --- */
-body.night-mode .kalkilatris-box, 
+/* 6. Night Mode Support */
+body.night-mode .kalkilatris-box,
 body.night-mode .team-section {
     background: #1e293b;
-}
-
-body.night-mode .info-kalkil-ref {
-    background: rgba(16, 145, 33, 0.1);
+    color: var(--white);
 }
 
 body.night-mode .input-calc {
@@ -192,5 +222,6 @@ body.night-mode .input-calc {
     border-color: #334155;
 }
 
-body.night-mode .input-calc input { color: white; }
+body.night-mode .input-calc input { color: var(--white); }
+body.night-mode .ist-item { background: #1e293b; border-color: #334155; }
    
