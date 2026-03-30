@@ -1,111 +1,147 @@
+/* ============================================================
+   JS PARENNAJ PREMIUM - ECHANJ PLUS V3
+   ============================================================ */
 import { auth, db } from './script.js';
 import { ref, onValue, get, update, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// 1. INISYALIZASYON DASHBOARD
+// 1. FONKSYON POU LANSE DASHBOARD LA
 window.initReferralDashboard = (uid) => {
     if (!uid) return;
     
+    // Nou kòmanse koute done yo an tan reyèl
     const userRef = ref(db, `users/${uid}`);
 
     onValue(userRef, async (snapshot) => {
         const userData = snapshot.val();
         if (!userData) return;
 
-        // A. Mizajou Balans Komisyon & Ekip (Soti nan referral_data)
+        // A. Mizajou Balans ak Kantite Envite (Pwofesyonèl)
         const refData = userData.referral_data || { balance: 0, total_invites: 0, invite_list: {} };
-        document.getElementById('komisyon-balans').innerText = (refData.balance || 0).toFixed(2);
-        document.getElementById('total-invites').innerText = refData.total_invites || 0;
+        
+        const balEl = document.getElementById('komisyon-balans');
+        const countEl = document.getElementById('total-invites');
+        
+        if (balEl) balEl.innerText = (refData.balance || 0).toFixed(2);
+        if (countEl) countEl.innerText = refData.total_invites || 0;
 
-        // B. Mizajou Kòd ARS (Soti nan users/uid/arsID)
+        // B. JERE KÒD ARS LA (Rale l nan Sidebar oswa Firebase)
+        // Nou priyorize tèks ki nan sidebar la pou vitès, si li pa la nou pran l nan Firebase
+        const arsSidebar = document.getElementById('sidebar-ars-id')?.innerText; 
         const inputCode = document.getElementById('my-ref-code');
-        if (inputCode) inputCode.value = userData.arsID || "---";
-
-        // C. Chaje Non Parenn (Moun ki te envite l la)
-        const referredBy = userData.referredBy; 
-        if (referredBy) {
-            try {
-                const sponsorSnap = await get(ref(db, `users/${referredBy}/fullname`));
-                const sponsorName = sponsorSnap.val() ? sponsorSnap.val().split(' ')[0] : "Sistèm";
-                document.getElementById('my-sponsor').innerText = sponsorName;
-            } catch (e) {
-                document.getElementById('my-sponsor').innerText = "Sistèm";
-            }
-        } else {
-            document.getElementById('my-sponsor').innerText = "Okenn";
+        
+        if (inputCode) {
+            inputCode.value = arsSidebar || userData.arsID || "ARS-LOADING...";
         }
 
-        // D. Chaje Lis Envite yo
+        // C. PARENN MWEN (Moun ki te envite w la)
+        const mySponsorEl = document.getElementById('my-sponsor');
+        if (mySponsorEl) {
+            const referredBy = userData.referredBy;
+            if (referredBy) {
+                try {
+                    const sponsorSnap = await get(ref(db, `users/${referredBy}/fullname`));
+                    const full = sponsorSnap.val() || "Sistèm";
+                    mySponsorEl.innerText = full.split(' ')[0]; // Pran premye non an sèlman
+                } catch (e) {
+                    mySponsorEl.innerText = "Sistèm";
+                }
+            } else {
+                mySponsorEl.innerText = "Okenn";
+            }
+        }
+
+        // D. CHAJE LIS EKIP LA
         chajeLisEnvite(refData.invite_list);
     });
 };
 
-// 2. LIS MOUN ENVITE
+// 2. LIS ENVITE YO (STYLE PREMIUM)
 function chajeLisEnvite(inviteList) {
     const container = document.getElementById('container-lis-envite');
     if (!container) return;
 
     if (!inviteList || Object.keys(inviteList).length === 0) {
-        container.innerHTML = `<p style="text-align:center; color:#94a3b8; padding:20px;">Poko gen moun nan ekip la.</p>`;
+        container.innerHTML = `
+            <div style="text-align:center; padding:40px 20px; opacity:0.5;">
+                <i class="fas fa-user-group" style="font-size:30px; margin-bottom:10px;"></i>
+                <p style="font-size:13px;">Ou poko gen moun nan ekip ou a.</p>
+            </div>`;
         return;
     }
 
-    let html = '';
+    let html = '<div class="premium-list-wrapper">';
     Object.values(inviteList).reverse().forEach(invite => {
         const isSuccess = invite.status === "Success";
         html += `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:rgba(0,0,0,0.03); border-radius:12px; margin-bottom:8px; border: 1px solid rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <i class="fas fa-user-circle" style="font-size:22px; color:#109121;"></i>
-                    <b style="font-size:13px;">${invite.name}</b>
+            <div class="ist-item-glass">
+                <div class="user-info">
+                    <div class="user-avatar-small"><i class="fas fa-user-circle"></i></div>
+                    <div class="user-det">
+                        <b>${invite.name}</b>
+                        <small>ID: ${invite.arsID || 'Atant'}</small>
+                    </div>
                 </div>
-                <span style="font-size:10px; font-weight:800; color:${isSuccess ? '#109121' : '#f39c12'};">
+                <span class="status-badge-elite ${isSuccess ? 'success' : 'pending'}">
                     ${isSuccess ? 'Validé' : 'En attente'}
                 </span>
             </div>`;
     });
+    html += '</div>';
     container.innerHTML = html;
 }
 
-// 3. KOPIYE KÒD
+// 3. KOPIYE KÒD (Serye)
 window.kopiyeKod = () => {
-    const code = document.getElementById('my-ref-code');
-    code.select();
-    navigator.clipboard.writeText(code.value);
-    alert("✅ Kòd " + code.value + " kopye!");
+    const codeInput = document.getElementById('my-ref-code');
+    if (!codeInput || codeInput.value.includes("LOADING")) return;
+
+    codeInput.select();
+    codeInput.setSelectionRange(0, 99999); // Pou mobil
+    navigator.clipboard.writeText(codeInput.value).then(() => {
+        // Ou ka ajoute yon "Toast" oswa yon ti alèt pwofesyonèl
+        alert("✅ Kòd " + codeInput.value + " kopye!");
+    });
 };
 
-// 4. PATAJE MODÈN
+// 4. PATAJE MODÈN (Avèk kòd ARS la)
 window.patajeLien = (platform) => {
     const myCode = document.getElementById('my-ref-code').value;
     const link = `https://echanjplus064.netlify.app/?ref=${myCode}`;
-    const msg = `🚀 *ECHANJ PLUS* \nChanje minit pou kòb kach rapid! \n🎁 Kòd mwen: *${myCode}* \nEnskri la: ${link}`;
+    const msg = `🚀 *ECHANJ PLUS* \nChanje minit pou kòb kach rapid ak sekirite! \n\n🎁 Kòd kado: *${myCode}* \nEnskri isit la: ${link}`;
 
     let url = "";
-    if (platform === 'whatsapp') url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
-    else if (platform === 'facebook') url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`;
-    else if (platform === 'telegram') url = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(msg)}`;
-    else if (platform === 'sms') url = `sms:?body=${encodeURIComponent(msg)}`;
-    
+    switch(platform) {
+        case 'whatsapp': url = `https://wa.me/?text=${encodeURIComponent(msg)}`; break;
+        case 'facebook': url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`; break;
+        case 'telegram': url = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(msg)}`; break;
+        case 'sms': url = `sms:?body=${encodeURIComponent(msg)}`; break;
+    }
     if (url) window.open(url, '_blank');
 };
 
-// 5. TRANSFÈ KOMISYON
+// 5. TRANSFÈ KOMISYON (Firebase Update)
 window.demannTransfere = async () => {
     const uid = auth.currentUser?.uid;
-    const komisyon = parseFloat(document.getElementById('komisyon-balans').innerText);
+    const balText = document.getElementById('komisyon-balans')?.innerText || "0";
+    const montant = parseFloat(balText);
 
-    if (komisyon < 50) return alert("❌ Ou bezwen omwen 50.00 HTG.");
+    if (montant < 50) {
+        alert("❌ Minimòm transfè se 50.00 HTG.");
+        return;
+    }
 
-    if (confirm(`Èske ou vle voye ${komisyon.toFixed(2)} HTG nan Balans Prensipal?`)) {
+    if (confirm(`Èske w vle voye ${montant.toFixed(2)} HTG nan Balans Prensipal ou?`)) {
         try {
             const updates = {};
             updates[`users/${uid}/referral_data/balance`] = 0;
-            updates[`users/${uid}/balance`] = increment(komisyon); // Balans prensipal
+            updates[`users/${uid}/balance`] = increment(montant);
 
             await update(ref(db), updates);
-            alert("✅ Transfè reyisi!");
+            alert("✅ Transfè fèt ak siksè! Balans ou mete ajou.");
         } catch (err) {
-            alert("Erè teknik.");
+            console.error(err);
+            alert("Erè teknik. Eseye ankò pita.");
         }
     }
 };
+        
