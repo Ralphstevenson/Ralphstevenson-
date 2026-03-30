@@ -1,183 +1,163 @@
-/* ==========================================
-   CSS ELITE - CHAT ECHANJ PLUS (VÈSYON V3)
-   ========================================== */
+/* ============================================================
+   STYLE CHAT SIPÒ - ECHANJ PLUS V3.2 (PREMIUM UI)
+   ============================================================ */
 
-/* 1. CONTAINER PRENSIPAL (SEKSYON CHAT) */
-#chat-container:not(.hidden) {
-    display: flex !important;
+#chat-container {
+    height: 100vh;
+    display: flex;
     flex-direction: column;
-    height: 85vh; /* Wotè a fiks pou l pa deplase lòt eleman paj la */
-    padding: 15px;
-    max-width: 500px;
-    margin: 0 auto;
+    background-color: #f0f2f5; /* Koulè background dous */
+    position: relative;
 }
 
 .chat-wrapper {
     display: flex;
     flex-direction: column;
-    height: 100%; /* Li pran tout plas anndan container a */
+    height: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
     background: #ffffff;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-    border: 1px solid #eef0f2;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
 }
 
-/* 2. HEADER - ENFÒMASYON ADMIN */
+/* 1. HEADER CHAT LA */
 .chat-header {
-    background: #0052cc;
-    color: white;
-    padding: 12px 18px;
+    padding: 15px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
     display: flex;
     align-items: center;
     gap: 12px;
-    flex-shrink: 0; /* Header a p'ap janm ratresi */
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
-
-/* Foto profil nan header a */
-.header-logo {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1.5px solid rgba(255,255,255,0.8);
-}
-
-.profile-avatar-main { position: relative; display: flex; align-items: center; }
 
 .status-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: 2px solid white;
-    position: absolute;
-    bottom: -2px;
-    right: -2px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
-.status-dot.online { background: #00d1ff; box-shadow: 0 0 8px #00d1ff; }
-.status-dot.offline { background: #ff5630; }
 
-.admin-info p { margin: 0; font-weight: 600; font-size: 14px; }
-.status-label { font-size: 11px; opacity: 0.9; }
+.status-dot.online { background-color: #22c55e; } /* Vèt */
+.status-dot.offline { background-color: #94a3b8; } /* Gri */
 
-/* 3. BODY - ZÒN KI KONSTAN (SCROLL SÈLMAN) */
+.admin-info p {
+    color: #1e293b;
+}
+
+.admin-info small {
+    color: #64748b;
+    display: block;
+}
+
+/* 2. KÒ CHAT LA (BODY) */
 .chat-body {
-    flex: 1; /* Sa a fòse bwat la pran tout rès plas la ant header ak footer */
+    flex: 1;
+    overflow-y: auto;
     padding: 20px;
-    overflow-y: auto; /* Se isit la sèlman k ap scroll */
-    background-color: #f4f7f9;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    scroll-behavior: smooth;
-}
-
-/* Style Scrollbar fen */
-.chat-body::-webkit-scrollbar { width: 5px; }
-.chat-body::-webkit-scrollbar-thumb { background: #d1d1d1; border-radius: 10px; }
-
-/* 4. ESTRIKTI MESAJ YO (AVÈK AVATAR) */
-.message-line {
-    display: flex;
-    align-items: flex-end;
     gap: 10px;
-    max-width: 85%;
+    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); /* Pattern WhatsApp diskrè */
+    background-attachment: fixed;
 }
 
-/* Mesaj ITILIZATÈ (A DWAT - BLE) */
-.msg-user-line {
-    align-self: flex-end;
-    flex-direction: row-reverse; /* Foto a parèt a dwat */
-}
-
-/* Mesaj ADMIN (A GOCH - GRI) */
-.msg-admin-line {
-    align-self: flex-start;
-    flex-direction: row; /* Foto a parèt a goch */
-}
-
-/* Stil Avatar nan mesaj yo */
-.chat-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* Bul Mesaj yo */
-.bubble {
-    padding: 10px 15px;
+/* Style pou Mesaj yo (Si w jenere yo nan JS) */
+.message {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 18px;
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.4;
     position: relative;
-    word-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-.msg-user-line .bubble {
-    background: #0052cc;
+.message.sent {
+    align-self: flex-end;
+    background-color: #109121;
     color: white;
-    border-radius: 18px 18px 4px 18px;
-    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.15);
+    border-bottom-right-radius: 4px;
 }
 
-.msg-admin-line .bubble {
-    background: #ffffff;
-    color: #333;
-    border-radius: 18px 18px 18px 4px;
-    border: 1px solid #e1e4e8;
+.message.received {
+    align-self: flex-start;
+    background-color: #ffffff;
+    color: #1e293b;
+    border-bottom-left-radius: 4px;
 }
 
-/* Lè mesaj la pati (Time) */
-.time-send {
-    font-size: 10px;
-    display: block;
-    margin-top: 5px;
-    opacity: 0.6;
-}
-.msg-user-line .time-send { text-align: right; }
-
-/* 5. FOOTER - INPUT AK BOUTON VOYE (FIKS ANBA) */
+/* 3. FOOTER CHAT LA (INPUT) */
 .chat-footer {
     padding: 15px;
-    background: white;
+    background: #ffffff;
     display: flex;
     align-items: center;
     gap: 12px;
-    border-top: 1px solid #eee;
-    flex-shrink: 0;
-}
-
-.input-container {
-    flex: 1;
-    background: #f0f2f5;
-    border-radius: 25px;
-    padding: 2px 15px;
+    border-top: 1px solid #f1f5f9;
 }
 
 #chat-input {
-    width: 100%;
-    border: none;
-    background: transparent;
-    padding: 10px 0;
+    flex: 1;
+    padding: 12px 18px;
+    border-radius: 25px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
     outline: none;
     font-size: 14px;
+    transition: 0.3s;
 }
 
-.send-btn {
-    transition: transform 0.2s, color 0.2s;
+#chat-input:focus {
+    border-color: #109121;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(16, 145, 33, 0.05);
 }
-.send-btn:hover { color: #0040a3 !important; transform: scale(1.1); }
-.send-btn:active { transform: scale(0.9); }
 
-/* Avètisman sekirite */
-.secure-notice {
-    text-align: center;
-    padding: 12px;
-    color: #888;
-    font-size: 11px;
-    background: rgba(0,0,0,0.03);
-    border-radius: 12px;
-    margin-bottom: 5px;
+.chat-footer label i {
+    font-size: 20px;
+    color: #64748b;
+    transition: 0.3s;
 }
+
+.chat-footer label i:hover {
+    color: #109121;
+}
+
+#btn-send-chat {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #109121 !important; /* Mwen chanje ble a pou vèt ou a */
+    color: white !important;
+    transition: 0.3s;
+}
+
+#btn-send-chat:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(16, 145, 33, 0.2);
+}
+
+/* Custom Scrollbar pou Chat la */
+.chat-body::-webkit-scrollbar {
+    width: 5px;
+}
+.chat-body::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* Efè pou lè w ap voye foto */
+.chat-img-preview {
+    max-width: 200px;
+    border-radius: 10px;
+    margin-top: 5px;
+   }
+       
