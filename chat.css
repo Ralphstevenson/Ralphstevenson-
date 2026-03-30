@@ -1,13 +1,12 @@
 /* ============================================================
-   STYLE CHAT SIPÒ - ECHANJ PLUS V3.2 (PREMIUM UI)
+   CHAT CSS PROFESSIONNEL - ECHANJ PLUS V3.2
    ============================================================ */
 
 #chat-container {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: #f0f2f5; /* Koulè background dous */
-    position: relative;
+    background-color: #f0f2f5; /* Koulè background net */
 }
 
 .chat-wrapper {
@@ -21,9 +20,9 @@
     box-shadow: 0 0 20px rgba(0,0,0,0.05);
 }
 
-/* 1. HEADER CHAT LA */
+/* 1. HEADER (TÈT CHAT LA) */
 .chat-header {
-    padding: 15px 20px;
+    padding: 12px 18px;
     background: #ffffff;
     border-bottom: 1px solid #f1f5f9;
     display: flex;
@@ -39,20 +38,10 @@
     height: 10px;
     border-radius: 50%;
     border: 2px solid #fff;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
-.status-dot.online { background-color: #22c55e; } /* Vèt */
-.status-dot.offline { background-color: #94a3b8; } /* Gri */
-
-.admin-info p {
-    color: #1e293b;
-}
-
-.admin-info small {
-    color: #64748b;
-    display: block;
-}
+.status-dot.online { background-color: #22c55e; }
+.status-dot.offline { background-color: #94a3b8; }
 
 /* 2. KÒ CHAT LA (BODY) */
 .chat-body {
@@ -61,29 +50,25 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); /* Pattern WhatsApp diskrè */
+    gap: 12px;
+    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
     background-attachment: fixed;
+    background-size: contain;
 }
 
-/* Style pou Mesaj yo (Si w jenere yo nan JS) */
+/* 3. BUL MESAJ YO (BUBBLES) */
 .message {
     max-width: 80%;
     padding: 10px 14px;
     border-radius: 18px;
     font-size: 14px;
-    line-height: 1.4;
     position: relative;
+    line-height: 1.4;
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    word-wrap: break-word;
 }
 
-.message.sent {
-    align-self: flex-end;
-    background-color: #109121;
-    color: white;
-    border-bottom-right-radius: 4px;
-}
-
+/* Mesaj Admin (Agoch) */
 .message.received {
     align-self: flex-start;
     background-color: #ffffff;
@@ -91,7 +76,34 @@
     border-bottom-left-radius: 4px;
 }
 
-/* 3. FOOTER CHAT LA (INPUT) */
+/* Mesaj Itilizatè (Adwat) */
+.message.sent {
+    align-self: flex-end;
+    background-color: #109121; /* Vèt Echanj Plus */
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+/* 4. RANJE FOTO YO (LOGO AK IMAGES) */
+.chat-msg-img {
+    max-width: 200px; /* Limit pou logo a pa twò gwo */
+    max-height: 250px;
+    border-radius: 12px;
+    margin: 5px 0;
+    display: block;
+    object-fit: cover;
+    border: 2px solid rgba(0,0,0,0.05);
+}
+
+.msg-time {
+    display: block;
+    font-size: 10px;
+    margin-top: 4px;
+    opacity: 0.6;
+    text-align: right;
+}
+
+/* 5. FOOTER (KOTE W AP EKRI A) */
 .chat-footer {
     padding: 15px;
     background: #ffffff;
@@ -109,55 +121,36 @@
     background: #f8fafc;
     outline: none;
     font-size: 14px;
-    transition: 0.3s;
 }
 
 #chat-input:focus {
     border-color: #109121;
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(16, 145, 33, 0.05);
-}
-
-.chat-footer label i {
-    font-size: 20px;
-    color: #64748b;
-    transition: 0.3s;
-}
-
-.chat-footer label i:hover {
-    color: #109121;
 }
 
 #btn-send-chat {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background-color: #109121 !important; /* Mwen chanje ble a pou vèt ou a */
+    background-color: #109121 !important;
     color: white !important;
-    transition: 0.3s;
+    transition: 0.2s;
+    border: none;
 }
 
-#btn-send-chat:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(16, 145, 33, 0.2);
+#btn-send-chat:active {
+    transform: scale(0.9);
 }
 
-/* Custom Scrollbar pou Chat la */
+/* 6. SCROLLBAR MODÈN */
 .chat-body::-webkit-scrollbar {
-    width: 5px;
+    width: 4px;
 }
 .chat-body::-webkit-scrollbar-thumb {
     background: #cbd5e1;
     border-radius: 10px;
-}
-
-/* Efè pou lè w ap voye foto */
-.chat-img-preview {
-    max-width: 200px;
-    border-radius: 10px;
-    margin-top: 5px;
    }
-       
+   
