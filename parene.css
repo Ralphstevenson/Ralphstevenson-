@@ -1,227 +1,92 @@
-/* ==========================================
-   ECHANJ PLUS - PARENNAJ ELITE V3 UI
-   ========================================== */
-
+/* --- VARIABLES --- */
 :root {
-    --green-primary: #109121;
-    --green-dark: #0d751a;
-    --bg-light: #f8fafc;
-    --text-main: #1e293b;
-    --text-sub: #64748b;
-    --white: #ffffff;
-    --glass: rgba(255, 255, 255, 0.12);
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --premium-green: #109121;
+    --text-white: #ffffff;
 }
 
-/* 1. Kat Prensipal la (The Hero Card) */
-.referral-card {
-    background: linear-gradient(135deg, var(--green-primary), var(--green-dark));
-    padding: 28px 22px;
-    border-radius: 24px;
-    color: var(--white);
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 12px 30px rgba(16, 145, 33, 0.3);
-    margin: 15px;
+/* --- HEADER --- */
+.premium-header { padding: 20px 15px; border-left: 4px solid var(--premium-green); margin-bottom: 20px; }
+.page-title { font-weight: 900; font-size: 20px; color: #1e293b; margin: 0; }
+.subtitle-paj { font-size: 13px; color: #64748b; margin-top: 5px; }
+
+/* --- GLASS CARD PRINCIPAL --- */
+.referral-card-glass {
+    background: linear-gradient(135deg, #109121, #084d12);
+    padding: 30px 20px; border-radius: 28px; color: white;
+    box-shadow: 0 15px 35px rgba(16, 145, 33, 0.3);
+    margin-bottom: 25px; position: relative;
 }
 
-/* Ti dekorasyon pwofesyonèl nan background nan */
-.referral-card::before {
-    content: "";
-    position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 150px;
-    height: 150px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
+.referral-badge { 
+    position: absolute; top: 15px; right: 20px; 
+    background: rgba(255,255,255,0.2); padding: 5px 12px; 
+    border-radius: 50px; font-size: 10px; font-weight: 800; text-transform: uppercase;
 }
 
-.ref-main-label {
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.85;
-    font-weight: 600;
-}
+.balance-display { display: flex; align-items: baseline; gap: 8px; margin: 10px 0 25px 0; }
+.balance-display h1 { font-size: 42px; font-weight: 900; margin: 0; letter-spacing: -1.5px; }
 
-.balance-row {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    margin: 8px 0 20px 0;
-}
-
-.balance-row h1 {
-    font-size: 38px;
-    font-weight: 900; /* Tèks an gra pou rann li pwofesyonèl */
-    margin: 0;
-    letter-spacing: -1px;
-}
-
-.balance-row span {
-    font-size: 16px;
-    font-weight: 700;
-    opacity: 0.9;
-}
-
-/* 2. Grid Statistik (Parenn, Ekip, Nivo) */
-.referral-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    background: var(--glass);
-    backdrop-filter: blur(10px); /* Efè Glassmorphism */
+/* GRID GLASS STATS */
+.stats-grid-glass {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 15px 5px;
-    border-radius: 18px;
-    margin-bottom: 22px;
+    padding: 15px 5px; border-radius: 20px; margin-bottom: 20px;
+}
+.stat-box { display: flex; flex-direction: column; align-items: center; border-right: 1px solid rgba(255,255,255,0.1); }
+.stat-box:last-child { border: none; }
+.stat-box span { font-size: 10px; opacity: 0.8; font-weight: 600; text-transform: uppercase; }
+.stat-box b { font-size: 14px; font-weight: 800; }
+
+.btn-premium-transfer {
+    width: 100%; height: 55px; background: white; color: #109121;
+    border: none; border-radius: 18px; font-weight: 900; font-size: 16px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s;
 }
 
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
+/* --- ZÒN TRANSPARENT KÒD --- */
+.glass-container {
+    background: #ffffff; /* Si se mòd klè */
+    padding: 25px; border-radius: 28px; margin-bottom: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.04); border: 1px solid #f1f5f9;
 }
 
-.stat-item:not(:last-child) {
-    border-right: 1px solid rgba(255, 255, 255, 0.2);
+/* Pati transparan ou vle a */
+.input-transparent-box {
+    display: flex; align-items: center; 
+    background: rgba(241, 245, 249, 0.7); /* Efè vè klè */
+    backdrop-filter: blur(5px);
+    border: 2px dashed #cbd5e1; /* Dash border bay li yon look teknisyen */
+    padding: 8px; border-radius: 18px; margin-bottom: 25px;
 }
 
-.stat-item small {
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.8);
+.input-transparent-box input {
+    flex: 1; background: transparent; border: none; outline: none;
+    text-align: center; font-size: 20px; font-weight: 900; color: #1e293b;
 }
 
-.stat-item b {
-    font-size: 14px;
-    font-weight: 800;
+.copy-premium-btn {
+    background: var(--premium-green); color: white;
+    width: 50px; height: 50px; border-radius: 14px; border: none;
+    cursor: pointer; font-size: 18px;
 }
 
-/* 3. Bouton Transfè a */
-.btn-withdraw {
-    width: 100%;
-    height: 52px;
-    background: var(--white);
-    color: var(--green-primary);
-    border: none;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+/* SHARE GRID */
+.share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px; }
+.share-icon { 
+    height: 55px; border-radius: 16px; display: flex; 
+    align-items: center; justify-content: center; font-size: 22px; color: white; cursor: pointer; 
 }
+.wa { background: #25D366; } .fb { background: #1877F2; } .tg { background: #0088cc; } .sms { background: #34495e; }
 
-.btn-withdraw:active {
-    transform: scale(0.96);
+/* NIGHT MODE - Pou sa parèt plis Glass toujou */
+body.night-mode .glass-container {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
 }
-
-/* 4. Zòn Kòd ARS la */
-.kalkilatris-box {
-    background: var(--white);
-    margin: 15px;
-    padding: 22px;
-    border-radius: 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-}
-
-.input-label {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text-sub);
-    margin-bottom: 10px;
-    display: block;
-}
-
-.input-calc {
-    display: flex;
-    background: #f1f5f9;
-    padding: 5px;
-    border-radius: 15px;
-    border: 2px solid #e2e8f0;
-    margin-bottom: 20px;
-    transition: border-color 0.3s;
-}
-
-.input-calc:focus-within {
-    border-color: var(--green-primary);
-}
-
-.input-calc input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 12px;
-    font-size: 18px;
-    font-weight: 900;
-    color: var(--text-main);
-    text-align: center;
-    font-family: 'Inter', sans-serif;
-}
-
-.copy-btn {
-    background: var(--green-primary);
-    color: var(--white);
-    width: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.copy-btn:hover { background: var(--green-dark); }
-
-/* 5. Lis Envite yo (List UI) */
-.team-section {
-    margin: 15px;
-    background: var(--white);
-    padding: 20px;
-    border-radius: 24px;
-}
-
-.ist-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px;
-    background: #f8fafc;
-    border-radius: 16px;
-    margin-bottom: 10px;
-    border: 1px solid #edf2f7;
-}
-
-.status-badge {
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 10px;
-    font-weight: 800;
-    text-transform: uppercase;
-}
-
-.success { background: #dcfce7; color: #166534; }
-.pending { background: #fef9c3; color: #854d0e; }
-
-/* 6. Night Mode Support */
-body.night-mode .kalkilatris-box,
-body.night-mode .team-section {
-    background: #1e293b;
-    color: var(--white);
-}
-
-body.night-mode .input-calc {
-    background: #0f172a;
-    border-color: #334155;
-}
-
-body.night-mode .input-calc input { color: var(--white); }
-body.night-mode .ist-item { background: #1e293b; border-color: #334155; }
-   
+body.night-mode .input-transparent-box { background: rgba(15, 23, 42, 0.5); }
+body.night-mode .input-transparent-box input { color: white; }
+body.night-mode .logic-info { background: rgba(16, 145, 33, 0.1); border: 1px solid rgba(16, 145, 33, 0.2); }
