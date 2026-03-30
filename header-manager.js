@@ -16,7 +16,7 @@ export const activateDynamicHeader = (uid, db) => {
         const balansKomisyon = (data.referral_data?.balance || 0).toFixed(2);
         const flashMessage = "🚀 Nouvo pousantaj disponib! | ⚠️ Pa bay kòd ou | ✅ Echanj Plus Sekirite.";
 
-        // 2. SALITASYON
+        // 2. SALITASYON (Sidebar/Header)
         const greetingBox = document.getElementById('header-user-greeting');
         if (greetingBox) {
             greetingBox.innerHTML = `<span class="greeting-text">Bonjou, <b>${nonKliyan}</b>! 👋</span>`;
@@ -28,7 +28,7 @@ export const activateDynamicHeader = (uid, db) => {
             securityBox.innerHTML = `<i class="fas fa-shield-alt"></i> Kont ou an sekirite`;
         }
 
-        // 4. BALANS YO (STYLE PILL)
+        // 4. BALANS YO (STYLE PILL - JAN OU TE MANDE L LA)
         const balanceBox = document.getElementById('header-quick-balance');
         if (balanceBox) {
             balanceBox.innerHTML = `
@@ -41,7 +41,7 @@ export const activateDynamicHeader = (uid, db) => {
                 </div>`;
         }
 
-        // 5. FLASH INFO (SAN MARQUEE - POU CSS MODÈN NAN)
+        // 5. FLASH INFO (STRICTEMENT POU CSS NEWS TICKER A)
         const flashBox = document.getElementById('header-flash-info');
         if (flashBox) {
             flashBox.innerHTML = `
