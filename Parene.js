@@ -1,146 +1,95 @@
-/* ============================================================
-   JS PARENNAJ - ECHANJ PLUS V3 - KONPLE NET
-   ============================================================ */
 import { auth, db } from './script.js';
-import { ref, onValue, get, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { ref, onValue, get, update, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// 1. INISYALIZASYON DASHBOARD LA
+// 1. CHAJMAN DONE PARENNAJ
 window.initReferralDashboard = (uid) => {
     if (!uid) return;
+    const refPath = `users/${uid}/referral_data`;
 
-    const refDataPath = `users/${uid}/referral_data`;
-    
-    // Koute chanjman nan balans komisyon ak total envite
-    onValue(ref(db, refDataPath), (snapshot) => {
+    onValue(ref(db, refPath), (snapshot) => {
         const data = snapshot.val() || { balance: 0, total_invites: 0, invite_list: {} };
         
-        // Mizajou UI
-        document.getElementById('komisyon-balans').innerText = (data.balance || 0).toFixed(2);
-        document.getElementById('total-invites').innerText = data.total_invites || 0;
+        if(document.getElementById('komisyon-balans')) 
+            document.getElementById('komisyon-balans').innerText = (data.balance || 0).toFixed(2);
         
-        // Chaje kÃ²d ARS itilizatÃ¨ a
-        get(ref(db, `users/${uid}/arsID`)).then((arsSnap) => {
-            const arsID = arsSnap.val() || "ARS-0000";
-            document.getElementById('my-ref-code').value = arsID;
+        if(document.getElementById('total-invites')) 
+            document.getElementById('total-invites').innerText = data.total_invites || 0;
+
+        get(ref(db, `users/${uid}/arsID`)).then(s => {
+            if(document.getElementById('my-ref-code')) 
+                document.getElementById('my-ref-code').value = s.val() || "---";
         });
 
-        // Chaje Lis Envite yo
         chajeLisEnvite(data.invite_list);
     });
 };
 
-// 2. CHAJE LIS ENVITE YO NAN TABLO A
+// 2. LIS ENVITE YO
 function chajeLisEnvite(inviteList) {
     const container = document.getElementById('container-lis-envite');
     if (!container) return;
 
     if (!inviteList || Object.keys(inviteList).length === 0) {
-        container.innerHTML = `
-            <div class="empty-msg">
-                <i class="fas fa-user-plus" style="display:block; font-size:30px; margin-bottom:10px;"></i>
-                <p>Ou poko gen okenn moun nan ekip ou a.</p>
-            </div>`;
+        container.innerHTML = `<div style="text-align:center; padding:20px; color:#94a3b8;"><p>Poko gen moun.</p></div>`;
         return;
     }
 
-    let html = '<div class="referral-list">';
-    Object.values(inviteList).reverse().forEach(user => {
-        const statusClass = user.status === "Success" ? "status-success" : "status-pending";
-        const statusText = user.status === "Success" ? "ValidÃ©" : "En attente";
-        
+    let html = '';
+    Object.values(inviteList).reverse().forEach(invite => {
+        const isSuccess = invite.status === "Success";
         html += `
             <div class="ist-item">
-                <div class="ist-info">
-                    <div class="ist-icon"><i class="fas fa-user"></i></div>
-                    <div class="ist-details">
-                        <b>${user.name}</b>
-                        <small>${user.date || '---'}</small>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <i class="fas fa-user-circle" style="font-size:25px; color:#cbd5e1;"></i>
+                    <div style="display:flex; flex-direction:column;">
+                        <b style="font-size:14px;">${invite.name}</b>
+                        <small style="font-size:11px; color:#64748b;">ID: ${invite.arsID || 'Atant'}</small>
                     </div>
                 </div>
-                <div class="ist-amount">
-                    <span class="badge-status ${statusClass}">${statusText}</span>
-                </div>
+                <span class="${isSuccess ? 'status-success' : 'status-pending'}">
+                    ${isSuccess ? 'Validé' : 'En attente'}
+                </span>
             </div>`;
     });
-    html += '</div>';
     container.innerHTML = html;
 }
 
-// 3. KOPIYE KÃ’D ARS
+// 3. KOPIYE KÒD
 window.kopiyeKod = () => {
-    const copyText = document.getElementById("my-ref-code");
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); 
-    navigator.clipboard.writeText(copyText.value);
+    const code = document.getElementById('my-ref-code');
+    code.select();
+    navigator.clipboard.writeText(code.value);
+    alert("✅ Kòd " + code.value + " kopye!");
+};
+
+// 4. PATAJE MODÈN
+window.patajeLien = (platform) => {
+    const code = document.getElementById('my-ref-code').value;
+    const link = `https://echanjplus064.netlify.app/?ref=${code}`;
+    const msg = `🚀 *ECHANJ PLUS* \nChanje minit pou kòb kach rapid! \n🎁 Kòd mwen: *${code}* \nEnskri la: ${link}`;
+
+    let url = "";
+    if (platform === 'whatsapp') url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+    else if (platform === 'telegram') url = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(msg)}`;
+    else if (platform === 'facebook') url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`;
     
-    alert("KÃ²d kopiye: " + copyText.value);
+    if (url) window.open(url, '_blank');
 };
 
-// 4. PATAJE SOU WHATSAPP
-window.patajeWhatsApp = () => {
-    const myCode = document.getElementById('my-ref-code').value;
-    const siteLink = `https://echanjplus064.netlify.app/?ref=${myCode}`;
-    const text = `*Bonjou!* ðŸ‘‹\n\nMwen invite'w sou *Echanj Plus*.\nSÃ¨vi ak kÃ²d mwen an (*${myCode}*) pou'w ka jwenn *2% rabÃ¨* sou premye echanj ou.\n\nEnskri la: ${siteLink}`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
-    window.open(whatsappUrl, '_blank');
-};
-
-// 5. TRANSFERE KOMISYON NAN BALANS PRENSIPAL
+// 5. TRANSFÈ KOMISYON
 window.demannTransfere = async () => {
     const uid = auth.currentUser?.uid;
-    if (!uid) return;
+    const bal = parseFloat(document.getElementById('komisyon-balans').innerText);
 
-    const komisyonElem = document.getElementById('komisyon-balans');
-    const montantKomisyon = parseFloat(komisyonElem.innerText);
+    if (bal < 50) return alert("❌ Minimòm transfè se 50.00 HTG");
 
-    if (montantKomisyon < 50) {
-        return alert("Ou bezwen omwen 50 HTG komisyon pou w ka transfere.");
-    }
-
-    if (confirm(`Ãˆske ou vle transfere ${montantKomisyon} HTG nan balans prensipal ou?`)) {
+    if (confirm(`Voye ${bal.toFixed(2)} HTG nan balans prensipal?`)) {
         try {
-            const userRef = ref(db, `users/${uid}`);
-            const refDataPath = `users/${uid}/referral_data`;
-
-            const snap = await get(userRef);
-            const userData = snap.val();
-            const balansAktyel = parseFloat(userData.balance || 0);
-
-            // Operasyon an de tan: 
-            // 1. Vide balans komisyon 
-            // 2. Mete kÃ²b la nan balans prensipal
-            const updates = {};
-            updates[`${refDataPath}/balance`] = 0;
-            updates[`users/${uid}/balance`] = balansAktyel + montantKomisyon;
-
-            await update(ref(db), updates);
-            alert("TransfÃ¨ reyisi! Balans ou mete ajou.");
-
-        } catch (error) {
-            console.error("ErÃ¨ transfÃ¨:", error);
-            alert("Gen yon erÃ¨ ki rive pandan transfÃ¨ a.");
-        }
+            const up = {};
+            up[`users/${uid}/referral_data/balance`] = 0;
+            up[`users/${uid}/balance`] = increment(bal);
+            await update(ref(db), up);
+            alert("✅ Transfè reyisi!");
+        } catch (e) { alert("Erè."); }
     }
 };
-
-// 6. DETEKTE KÃ’D SPONSOR NAN URL (POU NOUVO MOUN)
-window.detecterSponsorURL = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const refCode = urlParams.get('ref');
-
-    if (refCode && refCode.startsWith('ARS-')) {
-        localStorage.setItem('pending_sponsor_code', refCode);
-        
-        // Si input la egziste nan HTML la (paj signup)
-        const sInput = document.getElementById('sponsor-input');
-        if (sInput) {
-            sInput.value = refCode;
-            sInput.readOnly = true;
-            document.getElementById('badge-ref-status').style.display = "block";
-            
-            // Ouvri paj signup la otomatikman si moun lan te sou login
-            if (window.toggleAuth) window.toggleAuth('signup');
-        }
-    }
-};
-                
