@@ -6,7 +6,7 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: #f0f2f5; /* Koulè background net */
+    background-color: #f0f2f5;
 }
 
 .chat-wrapper {
@@ -22,18 +22,42 @@
 
 /* 1. HEADER (TÈT CHAT LA) */
 .chat-header {
-    padding: 12px 18px;
+    padding: 10px 15px;
     background: #ffffff;
     border-bottom: 1px solid #f1f5f9;
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: space-between;
     position: sticky;
     top: 0;
     z-index: 10;
 }
 
-.status-dot {
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-avatar-main {
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
+.header-logo {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #e2e8f0;
+}
+
+/* Pwen Online/Offline anlè a */
+#presence-indicator {
+    position: absolute;
+    bottom: 2px;
+    right: 0;
     width: 10px;
     height: 10px;
     border-radius: 50%;
@@ -42,6 +66,18 @@
 
 .status-dot.online { background-color: #22c55e; }
 .status-dot.offline { background-color: #94a3b8; }
+
+.admin-name {
+    margin: 0;
+    font-weight: 700;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.status-label {
+    font-size: 11px;
+    color: #64748b;
+}
 
 /* 2. KÒ CHAT LA (BODY) */
 .chat-body {
@@ -52,11 +88,10 @@
     flex-direction: column;
     gap: 12px;
     background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
-    background-attachment: fixed;
-    background-size: contain;
+    background-size: cover;
 }
 
-/* 3. BUL MESAJ YO (BUBBLES) */
+/* 3. BUL MESAJ YO */
 .message {
     max-width: 80%;
     padding: 10px 14px;
@@ -65,10 +100,8 @@
     position: relative;
     line-height: 1.4;
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    word-wrap: break-word;
 }
 
-/* Mesaj Admin (Agoch) */
 .message.received {
     align-self: flex-start;
     background-color: #ffffff;
@@ -76,81 +109,64 @@
     border-bottom-left-radius: 4px;
 }
 
-/* Mesaj Itilizatè (Adwat) */
 .message.sent {
     align-self: flex-end;
-    background-color: #109121; /* Vèt Echanj Plus */
+    background-color: #109121;
     color: white;
     border-bottom-right-radius: 4px;
 }
 
-/* 4. RANJE FOTO YO (LOGO AK IMAGES) */
 .chat-msg-img {
-    max-width: 200px; /* Limit pou logo a pa twò gwo */
-    max-height: 250px;
-    border-radius: 12px;
-    margin: 5px 0;
-    display: block;
-    object-fit: cover;
-    border: 2px solid rgba(0,0,0,0.05);
+    max-width: 100%;
+    width: 180px; /* Gwosè fiks pou logo a nan chat la */
+    border-radius: 10px;
+    margin-bottom: 5px;
 }
 
 .msg-time {
     display: block;
     font-size: 10px;
     margin-top: 4px;
-    opacity: 0.6;
+    opacity: 0.7;
     text-align: right;
 }
 
-/* 5. FOOTER (KOTE W AP EKRI A) */
+/* 4. FOOTER (KOTE W AP EKRI A) */
 .chat-footer {
-    padding: 15px;
+    padding: 12px;
     background: #ffffff;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     border-top: 1px solid #f1f5f9;
 }
 
-#chat-input {
+.input-container {
     flex: 1;
-    padding: 12px 18px;
-    border-radius: 25px;
+}
+
+#chat-input {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 20px;
     border: 1px solid #e2e8f0;
     background: #f8fafc;
     outline: none;
-    font-size: 14px;
-}
-
-#chat-input:focus {
-    border-color: #109121;
-    background: #fff;
 }
 
 #btn-send-chat {
-    width: 42px;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: #109121 !important;
     color: white !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: 0.2s;
-    border: none;
 }
 
-#btn-send-chat:active {
-    transform: scale(0.9);
+.footer-icon {
+    color: #64748b;
+    font-size: 18px;
 }
-
-/* 6. SCROLLBAR MODÈN */
-.chat-body::-webkit-scrollbar {
-    width: 4px;
-}
-.chat-body::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 10px;
-   }
-   
