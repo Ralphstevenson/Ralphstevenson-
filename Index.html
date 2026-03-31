@@ -140,70 +140,110 @@
             
 
 
-<section id="paj-retre" class="hidden">
-<div class="paj-retre-kontni">
-    <div class="user-status-bar-simple">
-        <div class="status-info"><span class="label">Balans:</span><span id="display-balance" class="value">0.00 HTG</span></div>
-        <div class="status-info"><span class="label">ID Kont:</span><span id="display-ars-id" class="value">---</span></div>
-    </div>
-
-    <div class="form-container">
-        <div class="form-group">
-            <label>Non Reseptè</label>
-            <input type="text" id="retre-name" placeholder="Non konplè">
-        </div>
-        <div class="form-group">
-            <label>Telefòn</label>
-            <input type="tel" id="retre-phone" placeholder="47112233">
-        </div>
-        <div class="form-group">
-            <label>Metòd</label>
-            <select id="retre-method">
-                <option value="MonCash">MonCash</option>
-                <option value="NatCash">NatCash</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Montan (HTG)</label>
-            <input type="number" id="retre-amount" placeholder="Minimòm 100">
-        </div>
-        <button class="btn-primary-pro" id="btn-konfime-retre">RETIRE KÒB LA</button>
-    </div>
-
-    <div id="modal-step1" class="modal hidden">
-        <div class="modal-content">
-            <h3>Verifye Enfòmasyon</h3>
-            <div id="info-recap" style="text-align: left; margin: 15px 0; font-size: 14px; line-height: 1.6;"></div>
-            <div class="modal-btns">
-                <button class="btn-cancel" onclick="closeAllModals()">ANILE</button>
-                <button class="btn-confirm" id="next-to-step2">OK, YO BON</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-step2" class="modal hidden">
-        <div class="modal-content">
-            <h3>Konfime Montan</h3>
-            <p style="font-size: 18px; margin: 15px 0;">W ap retire: <br><b id="amount-recap" style="color: var(--primary-blue); font-size: 24px;">0.00 HTG</b></p>
-            <div class="modal-btns">
-                <button class="btn-cancel" onclick="closeAllModals()">ANILE</button>
-                <button class="btn-confirm" onclick="finaliseRetre()">OK, KONTINYE</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-final" class="modal hidden">
-        <div class="modal-content">
-            <script src="https://cdn.lordicon.com/lordicon.js"></script>
-            <lord-icon src="https://cdn.lordicon.com/lvrxlmju.json" trigger="loop" stroke="bold" colors="primary:#109121" style="width:150px;height:150px"></lord-icon>
-            <h3 style="color: #109121;">Demann Voye!</h3>
-            <p>Admin ap trete sa kounye a.</p>
-        </div>
-    </div>
-    </div>
+<section id="paj-retre" class="page-content hidden">
+    <div class="paj-retre-kontni">
         
-</section>
+        <div class="user-status-bar-simple">
+            <div class="status-info">
+                <span class="label">Balans disponib:</span>
+                <span id="display-balance" class="value">0.00 HTG</span>
+            </div>
+            <div class="status-info">
+                <span class="label">ID Kont:</span>
+                <span id="display-ars-id" class="value">---</span>
+            </div>
+        </div>
 
+        <div class="form-container shadow-smooth">
+            <h3 style="margin-bottom: 20px; color: var(--text-main);"><i class="fa fa-wallet"></i> Mande yon Retrè</h3>
+            
+            <div class="form-group">
+                <label><i class="fa fa-user"></i> Non Reseptè</label>
+                <input type="text" id="retre-name" placeholder="Non konplè moun k ap resevwa a">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa fa-phone"></i> Nimewo Telefòn</label>
+                <input type="tel" id="retre-phone" placeholder="Ex: 47112233">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa fa-building-columns"></i> Metòd Peman</label>
+                <select id="retre-method">
+                    <option value="MonCash">MonCash</option>
+                    <option value="NatCash">NatCash</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa fa-money-bill-wave"></i> Montan pou w retire (HTG)</label>
+                <input type="number" id="retre-amount" placeholder="Minimòm 100 HTG">
+            </div>
+
+            <button class="btn-primary-pro" id="btn-konfime-retre">
+                RETIRE KÒB LA
+            </button>
+        </div>
+
+        <div id="modal-step1" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h3 style="color: var(--text-main);"><i class="fa fa-clipboard-check"></i> Verifye Done yo</h3>
+                <div id="info-recap" class="recap-box">
+                    </div>
+                <div class="modal-btns">
+                    <button class="btn-cancel" onclick="closeAllModals()">ANILE</button>
+                    <button class="btn-confirm" id="next-to-step2">OK, YO BON</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-pin-retre" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div style="margin-bottom: 15px;">
+                    <i class="fa-solid fa-shield-halved" style="font-size: 45px; color: #109121;"></i>
+                </div>
+                <h3 style="color: var(--text-main);">Sekirite PIN</h3>
+                <p style="font-size: 14px; color: var(--text-sub);">Antre PIN 4 chif ou an pou w ka debloke retrè sa a.</p>
+                
+                <div class="input-group-modal" style="margin: 25px 0;">
+                    <input type="number" id="pin-retre-input" 
+                           placeholder="****" 
+                           style="text-align: center; font-size: 28px; letter-spacing: 12px; font-weight: 800; border: 2px solid var(--primary);"
+                           oninput="if(this.value.length > 4) this.value = this.value.slice(0, 4)">
+                </div>
+
+                <div class="modal-btns">
+                    <button class="btn-cancel" onclick="closeAllModals()">ANILE</button>
+                    <button class="btn-confirm" id="btn-verify-pin-retre">VERIFYE PIN</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-step2" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h3 style="color: var(--text-main);">Èske w sèten?</h3>
+                <p style="margin: 15px 0; color: var(--text-sub);">W ap voye demann pou w retire:</p>
+                <b id="amount-recap" style="color: #109121; font-size: 32px; display: block; margin-bottom: 20px;">0.00 HTG</b>
+                <div class="modal-btns">
+                    <button class="btn-cancel" onclick="closeAllModals()">ANILE</button>
+                    <button class="btn-confirm" onclick="finaliseRetre()">WI, KONFIME</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-final" class="modal-overlay hidden">
+            <div class="modal-content">
+                <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                <lord-icon src="https://cdn.lordicon.com/lvrxlmju.json" trigger="loop" stroke="bold" colors="primary:#109121" style="width:150px;height:150px"></lord-icon>
+                <h3 style="color: #109121; font-size: 24px;">Demann Voye!</h3>
+                <p style="color: var(--text-sub);">Administratè a ap verifye epi voye kòb la sou kont ou kounye a.</p>
+            </div>
+        </div>
+
+    </div> </section>
+            
+
+            
             
             <section id="paj-trans" class="hidden">
     <div class="header-paj">
