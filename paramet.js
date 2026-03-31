@@ -1,9 +1,9 @@
 /* ============================================================
-   JS PARAMÈTRES KONPLÈ - ECHANJ PLUS V3.2 (SECURITY UPDATE)
+   JS PARAMÈTRES KONPLÈ - ECHANJ PLUS V3.2 - RESET EMAIL UPDATE
    ============================================================ */
 import { auth, db } from './script.js';
 import { ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-import { updatePassword, onAuthStateChanged, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 // Done mondyal pou kontwole sekirite nan tout App la
 window.userAppData = {
@@ -28,9 +28,17 @@ window.initParamet = (uid) => {
 
         // B. Afiche Gmail la (Nou pran l nan Auth pou n sèten li se mèt kont lan)
         const settEmail = document.getElementById('sett-email');
-        if (settEmail && auth.currentUser) {
-            window.userAppData.email = auth.currentUser.email;
-            settEmail.innerText = auth.currentUser.email;
+        const emailDisplayModal = document.getElementById('email-display-reset');
+
+        if (auth.currentUser) {
+            const userEmail = auth.currentUser.email;
+            window.userAppData.email = userEmail;
+            
+            // Afiche nan paj Paramètre a
+            if (settEmail) settEmail.innerText = userEmail;
+            
+            // Prepare email la pou modal reset la si l egziste
+            if (emailDisplayModal) emailDisplayModal.innerText = userEmail;
         }
 
         // C. Mizajou Avatar a ak inisyal non an
@@ -95,58 +103,27 @@ if (btnSavePin) {
     };
 }
 
-// 4. CHANJE MODPAS (AK REYANTIFIKASYON)
-const btnSavePw = document.getElementById('btn-save-pw');
-if (btnSavePw) {
-    btnSavePw.onclick = async () => {
-        const oldPw = document.getElementById('old-password').value;
-        const newPw = document.getElementById('new-password').value;
-        const confirmPw = document.getElementById('confirm-password').value;
+// 4. CHANJE MODPAS (VOYE LIEN NAN GMAIL)
+// Fonksyon sa a ranplase ansyen lojik reyantifikasyon an
+const btnSendReset = document.getElementById('btn-send-reset-link');
+if (btnSendReset) {
+    btnSendReset.onclick = async () => {
         const user = auth.currentUser;
+        if (!user) return alert("Ou dwe konekte anvan!");
 
-        if (!oldPw || !newPw || !confirmPw) {
-            alert("Tanpri ranpli tout chan yo.");
-            return;
-        }
-
-        if (newPw !== confirmPw) {
-            alert("Nouvo modpas yo pa match.");
-            return;
-        }
-
-        if (newPw.length < 6) {
-            alert("Modpas la dwe gen omwen 6 karaktè.");
-            return;
-        }
-
-        btnSavePw.innerText = "Y ap verifye...";
-        btnSavePw.disabled = true;
+        btnSendReset.disabled = true;
+        btnSendReset.innerText = "Y ap voye...";
 
         try {
-            // A. Verifikasyon si ansyen modpas la bon
-            const credential = EmailAuthProvider.credential(user.email, oldPw);
-            await reauthenticateWithCredential(user, credential);
-
-            // B. Si l bon, n ap chanje l
-            await updatePassword(user, newPw);
-            
-            alert("✅ Modpas ou mete ajou ak siksè!");
+            await sendPasswordResetEmail(auth, user.email);
+            alert("✅ Link la voye! Tcheke Gmail ou (" + user.email + ") pou w chanje modpas la.");
             window.closeModal('modal-password');
-            
-            // Netwaye
-            document.getElementById('old-password').value = "";
-            document.getElementById('new-password').value = "";
-            document.getElementById('confirm-password').value = "";
-
         } catch (error) {
-            if (error.code === 'auth/wrong-password') {
-                alert("❌ Ansyen modpas la pa kòrèk.");
-            } else {
-                alert("❌ Erè: " + error.message);
-            }
+            console.error("Erè Reset:", error);
+            alert("❌ Erè: " + error.message);
         } finally {
-            btnSavePw.innerText = "METE AJOU";
-            btnSavePw.disabled = false;
+            btnSendReset.disabled = false;
+            btnSendReset.innerText = "VOYE LIEN AN";
         }
     };
 }
@@ -176,4 +153,3 @@ onAuthStateChanged(auth, (user) => {
         window.initParamet(user.uid);
     }
 });
-   
