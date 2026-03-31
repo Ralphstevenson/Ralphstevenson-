@@ -432,21 +432,30 @@
         </div>
 
         <div id="modal-password" class="modal-overlay hidden">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4><i class="fa fa-lock"></i> Chanje Modpas</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group-modal">
-                        <input type="password" id="new-password" placeholder="Nouvo modpas">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn-cancel" onclick="closeModal('modal-password')">ANILE</button>
-                    <button id="btn-save-pw" class="btn-confirm">METE AJOU</button>
-                </div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4><i class="fa fa-lock"></i> Sekirite Modpas</h4>
+        </div>
+        <div class="modal-body">
+            <p style="font-size: 13px; margin-bottom: 15px;">Ranpli tout chan yo pou mete modpas ou ajou.</p>
+            
+            <div class="input-group-modal">
+                <input type="password" id="old-password" placeholder="Ansyen modpas">
+            </div>
+            <div class="input-group-modal">
+                <input type="password" id="new-password" placeholder="Nouvo modpas (min 6)">
+            </div>
+            <div class="input-group-modal">
+                <input type="password" id="confirm-password" placeholder="Konfime nouvo modpas">
             </div>
         </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeModal('modal-password')">ANILE</button>
+            <button id="btn-save-pw" class="btn-confirm">METE AJOU</button>
+        </div>
+    </div>
+        </div>
+        
 
         <div id="modal-pin" class="modal-overlay hidden">
             <div class="modal-content">
