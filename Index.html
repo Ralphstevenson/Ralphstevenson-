@@ -366,6 +366,47 @@
             </div>
         </div>
 
+<div id="modal-password" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4><i class="fa fa-lock"></i> Chanje Modpas</h4>
+            <i class="fa fa-times" onclick="closeModal('modal-password')"></i>
+        </div>
+        <div class="modal-body">
+            <p>Antre yon nouvo modpas ki gen omwen 6 karaktè.</p>
+            <div class="input-group-modal">
+                <i class="fa fa-key"></i>
+                <input type="password" id="new-password" placeholder="Nouvo modpas">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeModal('modal-password')">ANILE</button>
+            <button id="btn-save-pw" class="btn-confirm">METE AJOU</button>
+        </div>
+    </div>
+</div>
+
+<div id="modal-pin" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 id="pin-title"><i class="fa fa-shield-halved"></i> PIN Sekirite</h4>
+            <i class="fa fa-times" onclick="closeModal('modal-pin')"></i>
+        </div>
+        <div class="modal-body">
+            <p id="pin-msg">Antre 4 chif pou sekirize retrè w yo.</p>
+            <div class="input-group-modal">
+                <i class="fa fa-keyboard"></i>
+                <input type="number" id="pin-input" pattern="\d*" maxlength="4" placeholder="****" 
+                       oninput="if(this.value.length > 4) this.value = this.value.slice(0, 4)">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeModal('modal-pin')">FÈMEN</button>
+            <button id="btn-save-pin" class="btn-confirm">KONFIME PIN</button>
+        </div>
+    </div>
+    </div>
+        
         <div class="settings-group">
             <span class="group-label">SISTÈM</span>
             <div class="setting-row">
