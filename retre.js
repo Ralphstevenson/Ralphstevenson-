@@ -1,5 +1,5 @@
 /* ============================================================
-   JS RETRÈ - ECHANJ PLUS V3.2 - SEKIRITE PIN MODAL ENTEGRE
+   JS RETRÈ - ECHANJ PLUS V3.2 - SEKIRITE PIN & SYNC BALANS
    ============================================================ */
 import { auth, db } from './script.js';
 import { ref, get, update, serverTimestamp, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -18,11 +18,16 @@ function kouteDoneFirebase(uid) {
     onValue(userRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-            const balEl = document.getElementById('display-balance');
             const idEl = document.getElementById('display-ars-id');
             const balansDatabase = parseFloat(data.balance || 0);
 
-            if (balEl) balEl.innerText = balansDatabase.toFixed(2) + " HTG";
+            // NOUVO: Olye nou ekri nan innerText dirèkteman, nou mete ajou valè global la
+            // epi nou rele fonksyon ki jere afichaj la (kache/montre) nan Gwo JS la.
+            window.userRealBalance = balansDatabase;
+            if (window.updateBalanceUI) {
+                window.updateBalanceUI();
+            }
+            
             if (idEl) idEl.innerText = data.arsID || "---";
 
             // Sove done PIN yo nan window pou verifikasyon rapid
@@ -58,15 +63,15 @@ function kouteDoneFirebase(uid) {
 // 2. LOGIK BOUTON AK VERIFIKASYON PIN
 function konekteLojikBouton() {
     const btnMain = document.getElementById('btn-konfime-retre');
-    const btnNextToPin = document.getElementById('next-to-step2'); // Sa a ap louvri Modal PIN
+    const btnNextToPin = document.getElementById('next-to-step2'); 
     const btnVerifyPin = document.getElementById('btn-verify-pin-retre');
 
     if (btnMain) {
         btnMain.onclick = () => {
             // Tcheke si PIN nan kreye anvan
-            if (!window.userAppData.hasPin) {
+            if (!window.userAppData || !window.userAppData.hasPin) {
                 alert("🔴 Ou dwe kreye yon PIN nan Paramètres anvan ou fè retrè.");
-                window.showPage('paj-parametre'); 
+                if (window.showPage) window.showPage('paj-parametre'); 
                 return;
             }
 
@@ -85,30 +90,29 @@ function konekteLojikBouton() {
                     <p><b>Montan:</b> ${montan} HTG</p>
                 `;
             }
-            document.getElementById('amount-recap').innerText = montan + " HTG";
-            document.getElementById('modal-step1').classList.remove('hidden');
+            const amountRecap = document.getElementById('amount-recap');
+            if (amountRecap) amountRecap.innerText = montan + " HTG";
+            
+            document.getElementById('modal-step1')?.classList.remove('hidden');
         };
     }
 
-    // Lè kliyan an klike "OK, YO BON" nan Step 1
     if (btnNextToPin) {
         btnNextToPin.onclick = () => {
-            document.getElementById('modal-step1').classList.add('hidden');
-            document.getElementById('modal-pin-retre').classList.remove('hidden');
+            document.getElementById('modal-step1')?.classList.add('hidden');
+            document.getElementById('modal-pin-retre')?.classList.remove('hidden');
         };
     }
 
-    // Lè kliyan an klike "VERIFYE PIN" nan Modal PIN la
     if (btnVerifyPin) {
         btnVerifyPin.onclick = () => {
             const pinInput = document.getElementById('pin-retre-input');
             const pinAntre = pinInput.value;
             
             if (pinAntre === window.userAppData.correctPin) {
-                // Si PIN lan bon, debloke dènye etap la
-                document.getElementById('modal-pin-retre').classList.add('hidden');
-                document.getElementById('modal-step2').classList.remove('hidden');
-                pinInput.value = ""; // Netwaye input la
+                document.getElementById('modal-pin-retre')?.classList.add('hidden');
+                document.getElementById('modal-step2')?.classList.remove('hidden');
+                pinInput.value = ""; 
             } else {
                 alert("❌ PIN enkòrèk. Eseye ankò.");
                 pinInput.value = "";
@@ -125,7 +129,7 @@ window.finaliseRetre = async () => {
     const montanInput = document.getElementById('retre-amount').value;
     const montan = parseFloat(montanInput);
 
-    document.getElementById('modal-step2').classList.add('hidden');
+    document.getElementById('modal-step2')?.classList.add('hidden');
 
     try {
         const userRef = ref(db, `users/${user.uid}`);
@@ -159,10 +163,10 @@ window.finaliseRetre = async () => {
         document.getElementById('retre-amount').value = "";
 
         // Montre siksè
-        document.getElementById('modal-final').classList.remove('hidden');
+        document.getElementById('modal-final')?.classList.remove('hidden');
         setTimeout(() => {
-            document.getElementById('modal-final').classList.add('hidden');
-            window.showPage('paj-akey'); 
+            document.getElementById('modal-final')?.classList.add('hidden');
+            if (window.showPage) window.showPage('paj-akey'); 
         }, 4000);
 
     } catch (erè) {
@@ -170,13 +174,10 @@ window.finaliseRetre = async () => {
     }
 };
 
-// Fonksyon pou fèmen tout modal yo (Anile)
 window.closeAllModals = () => {
-    document.getElementById('modal-step1').classList.add('hidden');
-    document.getElementById('modal-pin-retre').classList.add('hidden');
-    document.getElementById('modal-step2').classList.add('hidden');
-    document.getElementById('modal-final').classList.add('hidden');
+    const modals = ['modal-step1', 'modal-pin-retre', 'modal-step2', 'modal-final'];
+    modals.forEach(m => document.getElementById(m)?.classList.add('hidden'));
     const pinInput = document.getElementById('pin-retre-input');
     if(pinInput) pinInput.value = "";
 };
-                       
+   
