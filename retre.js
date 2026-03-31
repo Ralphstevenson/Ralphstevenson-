@@ -1,16 +1,15 @@
 /* ============================================================
-   JS RETRÈ - ECHANJ PLUS V3 - KONEKTE AK GWO JS
+   JS RETRÈ (UPDATED) - ECHANJ PLUS V3.2 - SEKIRITE PIN ENTEGRE
    ============================================================ */
 import { auth, db } from './script.js';
 import { ref, get, update, serverTimestamp, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-// 1. KOUTE DONE FIREBASE (POU BALANS AK ID PARET)
-// Nou mete sa deyò pou l kouri le pli vit ke Firebase pare
+// 1. KOUTE DONE FIREBASE (BALANS AK SEKIRITE)
 onAuthStateChanged(auth, (user) => {
     if (user) {
         kouteDoneFirebase(user.uid);
-        konekteLojikBouton(); // Aktive bouton yo
+        konekteLojikBouton(); 
     }
 });
 
@@ -23,11 +22,15 @@ function kouteDoneFirebase(uid) {
             const idEl = document.getElementById('display-ars-id');
             const balansDatabase = parseFloat(data.balance || 0);
 
-            // Ranpli bwat ble yo (Si yo nan HTML la kounye a)
             if (balEl) balEl.innerText = balansDatabase.toFixed(2) + " HTG";
             if (idEl) idEl.innerText = data.arsID || "---";
 
-            // Sekirite: Bloke bouton si montan an twòp
+            // Sove done PIN yo nan window pou verifikasyon rapid
+            window.userAppData = {
+                hasPin: !!data.transactionPin,
+                correctPin: data.transactionPin || ""
+            };
+
             const inputMontan = document.getElementById('retre-amount');
             const btnMain = document.getElementById('btn-konfime-retre');
 
@@ -52,13 +55,20 @@ function kouteDoneFirebase(uid) {
     });
 }
 
-// 2. LOGIK BOUTON AK MODAL YO
+// 2. LOGIK BOUTON AK VERIFIKASYON PIN
 function konekteLojikBouton() {
     const btnMain = document.getElementById('btn-konfime-retre');
     const btnNext = document.getElementById('next-to-step2');
 
     if (btnMain) {
         btnMain.onclick = () => {
+            // Tcheke si PIN nan kreye nan Paramètres anvan
+            if (!window.userAppData.hasPin) {
+                alert("🔴 Ou dwe kreye yon PIN nan Paramètres anvan ou fè retrè.");
+                window.showPage('paj-parametre'); 
+                return;
+            }
+
             const non = document.getElementById('retre-name').value;
             const tel = document.getElementById('retre-phone').value;
             const metod = document.getElementById('retre-method').value;
@@ -66,7 +76,6 @@ function konekteLojikBouton() {
 
             if (!non || !tel || !montan) return alert("Ranpli tout chan yo!");
 
-            // Ranpli recap la anvan modal la louvri
             const recapBox = document.getElementById('info-recap');
             if (recapBox) {
                 recapBox.innerHTML = `
@@ -83,13 +92,23 @@ function konekteLojikBouton() {
 
     if (btnNext) {
         btnNext.onclick = () => {
+            // Mandè PIN lan anvan li ale nan Step 2 (Dènye Etap)
+            const pinAntre = prompt("🔒 Antre PIN Tranzaksyon ou an (4 chif):");
+            
+            if (!pinAntre) return;
+            
+            if (pinAntre !== window.userAppData.correctPin) {
+                alert("❌ PIN enkòrèk. Tranzaksyon anile.");
+                return;
+            }
+
             document.getElementById('modal-step1').classList.add('hidden');
             document.getElementById('modal-step2').classList.remove('hidden');
         };
     }
 }
 
-// 3. FINALIZASYON (SOVRE NAN FIREBASE)
+// 3. FINALIZASYON ETA FINAL LA
 window.finaliseRetre = async () => {
     const user = auth.currentUser;
     if (!user) return;
@@ -109,7 +128,6 @@ window.finaliseRetre = async () => {
         const transID = "RET-" + Date.now();
         const updates = {};
         
-        // Tranzaksyon
         updates[`/transactions/${transID}`] = {
             uid: user.uid,
             arsID: userData.arsID,
@@ -121,16 +139,15 @@ window.finaliseRetre = async () => {
             status: "En attente",
             timestamp: serverTimestamp()
         };
-        // Soustrè kòb
+        
         updates[`/users/${user.uid}/balance`] = userData.balance - montan;
 
         await update(ref(db), updates);
         
-        // Siksè
         document.getElementById('modal-final').classList.remove('hidden');
         setTimeout(() => {
             document.getElementById('modal-final').classList.add('hidden');
-            window.showPage('paj-akey'); // Retounen nan akèy
+            window.showPage('paj-akey'); 
         }, 4000);
 
     } catch (erè) {
@@ -138,9 +155,7 @@ window.finaliseRetre = async () => {
     }
 };
 
-// Fonksyon Global pou bouton "ANILE"
 window.closeAllModals = () => {
     document.getElementById('modal-step1').classList.add('hidden');
     document.getElementById('modal-step2').classList.add('hidden');
 };
-   
