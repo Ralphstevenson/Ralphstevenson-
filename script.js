@@ -24,7 +24,38 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 
-// --- II. SISTÈM NOTIFIKASYON (KLÒCH) ---
+// --- II. LOJIK GLOBAL POU BALANS (KACHE/MONTRE) ---
+window.isBalanceVisible = false; // Eta inisyal: Kache
+window.userRealBalance = 0;      // Valè reyèl ki soti nan Firebase
+
+window.toggleGlobalBalance = () => {
+    window.isBalanceVisible = !window.isBalanceVisible;
+    window.updateBalanceUI();
+};
+
+window.updateBalanceUI = () => {
+    // Jwenn tout kote ki gen klas sa yo nan tout paj app la
+    const balanceElements = document.querySelectorAll('.display-balance');
+    const eyeIcons = document.querySelectorAll('.eye-toggle-icon');
+
+    balanceElements.forEach(el => {
+        if (window.isBalanceVisible) {
+            el.innerText = window.userRealBalance.toLocaleString(undefined, {minimumFractionDigits: 2}) + " HTG";
+        } else {
+            el.innerText = "**** HTG";
+        }
+    });
+
+    eyeIcons.forEach(icon => {
+        if (window.isBalanceVisible) {
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        } else {
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        }
+    });
+};
+
+// --- III. SISTÈM NOTIFIKASYON (KLÒCH) ---
 let tabKouran = 'koneksyon'; 
 
 window.voyeNotifikasyon = async (uid, tit, mesaj) => {
@@ -85,7 +116,7 @@ function chajeNotifikasyonUI() {
     });
 }
 
-// --- III. OTANTIFIKASYON ---
+// --- IV. OTANTIFIKASYON ---
 window.handleLogin = () => {
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-pass').value;
@@ -120,7 +151,7 @@ window.handleSignup = async () => {
     } catch (err) { alert(err.message); }
 };
 
-// --- IV. NAVIGASYON & LISTENERS ---
+// --- V. NAVIGASYON & LISTENERS ---
 onAuthStateChanged(auth, (user) => {
     if (user) {
         document.getElementById('auth-page').classList.add('hidden');
@@ -130,16 +161,8 @@ onAuthStateChanged(auth, (user) => {
         chajeNotifikasyonUI();
         activateDynamicHeader(user.uid, db);
 
-        // 1. Lanse Lojik Parennaj
-        if (window.initReferralDashboard) {
-            window.initReferralDashboard(user.uid);
-        }
-
-        // 2. Lanse Lojik Paramètres (NEW)
-        if (window.initSettings) {
-            window.initSettings(user.uid);
-        }
-        
+        if (window.initReferralDashboard) window.initReferralDashboard(user.uid);
+        if (window.initSettings) window.initSettings(user.uid);
         if (window.listenToMessages) window.listenToMessages(user.uid);
     } else {
         document.getElementById('auth-page').classList.remove('hidden');
@@ -152,8 +175,9 @@ function loadUserData(uid) {
         const data = snap.val();
         if (!data) return;
         
-        const balEl = document.getElementById('user-balance');
-        if(balEl) balEl.innerText = (data.balance || 0).toFixed(2);
+        // Mete ajou valè balans lan pou tout app la
+        window.userRealBalance = data.balance || 0;
+        window.updateBalanceUI();
         
         document.getElementById('side-name').innerText = data.fullname || "...";
         document.getElementById('side-id').innerText = data.arsID || "---";
@@ -167,12 +191,15 @@ function loadUserData(uid) {
 window.handleLogout = () => { if (confirm("Dekonekte?")) signOut(auth); };
 
 window.showPage = (pageId, navElement) => {
-    // Te ajoute 'paj-parametre' nan lis sa a
     const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj', 'paj-parametre'];
     sections.forEach(id => document.getElementById(id)?.classList.add('hidden'));
     
     const targetPage = document.getElementById(pageId);
-    if (targetPage) targetPage.classList.remove('hidden');
+    if (targetPage) {
+        targetPage.classList.remove('hidden');
+        // Rafrechi balans lan nan nouvo paj la
+        window.updateBalanceUI();
+    }
     
     if (pageId === 'paj-trans' && window.initIstorik) window.initIstorik();
     
@@ -185,11 +212,10 @@ window.showPage = (pageId, navElement) => {
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
     if (navElement) navElement.classList.add('active');
     
-    // Fèmen sidebar si se sou mobil li ye
     document.getElementById('sidebar')?.classList.remove('active');
 };
 
-// --- V. LOJIK ECHANJ ---
+// --- VI. LOJIK ECHANJ ---
 window.openDialer = async (rezo) => {
     const montan = prompt("Konbyen minit w ap vann (" + rezo + ")?");
     if (!montan || montan < 100) return alert("Minimòm se 100 HTG.");
