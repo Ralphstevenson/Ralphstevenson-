@@ -244,8 +244,7 @@
             
 
             
-            
-            <section id="paj-trans" class="hidden">
+            <section id="paj-trans" class="page-content hidden">
     <div class="header-paj">
         <h3 class="page-title"><i class="fa fa-clock-rotate-left"></i> Istorik Tranzaksyon</h3>
         <p class="subtitle-paj">Swiv tout echanj ak retrè ou yo pa kategori.</p>
@@ -262,13 +261,71 @@
 
     <div class="list-wrapper-istorik">
         <div id="list-tout" class="ist-content">
-            <p class="empty-msg">Chaje done...</p>
+            <div class="skeleton-item"></div>
+            <div class="skeleton-item"></div>
+            <div class="skeleton-item"></div>
         </div>
         <div id="list-echanj" class="ist-content hidden"></div>
         <div id="list-retre" class="ist-content hidden"></div>
         <div id="list-echwe" class="ist-content hidden"></div>
     </div>
+
+    <div id="modal-receipt" class="modal-overlay hidden">
+        <div class="modal-content receipt-box">
+            <div class="receipt-header">
+                <div class="receipt-logo">ECHANJ PLUS</div>
+                <p>Resi Tranzaksyon Digital</p>
+            </div>
+            
+            <div class="receipt-body">
+                <div class="receipt-row status-container">
+                    <span>Status:</span>
+                    <b id="rec-status" class="status-badge">---</b>
+                </div>
+                
+                <hr class="dashed-line">
+                
+                <div class="receipt-row">
+                    <span>ID Tranzaksyon:</span>
+                    <b id="rec-id">#---</b>
+                </div>
+                
+                <div class="receipt-row">
+                    <span>Dat & Lè:</span>
+                    <span id="rec-date">---</span>
+                </div>
+                
+                <div class="receipt-row">
+                    <span>Metòd/Rezo:</span>
+                    <b id="rec-method">---</b>
+                </div>
+                
+                <div class="receipt-row">
+                    <span>Nimewo Telefòn:</span>
+                    <span id="rec-phone">---</span>
+                </div>
+                
+                <div class="receipt-total-box">
+                    <p>Montan Tranzaksyon</p>
+                    <h2 id="rec-amount">0.00 HTG</h2>
+                </div>
+
+                <div class="receipt-footer-msg">
+                    <p><i class="fa fa-circle-check"></i> Sistèm Echanj Plus verifye</p>
+                </div>
+            </div>
+
+            <div class="modal-footer-receipt">
+                <button class="btn-close-receipt" onclick="closeModal('modal-receipt')">FÈMEN</button>
+                <button class="btn-share-receipt" onclick="window.shareReceipt()">
+                    <i class="fa fa-share-nodes"></i> PATAJE RESI
+                </button>
+            </div>
+        </div>
+    </div>
             </section>
+            
+            
             
 
 <section id="chat-container" class="hidden">
