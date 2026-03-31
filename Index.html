@@ -66,39 +66,39 @@
         </div>
 
         <header class="main-header">
-            <i class="fa fa-bars-staggered" onclick="toggleSidebar()"></i>
-            <div class="logo-text">ECHANJ PLUS</div>
-            <div class="notif-wrapper" onclick="toggleNotifPanel()">
-                <i class="fa fa-bell"></i>
-                <span id="notif-badge" class="notif-badge hidden">0</span>
+    <i class="fa fa-bars-staggered" onclick="toggleSidebar()"></i>
+    <div class="logo-text">ECHANJ PLUS</div>
+
+    <div class="header-balance-wrapper" onclick="window.toggleGlobalBalance()">
+        <span class="display-balance">**** HTG</span>
+        <i class="fa-solid fa-eye-slash eye-toggle-icon"></i>
+    </div>
+
+    <div class="notif-wrapper" onclick="toggleNotifPanel()">
+        <i class="fa fa-bell"></i>
+        <span id="notif-badge" class="notif-badge hidden">0</span>
+    </div>
+
+    <div id="notif-panel" class="notif-panel">
+        <div class="notif-header">
+            <h4><i class="fa fa-bell"></i> Notifikasyon</h4>
+            <i class="fa fa-times close-notif" onclick="toggleNotifPanel()"></i>
+        </div>
+        <div class="notif-tabs">
+            <button id="tab-koneksyon" class="tab-btn active" onclick="switchNotifTab('koneksyon')">Koneksyon</button>
+            <button id="tab-transak" class="tab-btn" onclick="switchNotifTab('transak')">Tranzaksyon</button>
+        </div>
+        <div id="notif-content" class="notif-content">
+            <p class="empty-msg">Chaje mesaj...</p>
+        </div>
+        <div class="notif-footer">
+            <div class="logout-btn-elite" onclick="handleLogout()">
+                <i class="fa fa-right-from-bracket"></i> Dekonekte
             </div>
-            <div id="header-quick-balance" class="quick-balance"></div>
-            
-            <div id="notif-panel" class="notif-panel">
-    <div class="notif-header">
-        <h4><i class="fa fa-bell"></i> Notifikasyon</h4>
-        <i class="fa fa-times close-notif" onclick="toggleNotifPanel()"></i>
-    </div>
-
-    <div class="notif-tabs">
-        <button id="tab-koneksyon" class="tab-btn active" onclick="switchNotifTab('koneksyon')">Koneksyon</button>
-        <button id="tab-transak" class="tab-btn" onclick="switchNotifTab('transak')">Tranzaksyon</button>
-    </div>
-
-    <div id="notif-content" class="notif-content">
-        <p class="empty-msg">Chaje mesaj...</p>
-    </div>
-
-    <div class="notif-footer">
-        <div class="logout-btn-elite" onclick="handleLogout()">
-            <i class="fa fa-right-from-bracket"></i> Dekonekte
         </div>
     </div>
-            </div>
-            
-            
-            
-        </header>
+            </header>
+        
 
         <main class="content-wrapper">
             <section id="paj-akey">
