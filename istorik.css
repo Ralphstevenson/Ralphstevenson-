@@ -179,4 +179,172 @@
     margin-bottom: 10px;
     color: var(--primary);
     }
-    
+
+
+
+/* ============================================================
+   STYLE ISTORIK & DIGITAL RECEIPT - ECHANJ PLUS
+   ============================================================ */
+
+/* 1. STYLE POU KONTE-NÈ RESI A */
+.receipt-box {
+    background: #ffffff;
+    padding: 0 !important;
+    overflow: hidden;
+    border-radius: 20px !important;
+    max-width: 340px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.receipt-header {
+    background: #fdfdfd;
+    padding: 25px 15px;
+    text-align: center;
+    border-bottom: 2px dashed #eeeeee;
+    position: relative;
+}
+
+/* Ti sèk sou kote yo pou bay efè papye rache */
+.receipt-header::before, .receipt-header::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    width: 20px;
+    height: 20px;
+    background: #000; /* Koulè background modal overlay a */
+    border-radius: 50%;
+}
+.receipt-header::before { left: -10px; }
+.receipt-header::after { right: -10px; }
+
+.receipt-logo {
+    font-size: 22px;
+    font-weight: 900;
+    color: #109121;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.receipt-body {
+    padding: 20px;
+}
+
+.receipt-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 12px 0;
+    font-size: 14px;
+    color: #555555;
+}
+
+.dashed-line {
+    border: none;
+    border-top: 1px dashed #dddddd;
+    margin: 15px 0;
+}
+
+/* 2. STATUS BADGE STYLE */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* 3. MONTAN AN GWO */
+.receipt-total-box {
+    background: #f4fbf5;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    margin-top: 20px;
+    border: 1px solid #e1f2e4;
+}
+
+.receipt-total-box p {
+    font-size: 12px;
+    color: #666666;
+    margin-bottom: 5px;
+}
+
+.receipt-total-box h2 {
+    color: #333333;
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.receipt-footer-msg {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 11px;
+    color: #aaaaaa;
+}
+
+/* 4. BOUTON NAN MODAL LA */
+.modal-footer-receipt {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 15px;
+    background: #f9f9f9;
+}
+
+.btn-close-receipt {
+    background: #eeeeee;
+    color: #333;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-share-receipt {
+    background: #109121;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.btn-share-receipt:active {
+    transform: scale(0.95);
+}
+
+/* 5. SKELETON LOADING ANIMATION */
+.skeleton-item {
+    height: 85px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite linear;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+@keyframes loading-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* 6. STYLE POU KAT TRANZAKSYON YO (LIS LA) */
+.transaction-item {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.transaction-item:active {
+    transform: scale(0.98);
+    background-color: #fcfcfc;
+   }
+   
