@@ -156,14 +156,13 @@
             </section>
             
 
-
 <section id="paj-retre" class="page-content hidden">
     <div class="paj-retre-kontni">
         
         <div class="user-status-bar-simple">
             <div class="status-info">
                 <span class="label">Balans disponib:</span>
-                <span id="display-balance" class="value">0.00 HTG</span>
+                <span class="value display-balance">**** HTG</span>
             </div>
             <div class="status-info">
                 <span class="label">ID Kont:</span>
@@ -223,9 +222,10 @@
                 <p style="font-size: 14px; color: var(--text-sub);">Antre PIN 4 chif ou an pou w ka debloke retrè sa a.</p>
                 
                 <div class="input-group-modal" style="margin: 25px 0;">
-                    <input type="number" id="pin-retre-input" 
+                    <input type="password" id="pin-retre-input" 
                            placeholder="****" 
-                           style="text-align: center; font-size: 28px; letter-spacing: 12px; font-weight: 800; border: 2px solid var(--primary);"
+                           inputmode="numeric"
+                           style="text-align: center; font-size: 28px; letter-spacing: 12px; font-weight: 800; border: 2px solid #109121; border-radius: 10px; width: 80%;"
                            oninput="if(this.value.length > 4) this.value = this.value.slice(0, 4)">
                 </div>
 
@@ -257,8 +257,10 @@
             </div>
         </div>
 
-    </div> </section>
-            
+    </div> 
+    </section>
+                    
+
 
             
             <section id="paj-trans" class="page-content hidden">
