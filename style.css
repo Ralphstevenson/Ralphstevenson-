@@ -1558,3 +1558,56 @@ body.night-mode .subtitle-paj {
     display: flex;
     gap: 12px;
    }
+
+
+
+/* WELCOME BANNER */
+.welcome-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 10px;
+}
+#greeting-msg { font-size: 14px; color: #777; font-weight: 500; }
+#user-name-display { font-size: 20px; font-weight: 800; color: #109121; margin-top: -5px; }
+.user-avatar-mini { font-size: 35px; color: #ddd; }
+
+/* CARD BALANCE STYLE */
+.card-balance-rect {
+    background: linear-gradient(135deg, #109121 0%, #085a14 100%);
+    margin: 15px;
+    padding: 25px;
+    border-radius: 20px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(16, 145, 33, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-balance-rect::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+}
+
+.display-balance {
+    font-size: 30px;
+    font-weight: 900;
+    margin: 10px 0;
+    display: block;
+}
+
+.card-footer-info {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 10px;
+    opacity: 0.7;
+                     }
+   
