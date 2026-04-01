@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echanj Plus | Ofisyèl 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="retre.css">
+    <link rel="stylesheet" href="chat.css">
+    <link rel="stylesheet" href="istorik.css">
+    <link rel="stylesheet" href="parene.css">
+    <link rel="stylesheet" href="paramet.css">
+</head>
+<body class="light-mode">
+    <div id="auth-page" class="auth-container">
+        <div class="auth-card">
+            <center><img src="https://i.postimg.cc/vTtVtB8P/20260205-163353-removebg-preview.png" class="auth-logo"></center>
+            <div id="login-section">
+                <h2 class="auth-title">Konekte</h2>
+                <div class="input-group"><i class="fa fa-envelope"></i><input type="email" id="login-email" placeholder="Email ou"></div>
+                <div class="input-group"><i class="fa fa-lock"></i><input type="password" id="login-pass" placeholder="Modpas"></div>
+                <button class="btn-primary-pro" onclick="handleLogin()">KONEKTE</button>
+                <p class="auth-footer">Poko gen kont? <span onclick="toggleAuth('signup')">Enskri la</span></p>
+            </div>
+            <div id="signup-section" class="hidden">
+                <h2 class="auth-title">Kreye Kont</h2>
+                <div class="input-group"><i class="fa fa-user"></i><input type="text" id="sign-name" placeholder="Non Konplè"></div>
+                <div class="input-group"><i class="fa fa-phone"></i><input type="tel" id="sign-phone" placeholder="Telefòn"></div>
+                <div class="input-group"><i class="fa fa-envelope"></i><input type="email" id="sign-email" placeholder="Email"></div>
+                <div class="input-group"><i class="fa fa-lock"></i><input type="password" id="sign-pass" placeholder="Modpas"></div>
+                <input type="text" id="sponsor-input" placeholder="Kòd Sponsor (Opsyonèl)">
+                 <button class="btn-primary-pro" onclick="handleSignup()">ANREJISTRE</button>
+                <p class="auth-footer">Gen kont deja? <span onclick="toggleAuth('login')">Konekte</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="home-page" class="hidden">
+        <div id="sidebar" class="sidebar-pro">
+            <div class="sidebar-header">
+                <div class="user-meta">
+                    
+                    <div id="header-user-greeting" class="user-greeting"></div>
+<div id="header-security-status" class="security-status"></div>
+                    
+                    <p id="side-id" class="user-id-badge">ARS-ID</p>
+                    <h4 id="side-name">...</h4>
+                    <p id="side-email">...</p>
+                </div>
+                <i class="fa fa-times close-sidebar" onclick="toggleSidebar()"></i>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item active" onclick="showPage('paj-akey', this)"><i class="fa fa-house"></i> Akèy</div>
+                <div class="menu-item" onclick="showPage('paj-trans', this)"><i class="fa fa-clock-rotate-left"></i> Istorik</div>
+                <div class="menu-item" onclick="showPage('paj-parennaj', this)">
+    <i class="fas fa-users-viewfinder"></i>
+    <span>Parennaj & Komisyon</span>
+                </div>
+                <div class="menu-item" onclick="showPage('paj-parametre', this)">
+    <i class="fa fa-gear"></i> Paramètres
+                </div>
+                <div class="menu-item logout-btn" onclick="handleLogout()"><i class="fa fa-right-from-bracket"></i> Dekonekte</div>
+            </div>
+        </div>
+
+        <header class="main-header">
+            <i class="fa fa-bars-staggered" onclick="toggleSidebar()"></i>
+            <div class="logo-text">ECHANJ PLUS</div>
+            <div class="notif-wrapper" onclick="toggleNotifPanel()">
+                <i class="fa fa-bell"></i>
+                <span id="notif-badge" class="notif-badge hidden">0</span>
+            </div>
+            <div id="header-quick-balance" class="quick-balance"></div>
+            
+            <div id="notif-panel" class="notif-panel">
+    <div class="notif-header">
+        <h4><i class="fa fa-bell"></i> Notifikasyon</h4>
+        <i class="fa fa-times close-notif" onclick="toggleNotifPanel()"></i>
+    </div>
+
+    <div class="notif-tabs">
+        <button id="tab-koneksyon" class="tab-btn active" onclick="switchNotifTab('koneksyon')">Koneksyon</button>
+        <button id="tab-transak" class="tab-btn" onclick="switchNotifTab('transak')">Tranzaksyon</button>
+    </div>
+
+    <div id="notif-content" class="notif-content">
+        <p class="empty-msg">Chaje mesaj...</p>
+    </div>
+
+    <div class="notif-footer">
+        <div class="logout-btn-elite" onclick="handleLogout()">
+            <i class="fa fa-right-from-bracket"></i> Dekonekte
+        </div>
+    </div>
+            </div>
+            
+            
+            
+        </header>
+
+        <main class="content-wrapper">
+            <section id="paj-akey">
+                
+<div id="header-flash-info" class="flash-info-bar"></div>
+               
+                <div class="carousel-container">
+                    <div class="slides" id="carousel-slider">
+                        <div class="slide"><img src="https://i.postimg.cc/DSHc5ZJV/1771501449871.png"></div>
+                        <div class="slide"><img src="https://i.postimg.cc/s14wys8J/1771501465178.png"></div>
+                        <div class="slide"><img src="https://i.postimg.cc/qNzL8n7K/1771501473121.png"></div>
+                    </div>
+                </div>
+                <div class="card-balance-rect">
+                    <p>Balans ou disponib</p>
+                    <div class="balance-row"><h1 id="user-balance">0.00</h1> <span>HTG</span></div>
+                </div>
+                </section>
+
+            <section id="paj-echanj" class="hidden">
+    <h3 class="page-title">Echanj Minit</h3>
+    
+    <div class="provider-container">
+        <div class="provider-card" onclick="openDialer('digicel')">
+            <div class="card-img-box">
+                <img src="https://i.postimg.cc/1V5TGWk0/23403511-3d46-4460-a669-ccf2a18d8ec3.png" alt="Digicel">
+            </div>
+            <b>Digicel</b>
+        </div>
+
+        <div class="provider-card" onclick="openDialer('natcom')">
+            <div class="card-img-box">
+                <img src="https://i.postimg.cc/Jt19CnsV/recharge-com-natcom-product-card.png" alt="Natcom">
+            </div>
+            <b>Natcom</b>
+        </div>
+    </div>
+            </section>
+            
+
+
+<section id="paj-retre" class="page-content hidden">
+    <div class="paj-retre-kontni">
+        
+        <div class="user-status-bar-simple">
+            <div class="status-info">
+                <span class="label">Balans disponib:</span>
+                <span id="display-balance" class="value">0.00 HTG</span>
+            </div>
+            <div class="status-info">
+                <span class="label">ID Kont:</span>
+                <span id="display-ars-id" class="value">---</span>
+            </div>
+        </div>
+
+        <div class="form-container shadow-smooth">
+            <h3 style="margin-bottom: 20px; color: var(--text-main);"><i class="fa fa-wallet"></i> Mande yon Retrè</h3>
+            
+            <div class="form-group">
+                <label><i class="fa fa-user"></i> Non Reseptè</label>
+                <input type="text" id="retre-name" placeholder="Non konplè moun k ap resevwa a">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa fa-phone"></i> Nimewo Telefòn</label>
+                <input type="tel" id="retre-phone" placeholder="Ex: 47112233">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa fa-building-columns"></i> Metòd Peman</label>
+                <select id="retre-method">
+                    <option value="MonCash">MonCash</option>
+                    <option value="NatCash">NatCash</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa fa-money-bill-wave"></i> Montan pou w retire (HTG)</label>
+                <input type="number" id="retre-amount" placeholder="Minimòm 100 HTG">
+            </div>
+
+            <button class="btn-primary-pro" id="btn-konfime-retre">
+                RETIRE KÒB LA
+            </button>
+        </div>
+
+        <div id="modal-step1" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h3 style="color: var(--text-main);"><i class="fa fa-clipboard-check"></i> Verifye Done yo</h3>
+                <div id="info-recap" class="recap-box">
+                    </div>
+                <div class="modal-btns">
+                    <button class="btn-cancel" onclick="closeAllModals()">ANILE</button>
+                    <button class="btn-confirm" id="next-to-step2">OK, YO BON</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-pin-retre" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div style="margin-bottom: 15px;">
+                    <i class="fa-solid fa-shield-halved" style="font-size: 45px; color: #109121;"></i>
+                </div>
+                <h3 style="color: var(--text-main);">Sekirite PIN</h3>
+                <p style="font-size: 14px; color: var(--text-sub);">Antre PIN 4 chif ou an pou w ka debloke retrè sa a.</p>
+                
+                <div class="input-group-modal" style="margin: 25px 0;">
+                    <input type="number" id="pin-retre-input" 
+                           placeholder="****" 
+                           style="text-align: center; font-size: 28px; letter-spacing: 12px; font-weight: 800; border: 2px solid var(--primary);"
+                           oninput="if(this.value.length > 4) this.value = this.value.slice(0, 4)">
+                </div>
+
+                <div class="modal-btns">
+                    <button class="btn-cancel" onclick="closeAllModals()">ANILE</button>
+                    <button class="btn-confirm" id="btn-verify-pin-retre">VERIFYE PIN</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-step2" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h3 style="color: var(--text-main);">Èske w sèten?</h3>
+                <p style="margin: 15px 0; color: var(--text-sub);">W ap voye demann pou w retire:</p>
+                <b id="amount-recap" style="color: #109121; font-size: 32px; display: block; margin-bottom: 20px;">0.00 HTG</b>
+                <div class="modal-btns">
+                    <button class="btn-cancel" onclick="closeAllModals()">ANILE</button>
+                    <button class="btn-confirm" onclick="finaliseRetre()">WI, KONFIME</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-final" class="modal-overlay hidden">
+            <div class="modal-content">
+                <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                <lord-icon src="https://cdn.lordicon.com/lvrxlmju.json" trigger="loop" stroke="bold" colors="primary:#109121" style="width:150px;height:150px"></lord-icon>
+                <h3 style="color: #109121; font-size: 24px;">Demann Voye!</h3>
+                <p style="color: var(--text-sub);">Administratè a ap verifye epi voye kòb la sou kont ou kounye a.</p>
+            </div>
+        </div>
+
+    </div> </section>
+            
+
+            
+            
+            <section id="paj-trans" class="hidden">
+    <div class="header-paj">
+        <h3 class="page-title"><i class="fa fa-clock-rotate-left"></i> Istorik Tranzaksyon</h3>
+        <p class="subtitle-paj">Swiv tout echanj ak retrè ou yo pa kategori.</p>
+    </div>
+
+    <div class="tabs-istorik-wrapper">
+        <div class="tabs-istorik">
+            <button class="tab-btn-ist active" onclick="switchIstorik('tout', this)">TOUT</button>
+            <button class="tab-btn-ist" onclick="switchIstorik('echanj', this)">ECHANJ</button>
+            <button class="tab-btn-ist" onclick="switchIstorik('retre', this)">RETRÈ</button>
+            <button class="tab-btn-ist" onclick="switchIstorik('echwe', this)">ECHWE</button>
+        </div>
+    </div>
+
+    <div class="list-wrapper-istorik">
+        <div id="list-tout" class="ist-content">
+            <p class="empty-msg">Chaje done...</p>
+        </div>
+        <div id="list-echanj" class="ist-content hidden"></div>
+        <div id="list-retre" class="ist-content hidden"></div>
+        <div id="list-echwe" class="ist-content hidden"></div>
+    </div>
+            </section>
+            
+
+<section id="chat-container" class="hidden">
+
+    <div class="chat-wrapper">
+    <div class="chat-header">
+        <div id="presence-indicator" class="status-dot offline"></div>
+        <div class="admin-info">
+            <p style="margin:0; font-weight:bold; font-size:14px;">Sipò Echanj Plus</p>
+            <small id="admin-status-text" style="font-size:11px; opacity:0.8;">De-konekte</small>
+        </div>
+    </div>
+
+    <div id="chat-messages" class="chat-body">
+        <div style="text-align:center; padding:20px; color:#999; font-size:12px;">
+            <i class="fa-solid fa-lock" style="margin-bottom:5px;"></i>
+            <p>Konvèsasyon sa a an sekirite.</p>
+        </div>
+    </div>
+
+    <div class="chat-footer">
+        <label for="chat-file" style="cursor:pointer; color:#0052cc; font-size:18px;">
+            <i class="fa-solid fa-camera"></i>
+            <input type="file" id="chat-file" accept="image/*" style="display:none">
+        </label>
+        
+        <input type="text" id="chat-input" placeholder="Ekri yon mesaj..." autocomplete="off">
+        
+        <button id="btn-send-chat" style="background:none; border:none; color:#0052cc; font-size:18px; cursor:pointer;">
+            <i class="fa-solid fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+<audio id="chat-notif" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3"></audio>
+    
+</section>
+    
+
+<section id="paj-parennaj" class="hidden">
+    <div class="premium-header">
+        <h3 class="page-title"><i class="fas fa-users-viewfinder"></i> Pwogram Parennaj</h3>
+        <p class="subtitle-paj">Fè 4.5% komisyon sou premye echanj chak moun ou envite.</p>
+    </div>
+
+    <div class="referral-card-glass">
+        <div class="referral-badge">Patnè ARS</div>
+        <p class="ref-label">Balans Komisyon</p>
+        <div class="balance-display">
+            <h1 id="komisyon-balans">0.00</h1> <small>HTG</small>
+        </div>
+
+        <div class="stats-grid-glass">
+            <div class="stat-box">
+                <span>Parenn mwen</span>
+                <b id="my-sponsor">---</b>
+            </div>
+            <div class="stat-box">
+                <span>Ekip mwen</span>
+                <b id="total-invites">0</b>
+            </div>
+            <div class="stat-box">
+                <span>Nivo</span>
+                <b>Elite</b>
+            </div>
+        </div>
+
+        <button class="btn-premium-transfer" onclick="demannTransfere()">
+            <i class="fas fa-bolt"></i> Transfere kounye a
+        </button>
+    </div>
+
+    <div class="glass-container">
+        <div class="logic-info">
+            <div class="logic-icon"><i class="fas fa-gem"></i></div>
+            <div class="logic-text">
+                <h4>Lojik Rabè & Komisyon</h4>
+                <p>Envite w la jwenn <b>2% rabè</b>. Ou touche komisyon w depi tranzaksyon an <b>Validé</b>.</p>
+            </div>
+        </div>
+
+        <label class="premium-label">Kòd ARS Pèsonèl Ou</label>
+        <div class="input-transparent-box">
+            <input type="text" id="my-ref-code" value="ARS-..." readonly>
+            <button onclick="kopiyeKod()" class="copy-premium-btn">
+                <i class="fas fa-copy"></i>
+            </button>
+        </div>
+        
+        <div class="share-premium-section">
+            <p>Pataje lyen an sou :</p>
+            <div class="share-grid">
+                <div class="share-icon wa" onclick="patajeLien('whatsapp')"><i class="fab fa-whatsapp"></i></div>
+                <div class="share-icon fb" onclick="patajeLien('facebook')"><i class="fab fa-facebook"></i></div>
+                <div class="share-icon tg" onclick="patajeLien('telegram')"><i class="fab fa-telegram"></i></div>
+                <div class="share-icon sms" onclick="patajeLien('sms')"><i class="fas fa-comment-alt"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-container team-list-section">
+        <h4 class="section-subtitle">Moun ou envite yo</h4>
+        <div id="container-lis-envite" class="list-wrapper">
+            </div>
+    </div>
+            </section>
+
+
+<div id="paj-parametre" class="page-content hidden">
+    <div class="settings-container">
+        <h3 class="page-title"><i class="fa fa-gear"></i> Paramètres</h3>
+
+        <div class="settings-group">
+            <span class="group-label">PROFIL</span>
+            <div class="setting-item-glass">
+                <div class="avatar-circle">
+                    <img src="https://ui-avatars.com/api/?name=User&background=109121&color=fff" id="user-avatar-settings" alt="Avatar">
+                </div>
+                <div class="item-info">
+                    <b id="sett-name">Chaje...</b>
+                    <p id="sett-email">mail***@gmail.com</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-group">
+            <span class="group-label">SEKIRITE</span>
+            
+            <div class="setting-row" onclick="window.openModal('modal-password')">
+                <div class="row-left"><i class="fa fa-lock"></i> <span>Chanje Modpas</span></div>
+                <i class="fa fa-chevron-right"></i>
+            </div>
+
+            <div class="setting-row" onclick="window.openPinManager()">
+                <div class="row-left"><i class="fa fa-shield-halved"></i> <span>PIN Tranzaksyon</span></div>
+                <i class="fa fa-chevron-right"></i>
+            </div>
+        </div>
+
+        <div class="settings-group">
+            <span class="group-label">SISTÈM</span>
+            <div class="setting-row">
+                <div class="row-left"><i class="fa fa-moon"></i> <span>Dash Night</span></div>
+                <input type="checkbox" id="dark-mode-toggle">
+            </div>
+            <div class="setting-row">
+                <div class="row-left"><i class="fa fa-envelope"></i> <span>Notifikasyon Gmail</span></div>
+                <input type="checkbox" checked disabled>
+            </div>
+        </div>
+
+        <div class="settings-group">
+            <span class="group-label">ENFÒMASYON</span>
+            <div class="setting-row">
+                <div class="row-left"><i class="fa fa-circle-info"></i> <span>Vèsyon App</span></div>
+                <span class="version-tag">v3.2</span>
+            </div>
+            <a href="https://wa.me/50947111123" target="_blank" class="setting-row" style="text-decoration: none;">
+                <div class="row-left"><i class="fab fa-whatsapp"></i> <span>Sipò WhatsApp</span></div>
+                <i class="fa fa-external-link" style="font-size: 12px; opacity: 0.5;"></i>
+            </a>
+        </div>
+
+        <div id="modal-password" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4><i class="fa fa-envelope-open-text"></i> Reyajiste Modpas</h4>
+                </div>
+                <div class="modal-body" style="text-align: center; padding: 15px;">
+                    <p style="font-size: 14px; margin-bottom: 10px;">
+                        Peze bouton anba a pou n voye yon lien sekirize sou Gmail ou:
+                    </p>
+                    <b id="email-display-reset" style="color: #109121; font-size: 15px;">...</b>
+                    <p style="font-size: 12px; color: #888; margin-top: 15px;">
+                        W ap bezwen klike sou lien ki nan email la pou w chwazi yon nouvo modpas.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-cancel" onclick="closeModal('modal-password')">ANILE</button>
+                    <button id="btn-send-reset-link" class="btn-confirm">VOYE LIEN AN</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-pin" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="pin-title">PIN Sekirite</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="pin-msg">Antre 4 chif pou sekirize retrè w yo.</p>
+                    <div class="input-group-modal">
+                        <input type="number" id="pin-input" placeholder="****" oninput="if(this.value.length > 4) this.value = this.value.slice(0, 4)">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-cancel" onclick="closeModal('modal-pin')">FÈMEN</button>
+                    <button id="btn-save-pin" class="btn-confirm">KONFIME PIN</button>
+                </div>
+            </div>
+        </div>
+
+    </div> </div> 
+                                                                     
+
+        
+<div id="modal-rabe" class="modal-overlay hidden">
+    <div class="modal-card">
+        
+        <div class="modal-header-gift">
+            <div class="gift-icon-circle">
+                <i class="fas fa-gift"></i>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <h3 class="modal-title">Felisitasyon!</h3>
+            
+            <p id="msg-rabe" class="modal-text">
+                Ou debloke yon rabè <strong>2%</strong> sou premye echanj ou gras ak kòd parennaj sa a :
+            </p>
+
+            <div class="sponsor-display-box">
+                <span id="display-sponsor-id">Kòd: ARS-CHACHE</span>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-accept-pro" onclick="toggleModal('modal-rabe')">
+                KONTINYE
+            </button>
+        </div>
+
+    </div>
+</div>
+            
+            
+                
+    
+        </main>
+
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="showPage('paj-akey', this)"><i class="fa fa-house"></i><span>Akèy</span></div>
+            <div class="nav-item" onclick="showPage('paj-echanj', this)"><i class="fa fa-rotate"></i><span>Echanj</span></div>
+            <div class="nav-item" onclick="showPage('paj-retre', this)"><i class="fa fa-money-bill-transfer"></i><span>Retrè</span></div>
+            <div class="nav-item" onclick="showPage('paj-trans', this)"><i class="fa fa-clock-rotate-left"></i><span>Istorik</span></div>
+            <div class="nav-item" onclick="showPage('chat-container', this)"><i class="fa fa-comments"></i><span>Sipò</span></div>
+        </nav>
+    </div>
+
+    <script type="module" src="script.js"></script>
+    <script type="module" src="retre.js"></script>
+    <script type="module" src="chat.js"></script>
+    <script type="module" src="istorik.js"></script>
+    <script type="module" src="parene.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="header-manager.js"></script>
+    <script type="module" src="paramet.js"></script>
+</body>
+                                             </html>
+    
