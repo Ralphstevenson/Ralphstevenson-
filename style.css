@@ -1611,3 +1611,17 @@ body.night-mode .subtitle-paj {
     opacity: 0.7;
                      }
    
+
+
+.card-balance-rect .display-balance {
+    font-size: 32px; /* Pou l parèt gwo nan mitan akèy la */
+    color: #ffffff;
+    font-weight: 900;
+}
+
+.balance-row {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 5px;
+}
