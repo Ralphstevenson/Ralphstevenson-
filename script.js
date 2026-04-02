@@ -24,8 +24,47 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 
-// --- II. SISTÈM NOTIFIKASYON (KLÒCH) ---
+// --- II. SISTÈM NOTIFIKASYON (KLÒCH & GMAIL) ---
 let tabKouran = 'koneksyon'; 
+
+// 1. Fonksyon pou voye Gmail via EmailJS
+window.voyeGmail = async (tip, done) => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+        // Tcheke si itilizatè a aktive Notifikasyon Gmail nan pwofil li
+        const settingsSnap = await get(ref(db, `users/${user.uid}/settings`));
+        const settings = settingsSnap.val();
+
+        if (settings && settings.gmail_enabled === false) {
+            console.log("Gmail dezaktive nan paramèt.");
+            return;
+        }
+
+        let templateParams = {
+            to_email: user.email,
+            user_name: done.name || "Kliyan Echanj Plus",
+            message: ""
+        };
+
+        let templateID = "YOUR_TEMPLATE_TRANSAK"; // Mete ID ou isit la
+
+        if (tip === 'enskripsyon') {
+            templateID = "YOUR_TEMPLATE_WELCOME"; 
+            templateParams.message = `Byenveni! Kòd ARS ou se ${done.arsID}. Mèsi deske ou chwazi Echanj Plus.`;
+        } else if (tip === 'echanj') {
+            templateParams.message = `Ou fè yon echanj ${done.amount} HTG nan rezo ${done.rezo}. N ap valide tranzaksyon an kounye a.`;
+        } else if (tip === 'retre') {
+            templateParams.message = `Ou mande yon retrè ${done.amount} HTG sou kont ${done.method} (${done.phone}).`;
+        }
+
+        await emailjs.send("YOUR_SERVICE_ID", templateID, templateParams);
+        console.log("Gmail voye ak siksè!");
+    } catch (err) {
+        console.error("Erè voye Gmail:", err);
+    }
+};
 
 window.voyeNotifikasyon = async (uid, tit, mesaj) => {
     const path = tit.toLowerCase().includes('konekte') || tit.toLowerCase().includes('byenveni') ? 'koneksyon' : 'transak';
@@ -113,10 +152,15 @@ window.handleSignup = async () => {
         await set(ref(db, `users/${uid}`), {
             fullname: name, email: email, phone: phone, arsID: arsID,
             balance: 0.00, status: "active", sponsor_id: sponsor || null,
-            bonus_claimed: false, createdAt: serverTimestamp()
+            bonus_claimed: false, createdAt: serverTimestamp(),
+            settings: { gmail_enabled: true } // Aktive pa defo
         });
         await set(ref(db, `ars_mapping/${arsID}`), { uid: uid });
+        
+        // Voye notifikasyon lokal ak Gmail
         window.voyeNotifikasyon(uid, "Byenveni!", `Kòd ARS ou se ${arsID}.`);
+        window.voyeGmail('enskripsyon', { name: name, arsID: arsID });
+
     } catch (err) { alert(err.message); }
 };
 
@@ -130,16 +174,8 @@ onAuthStateChanged(auth, (user) => {
         chajeNotifikasyonUI();
         activateDynamicHeader(user.uid, db);
 
-        // 1. Lanse Lojik Parennaj
-        if (window.initReferralDashboard) {
-            window.initReferralDashboard(user.uid);
-        }
-
-        // 2. Lanse Lojik Paramètres (NEW)
-        if (window.initSettings) {
-            window.initSettings(user.uid);
-        }
-        
+        if (window.initReferralDashboard) window.initReferralDashboard(user.uid);
+        if (window.initParamet) window.initParamet(user.uid); // Nouvo non fonksyon an
         if (window.listenToMessages) window.listenToMessages(user.uid);
     } else {
         document.getElementById('auth-page').classList.remove('hidden');
@@ -152,8 +188,18 @@ function loadUserData(uid) {
         const data = snap.val();
         if (!data) return;
         
-        const balEl = document.getElementById('user-balance');
-        if(balEl) balEl.innerText = (data.balance || 0).toFixed(2);
+        // Pou balans kache/montre a, nou mete l nan klas la tou
+        const balElements = document.querySelectorAll('.display-balance');
+        const formattedBal = (data.balance || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + " HTG";
+        
+        balElements.forEach(el => {
+            // Si sistèm nan sou "Kache", nou pa chanje tèks la isit la, 
+            // men si l sou "Montre", nou mete valè a.
+            if (!el.innerText.includes('*')) {
+                el.innerText = formattedBal;
+            }
+            el.dataset.realValue = formattedBal; // Sove valè a pou JS Balans lan
+        });
         
         document.getElementById('side-name').innerText = data.fullname || "...";
         document.getElementById('side-id').innerText = data.arsID || "---";
@@ -167,7 +213,6 @@ function loadUserData(uid) {
 window.handleLogout = () => { if (confirm("Dekonekte?")) signOut(auth); };
 
 window.showPage = (pageId, navElement) => {
-    // Te ajoute 'paj-parametre' nan lis sa a
     const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj', 'paj-parametre'];
     sections.forEach(id => document.getElementById(id)?.classList.add('hidden'));
     
@@ -184,8 +229,6 @@ window.showPage = (pageId, navElement) => {
 
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
     if (navElement) navElement.classList.add('active');
-    
-    // Fèmen sidebar si se sou mobil li ye
     document.getElementById('sidebar')?.classList.remove('active');
 };
 
@@ -193,11 +236,19 @@ window.showPage = (pageId, navElement) => {
 window.openDialer = async (rezo) => {
     const montan = prompt("Konbyen minit w ap vann (" + rezo + ")?");
     if (!montan || montan < 100) return alert("Minimòm se 100 HTG.");
+    
     const transID = "ECH-" + Date.now();
+    const uid = auth.currentUser.uid;
+
     await set(ref(db, `transactions/${transID}`), {
-        uid: auth.currentUser.uid, type: "Echanj", rezo, amount: parseFloat(montan), status: "En attente", timestamp: serverTimestamp()
+        uid: uid, type: "Echanj", rezo, amount: parseFloat(montan), status: "En attente", timestamp: serverTimestamp()
     });
-    window.voyeNotifikasyon(auth.currentUser.uid, "Tranzaksyon", `Echanj ${montan} HTG ap tann validasyon.`);
+
+    window.voyeNotifikasyon(uid, "Tranzaksyon", `Echanj ${montan} HTG ap tann validasyon.`);
+    
+    // Deklanche Gmail
+    window.voyeGmail('echanj', { amount: montan, rezo: rezo });
+
     const ussd = rezo === 'digicel' ? `*128*50947111123*${montan}#` : `*123*88888888*32160708*${montan}#`;
     window.location.href = `tel:${encodeURIComponent(ussd)}`;
 };
