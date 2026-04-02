@@ -1,5 +1,7 @@
+.getElementById('sidebar')?.classList.toggle('active');
+       
 /* ============================================================
-   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V3.2 - MASTER (UPDATED)
+   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V3.2 - MASTER (CLEAN)
    ============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -33,7 +35,6 @@ window.voyeGmail = async (tip, done) => {
     if (!user) return;
 
     try {
-        // Tcheke si itilizatè a aktive Notifikasyon Gmail nan pwofil li
         const settingsSnap = await get(ref(db, `users/${user.uid}/settings`));
         const settings = settingsSnap.val();
 
@@ -48,7 +49,7 @@ window.voyeGmail = async (tip, done) => {
             message: ""
         };
 
-        let templateID = "YOUR_TEMPLATE_TRANSAK"; // Mete ID ou isit la
+        let templateID = "YOUR_TEMPLATE_TRANSAK"; 
 
         if (tip === 'enskripsyon') {
             templateID = "YOUR_TEMPLATE_WELCOME"; 
@@ -153,11 +154,10 @@ window.handleSignup = async () => {
             fullname: name, email: email, phone: phone, arsID: arsID,
             balance: 0.00, status: "active", sponsor_id: sponsor || null,
             bonus_claimed: false, createdAt: serverTimestamp(),
-            settings: { gmail_enabled: true } // Aktive pa defo
+            settings: { gmail_enabled: true } 
         });
         await set(ref(db, `ars_mapping/${arsID}`), { uid: uid });
         
-        // Voye notifikasyon lokal ak Gmail
         window.voyeNotifikasyon(uid, "Byenveni!", `Kòd ARS ou se ${arsID}.`);
         window.voyeGmail('enskripsyon', { name: name, arsID: arsID });
 
@@ -175,7 +175,7 @@ onAuthStateChanged(auth, (user) => {
         activateDynamicHeader(user.uid, db);
 
         if (window.initReferralDashboard) window.initReferralDashboard(user.uid);
-        if (window.initParamet) window.initParamet(user.uid); // Nouvo non fonksyon an
+        if (window.initParamet) window.initParamet(user.uid); 
         if (window.listenToMessages) window.listenToMessages(user.uid);
     } else {
         document.getElementById('auth-page').classList.remove('hidden');
@@ -188,17 +188,14 @@ function loadUserData(uid) {
         const data = snap.val();
         if (!data) return;
         
-        // Pou balans kache/montre a, nou mete l nan klas la tou
         const balElements = document.querySelectorAll('.display-balance');
         const formattedBal = (data.balance || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + " HTG";
         
         balElements.forEach(el => {
-            // Si sistèm nan sou "Kache", nou pa chanje tèks la isit la, 
-            // men si l sou "Montre", nou mete valè a.
             if (!el.innerText.includes('*')) {
                 el.innerText = formattedBal;
             }
-            el.dataset.realValue = formattedBal; // Sove valè a pou JS Balans lan
+            el.dataset.realValue = formattedBal; 
         });
         
         document.getElementById('side-name').innerText = data.fullname || "...";
@@ -232,26 +229,5 @@ window.showPage = (pageId, navElement) => {
     document.getElementById('sidebar')?.classList.remove('active');
 };
 
-// --- V. LOJIK ECHANJ ---
-window.openDialer = async (rezo) => {
-    const montan = prompt("Konbyen minit w ap vann (" + rezo + ")?");
-    if (!montan || montan < 100) return alert("Minimòm se 100 HTG.");
-    
-    const transID = "ECH-" + Date.now();
-    const uid = auth.currentUser.uid;
-
-    await set(ref(db, `transactions/${transID}`), {
-        uid: uid, type: "Echanj", rezo, amount: parseFloat(montan), status: "En attente", timestamp: serverTimestamp()
-    });
-
-    window.voyeNotifikasyon(uid, "Tranzaksyon", `Echanj ${montan} HTG ap tann validasyon.`);
-    
-    // Deklanche Gmail
-    window.voyeGmail('echanj', { amount: montan, rezo: rezo });
-
-    const ussd = rezo === 'digicel' ? `*128*50947111123*${montan}#` : `*123*88888888*32160708*${montan}#`;
-    window.location.href = `tel:${encodeURIComponent(ussd)}`;
-};
-
 window.toggleSidebar = () => document.getElementById('sidebar')?.classList.toggle('active');
-       
+   
