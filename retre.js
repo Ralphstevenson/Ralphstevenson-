@@ -1,5 +1,5 @@
 /* ============================================================
-   JS RETRÈ - ECHANJ PLUS V3.2 - SEKIRITE PIN & SYNC BALANS
+   JS RETRÈ - ECHANJ PLUS V3.2 - SEKIRITE PIN & GMAIL NOTIF
    ============================================================ */
 import { auth, db } from './script.js';
 import { ref, get, update, serverTimestamp, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -21,8 +21,7 @@ function kouteDoneFirebase(uid) {
             const idEl = document.getElementById('display-ars-id');
             const balansDatabase = parseFloat(data.balance || 0);
 
-            // NOUVO: Olye nou ekri nan innerText dirèkteman, nou mete ajou valè global la
-            // epi nou rele fonksyon ki jere afichaj la (kache/montre) nan Gwo JS la.
+            // Sync ak sistèm kache/montre sol la
             window.userRealBalance = balansDatabase;
             if (window.updateBalanceUI) {
                 window.updateBalanceUI();
@@ -30,10 +29,12 @@ function kouteDoneFirebase(uid) {
             
             if (idEl) idEl.innerText = data.arsID || "---";
 
-            // Sove done PIN yo nan window pou verifikasyon rapid
+            // Sove done PIN ak Settings pou voye Gmail
             window.userAppData = {
                 hasPin: !!data.transactionPin,
-                correctPin: data.transactionPin || ""
+                correctPin: data.transactionPin || "",
+                fullname: data.fullname || "Itilizatè",
+                gmailEnabled: data.settings ? data.settings.gmail_enabled : true
             };
 
             const inputMontan = document.getElementById('retre-amount');
@@ -68,7 +69,6 @@ function konekteLojikBouton() {
 
     if (btnMain) {
         btnMain.onclick = () => {
-            // Tcheke si PIN nan kreye anvan
             if (!window.userAppData || !window.userAppData.hasPin) {
                 alert("🔴 Ou dwe kreye yon PIN nan Paramètres anvan ou fè retrè.");
                 if (window.showPage) window.showPage('paj-parametre'); 
@@ -121,13 +121,15 @@ function konekteLojikBouton() {
     }
 }
 
-// 3. FINALIZASYON ETA FINAL LA
+// 3. FINALIZASYON AK DEKLANCHMAN GMAIL
 window.finaliseRetre = async () => {
     const user = auth.currentUser;
     if (!user) return;
 
     const montanInput = document.getElementById('retre-amount').value;
     const montan = parseFloat(montanInput);
+    const metòd = document.getElementById('retre-method').value;
+    const telefòn = document.getElementById('retre-phone').value;
 
     document.getElementById('modal-step2')?.classList.add('hidden');
 
@@ -146,8 +148,8 @@ window.finaliseRetre = async () => {
             arsID: userData.arsID,
             type: "Retrè",
             receiver: document.getElementById('retre-name').value,
-            phone: document.getElementById('retre-phone').value,
-            method: document.getElementById('retre-method').value,
+            phone: telefòn,
+            method: metòd,
             amount: montan,
             status: "En attente",
             timestamp: serverTimestamp()
@@ -156,6 +158,16 @@ window.finaliseRetre = async () => {
         updates[`/users/${user.uid}/balance`] = userData.balance - montan;
 
         await update(ref(db), updates);
+
+        // --- DEKLANCHE GMAIL NOTIFIKASYON ---
+        if (window.voyeGmail) {
+            window.voyeGmail('retre', {
+                amount: montan,
+                method: metòd,
+                phone: telefòn,
+                name: userData.fullname
+            });
+        }
         
         // Netwaye fòm nan
         document.getElementById('retre-name').value = "";
@@ -180,4 +192,4 @@ window.closeAllModals = () => {
     const pinInput = document.getElementById('pin-retre-input');
     if(pinInput) pinInput.value = "";
 };
-   
+                           
