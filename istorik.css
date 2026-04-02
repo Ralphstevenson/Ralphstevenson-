@@ -1,350 +1,89 @@
-/* ==========================================
-   1. LAYOUT JENERAL ISTORIK
-   ========================================== */
-#paj-trans {
+/* ============================================================
+   CSS MASTER - ECHANJ PLUS V3.2 (ISTORIK & PARAMÈT)
+   ============================================================ */
+
+/* 1. LAYOUT & TABS (ISTORIK) */
+#paj-trans, #paj-parametre {
     padding: 20px;
-    padding-bottom: 100px; /* Pou bottom nav la pa kache dènye kat la */
+    padding-bottom: 100px;
     min-height: 100vh;
     background-color: var(--bg-light, #f4f7fe);
 }
 
-.header-paj {
-    margin-bottom: 20px;
-}
+.header-paj { margin-bottom: 20px; }
+.page-title { font-size: 22px; font-weight: 800; color: #172b4d; display: flex; align-items: center; gap: 10px; }
+.subtitle-paj { font-size: 13px; color: #6b778c; margin-top: 5px; }
 
-.page-title {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--text-main, #172b4d);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.subtitle-paj {
-    font-size: 13px;
-    color: var(--text-soft, #6b778c);
-    margin-top: 5px;
-}
-
-/* ==========================================
-   2. SISTÈM BOUTON (TABS) - SA KI TE MANKE A
-   ========================================== */
-.tabs-istorik-wrapper {
-    overflow-x: auto;
-    display: flex;
-    padding: 10px 0;
-    margin-bottom: 20px;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
-}
-
-.tabs-istorik-wrapper::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
-}
-
-.tabs-istorik {
-    display: flex;
-    gap: 10px;
-    white-space: nowrap;
-}
+.tabs-istorik-wrapper { overflow-x: auto; display: flex; padding: 10px 0; margin-bottom: 20px; scrollbar-width: none; }
+.tabs-istorik-wrapper::-webkit-scrollbar { display: none; }
+.tabs-istorik { display: flex; gap: 10px; white-space: nowrap; }
 
 .tab-btn-ist {
-    background: var(--card-bg, #ffffff);
-    border: 1px solid var(--border-color, #e2e8f0);
-    padding: 10px 22px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text-soft, #4a5568);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    background: #ffffff; border: 1px solid #e2e8f0; padding: 10px 22px; border-radius: 12px;
+    font-size: 12px; font-weight: 700; color: #4a5568; cursor: pointer; transition: 0.3s;
 }
+.tab-btn-ist.active { background: #0052cc; color: #ffffff !important; border-color: #0052cc; box-shadow: 0 4px 12px rgba(0, 82, 204, 0.25); }
 
-.tab-btn-ist.active {
-    background: var(--primary, #0052cc);
-    color: #ffffff !important;
-    border-color: var(--primary, #0052cc);
-    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.25);
-}
-
-/* ==========================================
-   3. KAT TRANZAKSYON YO (ADAPTIF)
-   ========================================== */
-.list-wrapper-istorik {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.ist-content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.ist-content.hidden {
-    display: none !important;
-}
-
+/* 2. TRANSAKSYON ITEMS (LIST) */
+.list-wrapper-istorik { display: flex; flex-direction: column; gap: 12px; }
 .transaction-item {
-    background: var(--card-bg, #ffffff);
-    border-radius: 18px;
-    padding: 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-    transition: transform 0.2s;
-    border: 1px solid var(--border-color, transparent);
+    background: #ffffff; border-radius: 18px; padding: 18px; display: flex; justify-content: space-between;
+    align-items: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04); transition: 0.2s; cursor: pointer;
 }
-
-.transaction-item:active {
-    transform: scale(0.97);
-}
-
-.trans-info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.trans-type {
-    font-weight: 700;
-    font-size: 15px;
-    color: var(--text-main, #172b4d);
-    text-transform: capitalize;
-}
-
-.trans-date {
-    font-size: 11px;
-    color: var(--text-soft, #6b778c);
-}
-
-.trans-amount-status {
-    text-align: right;
-}
-
-.trans-price {
-    font-size: 16px;
-    font-weight: 800;
-    color: var(--text-main, #172b4d);
-}
+.transaction-item:active { transform: scale(0.97); }
 
 .status-badge {
-    font-size: 10px;
-    font-weight: 800;
-    padding: 5px 12px;
-    border-radius: 8px;
-    margin-top: 6px;
-    display: inline-block;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 10px; font-weight: 800; padding: 5px 12px; border-radius: 8px;
+    display: inline-block; text-transform: uppercase; letter-spacing: 0.5px;
 }
 
-/* ==========================================
-   4. MOD NWIT (DARK MODE)
-   ========================================== */
-[data-theme="dark"] #paj-trans {
-    background-color: #0d1117;
-}
-
-[data-theme="dark"] .tab-btn-ist {
-    background: #1c2128;
-    border-color: #30363d;
-    color: #8b949e;
-}
-
-[data-theme="dark"] .transaction-item {
-    background: #1c2128;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    border-color: #30363d;
-}
-
-/* ==========================================
-   5. ETA VID & CHARGEMENT
-   ========================================== */
-.empty-msg, .loader-istorik {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text-soft, #6b778c);
-    font-size: 14px;
-    width: 100%;
-}
-
-.loader-istorik i {
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: var(--primary);
-    }
-
-
-
-/* ============================================================
-   STYLE ISTORIK & DIGITAL RECEIPT - ECHANJ PLUS
-   ============================================================ */
-
-/* 1. STYLE POU KONTE-NÈ RESI A */
-.receipt-box {
-    background: #ffffff;
-    padding: 0 !important;
-    overflow: hidden;
-    border-radius: 20px !important;
-    max-width: 340px !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-.receipt-header {
-    background: #fdfdfd;
-    padding: 25px 15px;
-    text-align: center;
-    border-bottom: 2px dashed #eeeeee;
-    position: relative;
-}
-
-/* Ti sèk sou kote yo pou bay efè papye rache */
-.receipt-header::before, .receipt-header::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    width: 20px;
-    height: 20px;
-    background: #000; /* Koulè background modal overlay a */
-    border-radius: 50%;
+/* 3. DIGITAL RECEIPT (MODAL) */
+.receipt-box { background: #ffffff; padding: 0 !important; overflow: hidden; border-radius: 20px !important; max-width: 340px !important; }
+.receipt-header { background: #fdfdfd; padding: 25px 15px; text-align: center; border-bottom: 2px dashed #eeeeee; position: relative; }
+.receipt-header::before, .receipt-header::after { 
+    content: ''; position: absolute; bottom: -10px; width: 20px; height: 20px; background: rgba(0,0,0,0.8); border-radius: 50%; 
 }
 .receipt-header::before { left: -10px; }
 .receipt-header::after { right: -10px; }
 
-.receipt-logo {
-    font-size: 22px;
-    font-weight: 900;
-    color: #109121;
-    letter-spacing: 1px;
-    margin-bottom: 5px;
-}
+.receipt-total-box { background: #f4fbf5; border-radius: 12px; padding: 15px; text-align: center; margin-top: 10px; border: 1px solid #e1f2e4; }
+.receipt-total-box h2 { color: #333; font-size: 26px; font-weight: 800; margin: 0; }
 
-.receipt-body {
-    padding: 20px;
-}
+.modal-footer-receipt { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: #f9f9f9; }
+.btn-share-receipt { background: #109121; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-.receipt-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 12px 0;
-    font-size: 14px;
-    color: #555555;
+/* 4. PAJ PARAMÈTRES (SETTINGS) */
+.settings-card {
+    background: #fff; border-radius: 18px; padding: 20px; margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
 }
+.profile-preview { display: flex; align-items: center; gap: 15px; }
+.avatar-circle { width: 50px; height: 50px; background: #e3f2fd; color: #1976d2; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
 
-.dashed-line {
-    border: none;
-    border-top: 1px dashed #dddddd;
-    margin: 15px 0;
-}
+.pin-status { font-size: 12px; padding: 10px; background: #f8f9fa; border-radius: 10px; margin: 10px 0; }
+.input-group-sett { display: flex; gap: 10px; margin-top: 10px; }
+.input-group-sett input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; }
+.btn-save-pin { background: #172b4d; color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
-/* 2. STATUS BADGE STYLE */
-.status-badge {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: bold;
-    text-transform: uppercase;
-}
+/* SWITCH TOGGLE */
+.setting-row { display: flex; justify-content: space-between; align-items: center; }
+.switch { position: relative; display: inline-block; width: 45px; height: 24px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: #2ecc71; }
+input:checked + .slider:before { transform: translateX(21px); }
 
-/* 3. MONTAN AN GWO */
-.receipt-total-box {
-    background: #f4fbf5;
-    border-radius: 12px;
-    padding: 15px;
-    text-align: center;
-    margin-top: 20px;
-    border: 1px solid #e1f2e4;
-}
-
-.receipt-total-box p {
-    font-size: 12px;
-    color: #666666;
-    margin-bottom: 5px;
-}
-
-.receipt-total-box h2 {
-    color: #333333;
-    font-size: 26px;
-    font-weight: 800;
-    margin: 0;
-}
-
-.receipt-footer-msg {
-    text-align: center;
-    margin-top: 15px;
-    font-size: 11px;
-    color: #aaaaaa;
-}
-
-/* 4. BOUTON NAN MODAL LA */
-.modal-footer-receipt {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    padding: 15px;
-    background: #f9f9f9;
-}
-
-.btn-close-receipt {
-    background: #eeeeee;
-    color: #333;
-    border: none;
-    padding: 12px;
-    border-radius: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-share-receipt {
-    background: #109121;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: 0.3s;
-}
-
-.btn-share-receipt:active {
-    transform: scale(0.95);
-}
-
-/* 5. SKELETON LOADING ANIMATION */
+/* 5. SKELETON & ANIMATION */
 .skeleton-item {
-    height: 85px;
-    background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: loading-shimmer 1.5s infinite linear;
-    border-radius: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    height: 85px; background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+    background-size: 200% 100%; animation: loading-shimmer 1.5s infinite linear; border-radius: 15px; margin-bottom: 15px;
 }
+@keyframes loading-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-@keyframes loading-shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+.btn-logout-alt {
+    width: 100%; padding: 15px; background: #fff; color: #ff5630; border: 1px solid #ff5630;
+    border-radius: 15px; font-weight: 800; margin-top: 20px; cursor: pointer; transition: 0.3s;
 }
-
-/* 6. STYLE POU KAT TRANZAKSYON YO (LIS LA) */
-.transaction-item {
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.transaction-item:active {
-    transform: scale(0.98);
-    background-color: #fcfcfc;
-   }
-   
+.btn-logout-alt:active { background: #ff5630; color: white; }
+                    
