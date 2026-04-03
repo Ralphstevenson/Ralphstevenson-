@@ -315,5 +315,187 @@ body.night-mode .menu-item:hover {
        }
 
 
+   
+
+/* ==========================================
+   CSS HEADER & PANÈL NOTIFIKASYON - ELITE
+   ========================================== */
+
+/* 1. HEADER PRENSIPAL */
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: var(--card-white);
+    position: sticky;
+    top: 0;
+    z-index: 2000;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    height: 65px;
+}
+
+.fa-bars-staggered {
+    font-size: 20px;
+    color: var(--primary-blue);
+    cursor: pointer;
+}
+
+.logo-text {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--primary-blue);
+    letter-spacing: 1px;
+}
+
+/* 2. NOTIFIKASYON ICON & BADGE */
+.notif-wrapper {
+    position: relative;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.notif-wrapper i {
+    font-size: 20px;
+    color: var(--text-soft);
+}
+
+.notif-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: var(--danger);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--card-white);
+}
+
+/* 3. PANÈL NOTIFIKASYON (FLY-OUT) */
+.notif-panel {
+    position: fixed;
+    top: 75px;
+    right: -100%; /* Kache bò dwat */
+    width: 90%;
+    max-width: 350px;
+    background: var(--card-white);
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    z-index: 3000;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.notif-panel.active {
+    right: 15px; /* Parèt 15px ak bò a */
+}
+
+/* Header Panèl la */
+.notif-header {
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.notif-header h4 {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.close-notif {
+    cursor: pointer;
+    color: var(--text-soft);
+}
+
+/* Tabs yo (Koneksyon / Tranzaksyon) */
+.notif-tabs {
+    display: flex;
+    padding: 10px;
+    background: #f8fafc;
+    gap: 5px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background: none;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-soft);
+    cursor: pointer;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.tab-btn.active {
+    background: white;
+    color: var(--primary-blue);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Content & Mesaj vid */
+.notif-content {
+    min-height: 200px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.empty-msg {
+    text-align: center;
+    color: var(--text-soft);
+    font-size: 13px;
+    margin-top: 50px;
+}
+
+/* Footer & Logout Elite */
+.notif-footer {
+    padding: 15px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.logout-btn-elite {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    background: rgba(255, 86, 48, 0.08);
+    color: var(--danger);
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.logout-btn-elite:active {
+    transform: scale(0.97);
+    background: rgba(255, 86, 48, 0.15);
+}
+
+/* 4. QUICK BALANCE (HEADER) */
+.quick-balance {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--success);
+    background: rgba(54, 179, 126, 0.1);
+    padding: 5px 12px;
+    border-radius: 50px;
+   }
 
 
