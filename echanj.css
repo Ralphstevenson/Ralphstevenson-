@@ -1,0 +1,207 @@
+/* ============================================================
+   STYLE SEKSYON ECHANJ & MODAL KONFIMASYON (ECHANJ PLUS)
+   ============================================================ */
+
+/* 1. KONTENÈ KAT REZO YO */
+.provider-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 20px 10px;
+}
+
+.provider-card {
+    flex: 1;
+    max-width: 160px;
+    height: 200px;
+    background: #ffffff;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #f0f0f0;
+    position: relative;
+}
+
+.provider-card:active {
+    transform: scale(0.95);
+}
+
+.card-img-box {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.card-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.provider-card b {
+    font-size: 16px;
+    color: #333;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.rate-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #109121;
+    color: white;
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+/* 2. MODAL KONFIMASYON (OVERLAY) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-content-premium {
+    background: #ffffff;
+    width: 90%;
+    max-width: 380px;
+    border-radius: 25px;
+    padding: 25px;
+    animation: slideUpModal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.modal-header-pwo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.icon-circle {
+    width: 60px;
+    height: 60px;
+    background: rgba(16, 145, 33, 0.1);
+    color: #109121;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-size: 24px;
+}
+
+.modal-header-pwo h4 {
+    font-size: 18px;
+    color: #1e293b;
+    font-weight: 800;
+}
+
+/* 3. DETAY REZIME YO */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.summary-row b {
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.rabe-box {
+    background: #dcfce7;
+    padding: 10px;
+    border-radius: 12px;
+    margin: 10px 0;
+}
+
+.divider-dashed {
+    border-top: 2px dashed #e2e8f0;
+    margin: 15px 0;
+}
+
+.total-row {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.total-row span {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 600;
+    display: block;
+}
+
+.total-row h2 {
+    font-size: 32px;
+    color: #109121;
+    font-weight: 900;
+    margin-top: 5px;
+}
+
+/* 4. BOUTON AKSYON YO */
+.modal-footer-pwo {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-cancel-modal {
+    flex: 1;
+    padding: 14px;
+    background: #f1f5f9;
+    color: #64748b;
+    border: none;
+    border-radius: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-confirm-modal {
+    flex: 2;
+    padding: 14px;
+    background: #109121;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(16, 145, 33, 0.2);
+}
+
+.security-note {
+    font-size: 10px;
+    color: #94a3b8;
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* ANIMASYON */
+@keyframes slideUpModal {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
