@@ -1,191 +1,158 @@
 /* ==========================================
-   STYLE BANK PWOFESYONÈL - ECHANJ PLUS 2026
+   CSS OTANTIFIKASYON - ECHANJ PLUS
    ========================================== */
 
-:root {
-    --primary-blue: #0052cc;      
-    --accent-cyan: #00d1ff;       
-    --bg-light: #f4f7fe;          
-    --card-white: #ffffff;
-    --text-main: #172b4d;         
-    --text-soft: #6b778c;
-    --success: #36b37e;           
-    --warning: #ffab00;           
-    --danger: #ff5630;            
-    --radius-lg: 24px;
-    --radius-md: 16px;
-    --shadow: 0 10px 30px rgba(0, 82, 204, 0.08);
-}
-
-/* Night Mode */
-body.night-mode {
-    --bg-light: #091e42;
-    --card-white: #172b4d;
-    --text-main: #ffffff;
-    --text-soft: #a5adba;
-    --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Inter', sans-serif;
-    -webkit-tap-highlight-color: transparent;
-}
-
-body {
-    background-color: var(--bg-light);
-    color: var(--text-main);
-    transition: background 0.3s ease;
-    overflow-x: hidden;
-}
-
-.hidden { display: none !important; }
-
-/* ==========================================
-   II. JÈSYON SEKSYON & ANIMASYON
-   ========================================== */
-
+/* 1. KONTENÈ PRENSIPAL */
 .auth-container {
-    animation: fadeInPage 0.8s ease-in-out;
-    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-height: 100vh;
+    background-color: var(--bg-light);
     padding: 20px;
+    animation: fadeInPage 0.6s ease-out;
 }
 
+/* 2. KAT BLAN AN */
+.auth-card {
+    background: var(--card-white);
+    width: 100%;
+    max-width: 400px;
+    padding: 35px 30px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+/* Logo */
+.auth-logo {
+    width: 120px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+}
+
+/* Tit yo */
+.auth-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 25px;
+}
+
+/* 3. INPUT GROUPS */
+.input-group {
+    display: flex;
+    align-items: center;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 12px 18px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.input-group:focus-within {
+    border-color: var(--primary-blue);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(0, 82, 204, 0.1);
+}
+
+.input-group i {
+    color: #94a3b8;
+    font-size: 16px;
+    width: 25px;
+}
+
+.input-group input {
+    border: none;
+    background: none;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+/* Sponsor Input (Espesyal) */
+#sponsor-input {
+    width: 100%;
+    padding: 12px 18px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    border: 1.5px dashed #cbd5e1;
+    background: #f1f5f9;
+    font-size: 13px;
+    outline: none;
+    text-align: center;
+    color: var(--primary-blue);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+#sponsor-input::placeholder {
+    text-transform: none;
+    font-weight: 400;
+    color: #94a3b8;
+}
+
+/* 4. BOUTON YO */
+.btn-primary-pro {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary-blue), #0747a6);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 82, 204, 0.2);
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+}
+
+.btn-primary-pro:active {
+    transform: scale(0.98);
+    box-shadow: 0 5px 10px rgba(0, 82, 204, 0.2);
+}
+
+/* 5. FOOTER (Switch Login/Signup) */
+.auth-footer {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+    color: var(--text-soft);
+}
+
+.auth-footer span {
+    color: var(--primary-blue);
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 5px;
+}
+
+/* 6. ANIMASYON */
 @keyframes fadeInPage {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ==========================================
-   III. HEADER & BALANS (PILL STYLE)
-   ========================================== */
-
-.main-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-    background: var(--card-white);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+/* Adaptasyon pou Night Mode */
+body.night-mode .input-group {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
-.header-bal-pill {
-    display: flex;
-    align-items: center;
-    background: #109121; 
-    padding: 4px 12px 4px 4px;
-    border-radius: 50px;
-    gap: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.bal-icon-circle {
-    background: #ff9800;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+body.night-mode .input-group input {
     color: white;
-    font-weight: bold;
 }
 
-.card-balance-rect {
-    background: linear-gradient(135deg, #109121 0%, #085a14 100%);
-    margin: 15px;
-    padding: 25px;
-    border-radius: 20px;
-    color: white;
-    text-align: center;
-    box-shadow: 0 10px 20px rgba(16, 145, 33, 0.2);
-}
+body.night-mode #sponsor-input {
+    background: rgba(0, 82, 204, 0.1);
+    border-color: var(--primary-blue);
+   }
 
-/* ==========================================
-   IV. FLASH INFO (NEWS TICKER)
-   ========================================== */
 
-.flash-info-bar {
-    display: flex;
-    align-items: center;
-    background: #1e293b;
-    height: 40px;
-    overflow: hidden;
-    border-radius: 8px;
-    margin: 12px 0;
-    border-left: 5px solid #109121;
-}
 
-.flash-label {
-    background: linear-gradient(135deg, #109121, #0d751a);
-    color: #ffffff !important;
-    padding: 0 15px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    font-size: 13px;
-    font-weight: 900;
-}
-
-.flash-text {
-    display: inline-block;
-    padding-left: 100%;
-    color: #ffffff !important;
-    animation: marquee-pro 25s linear infinite;
-}
-
-@keyframes marquee-pro {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-}
-
-/* ==========================================
-   V. SIDEBAR & NAVBAR
-   ========================================== */
-
-.sidebar-pro {
-    position: fixed;
-    top: 0;
-    left: -290px;
-    width: 280px;
-    height: 100vh;
-    background: var(--card-white);
-    z-index: 2100;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 10px 0 30px rgba(0,0,0,0.1);
-}
-
-.sidebar-pro.active { left: 0; }
-
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 70px;
-    background: var(--card-white);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    border-top: 1px solid rgba(0,0,0,0.05);
-    z-index: 1000;
-}
-
-.nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: var(--text-soft);
-    font-size: 10px;
-    gap: 5px;
-}
-
-.nav-item.active { color: var(--primary-blue); }
-   
