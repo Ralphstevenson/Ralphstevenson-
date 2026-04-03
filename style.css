@@ -499,3 +499,113 @@ body.night-mode .menu-item:hover {
    }
 
 
+
+
+/* ==========================================
+   CSS PAJ AKÈY - ECHANJ PLUS
+   ========================================== */
+
+#paj-akey {
+    padding-bottom: 80px; /* Pou evite bottom-nav la kache kontni */
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* 1. CAROUSEL (SLIDER) */
+.carousel-container {
+    margin: 15px;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 180px; /* Wotè banyè yo */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    position: relative;
+    background: #e2e8f0;
+}
+
+.slides {
+    display: flex;
+    width: 300%; /* Paske ou gen 3 imaj */
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide {
+    width: 100.33%;
+    height: 100%;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Pou imaj la pa defòme */
+}
+
+/* 2. CARD BALANCE RECT (PREMIUM) */
+.card-balance-rect {
+    background: linear-gradient(135deg, #109121 0%, #085a14 100%);
+    margin: 20px 15px;
+    padding: 30px 20px;
+    border-radius: 25px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 12px 25px rgba(16, 145, 33, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Ti efè limyè sou kat la */
+.card-balance-rect::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.card-balance-rect p {
+    font-size: 13px;
+    opacity: 0.9;
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.balance-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+}
+
+.balance-row h1 {
+    font-size: 42px;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.balance-row span {
+    font-size: 18px;
+    font-weight: 700;
+    opacity: 0.8;
+}
+
+/* 3. FLASH INFO BAR (Si l nan paj akey tou) */
+.flash-info-bar {
+    margin: 10px 15px;
+    border-radius: 12px;
+    height: 45px;
+}
+
+/* ANIMASYON */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Night Mode Support */
+body.night-mode .card-balance-rect {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
