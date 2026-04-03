@@ -1,8 +1,13 @@
 /* ============================================================
-   JS ECHANJ - ECHANJ PLUS V4.2 - OTOMATIK RABÈ & KOMISYON
+   JS ECHANJ - ECHANJ PLUS V4.3 - MODAL & OTOMATIK SYNC
    ============================================================ */
 import { auth, db } from './script.js';
 import { ref, get, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+// Fonksyon pou fèmen modal la
+window.femenModalEchanj = () => {
+    document.getElementById('modal-confirm-echanj').classList.add('hidden');
+};
 
 window.openDialer = async (rezo) => {
     const uid = auth.currentUser?.uid;
@@ -29,75 +34,82 @@ window.openDialer = async (rezo) => {
         const mVal = parseFloat(montanMinit);
 
         // --- LOJIK KALKIL OTOMATIK ---
-        const pousantajSistem = 0.165; // 16.5% frè sistèm nan
-        let montanPouResevwa = mVal - (mVal * pousantajSistem);
+        const pousantajSistem = 0.165; // 16.5% frè
+        const freSistem = mVal * pousantajSistem;
+        let montanPouResevwa = mVal - freSistem;
         let rabeAplike = 0;
 
         // Tcheke si se 1er fwa epi si l gen parenn pou rabè 9.5 HTG an
-        if (userData.referredBy && !userData.first_exchange_done) {
+        const isFirstExchange = !userData.first_exchange_done;
+        const hasReferral = !!userData.referredBy;
+
+        if (hasReferral && isFirstExchange) {
             rabeAplike = 9.5;
             montanPouResevwa += rabeAplike;
+            document.getElementById('box-rabe-premium').classList.remove('hidden');
+        } else {
+            document.getElementById('box-rabe-premium').classList.add('hidden');
         }
 
-        // 3. Konfimasyon Vizyèl pou Kliyan an
-        const konfime = confirm(
-            `RECHIME ECHANJ OU:\n` +
-            `--------------------------\n` +
-            `Voye: ${mVal} Minit\n` +
-            `Frè Sistèm (16.5%): -${(mVal * pousantajSistem).toFixed(2)} HTG\n` +
-            (rabeAplike > 0 ? `Rabè Byenveni: +${rabeAplike} HTG\n` : "") +
-            `--------------------------\n` +
-            `W AP RESEVWA: ${montanPouResevwa.toFixed(2)} HTG\n\n` +
-            `Èske w vle kontinye?`
-        );
+        // 3. RANPLI DONE YO NAN MODAL LA (UI)
+        document.getElementById('sum-minit').innerText = mVal.toFixed(2) + " Minit";
+        document.getElementById('sum-fre').innerText = "-" + freSistem.toFixed(2) + " HTG";
+        document.getElementById('sum-total').innerText = montanPouResevwa.toFixed(2) + " HTG";
 
-        if (!konfime) return;
+        // 4. MONTRÈ MODAL LA
+        document.getElementById('modal-confirm-echanj').classList.remove('hidden');
 
-        // 4. Mande PIN pou sekirite final
-        const pinAntre = prompt("Antre PIN 4 chif ou an pou konfime:");
-        if (pinAntre !== userData.transactionPin) {
-            return alert("❌ PIN enkòrèk. Aksyon anile.");
-        }
-
-        // 5. Sove tranzaksyon an ak tout chif yo pou Admin lan
-        const transID = "ECH-" + Date.now();
-        const transactionData = {
-            uid: uid,
-            arsID: userData.arsID || "---",
-            fullname: userData.fullname || "Itilizatè",
-            type: "Echanj",
-            rezo: rezo,
-            amount_sent: mVal, // Minit li voye a
-            htg_to_receive: parseFloat(montanPouResevwa.toFixed(2)), // Sa l dwe jwenn nan
-            status: "En attente",
-            has_referral: !!userData.referredBy,
-            is_first_time: !userData.first_exchange_done,
-            timestamp: serverTimestamp()
-        };
-
-        // Sove nan branch tranzaksyon ak admin_orders
-        await set(ref(db, `transactions/${transID}`), transactionData);
-        await set(ref(db, `admin_orders/${transID}`), transactionData);
-
-        // 6. Notifikasyon ak Gmail
-        if (window.voyeNotifikasyon) {
-            window.voyeNotifikasyon(uid, "Tranzaksyon", `Echanj ${mVal} Minit ap tann validasyon.`);
-        }
-        
-        if (window.voyeGmail) {
-            window.voyeGmail('echanj', { 
-                amount: montanPouResevwa.toFixed(2), 
-                rezo: rezo, 
-                name: userData.fullname 
-            });
-        }
-
-        // 7. Lanse kòd USSD a otomatikman
-        const ussd = rezo === 'digicel' 
-            ? `*128*50947111123*${mVal}#` 
-            : `*123*88888888*32160708*${mVal}#`;
+        // 5. LÈ MOUN LAN KLIKE SOU "KONFIME AK PIN" NAN MODAL LA
+        document.getElementById('btn-konfime-final').onclick = async () => {
             
-        window.location.href = `tel:${encodeURIComponent(ussd)}`;
+            // Fèmen modal la anvan mande PIN
+            femenModalEchanj();
+
+            const pinAntre = prompt("Antre PIN 4 chif ou an pou konfime:");
+            if (pinAntre !== userData.transactionPin) {
+                return alert("❌ PIN enkòrèk. Aksyon anile.");
+            }
+
+            // 6. Sove tranzaksyon an ak tout chif kalkile yo
+            const transID = "ECH-" + Date.now();
+            const transactionData = {
+                uid: uid,
+                arsID: userData.arsID || "---",
+                fullname: userData.fullname || "Itilizatè",
+                type: "Echanj",
+                rezo: rezo,
+                amount_sent: mVal,
+                htg_to_receive: parseFloat(montanPouResevwa.toFixed(2)), // Sa k monte sou balans li
+                status: "En attente",
+                has_referral: hasReferral,
+                is_first_time: isFirstExchange,
+                timestamp: serverTimestamp()
+            };
+
+            // Sove nan Firebase
+            await set(ref(db, `transactions/${transID}`), transactionData);
+            await set(ref(db, `admin_orders/${transID}`), transactionData);
+
+            // 7. Notifikasyon ak Gmail
+            if (window.voyeNotifikasyon) {
+                window.voyeNotifikasyon(uid, "Tranzaksyon", `Echanj ${mVal} Minit ap tann validasyon.`);
+            }
+            
+            if (window.voyeGmail) {
+                window.voyeGmail('echanj', { 
+                    amount: montanPouResevwa.toFixed(2), 
+                    rezo: rezo, 
+                    name: userData.fullname 
+                });
+            }
+
+            // 8. Lanse kòd USSD a otomatikman
+            const ussd = rezo === 'digicel' 
+                ? `*128*50947111123*${mVal}#` 
+                : `*123*88888888*32160708*${mVal}#`;
+                
+            window.location.href = `tel:${encodeURIComponent(ussd)}`;
+        };
 
     } catch (error) {
         console.error("Erè Echanj:", error);
