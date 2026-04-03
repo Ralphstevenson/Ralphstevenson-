@@ -126,8 +126,13 @@
                 </div>
                 </section>
 
+
+            
             <section id="paj-echanj" class="hidden">
-    <h3 class="page-title">Echanj Minit</h3>
+    <div class="premium-header">
+        <h3 class="page-title"><i class="fas fa-sync-alt"></i> Echanj Minit</h3>
+        <p class="subtitle-paj">Chwazi rezo w la pou w kòmanse echanj la.</p>
+    </div>
     
     <div class="provider-container">
         <div class="provider-card" onclick="openDialer('digicel')">
@@ -135,6 +140,7 @@
                 <img src="https://i.postimg.cc/1V5TGWk0/23403511-3d46-4460-a669-ccf2a18d8ec3.png" alt="Digicel">
             </div>
             <b>Digicel</b>
+            <span class="rate-tag">16.5% Frè</span>
         </div>
 
         <div class="provider-card" onclick="openDialer('natcom')">
@@ -142,9 +148,51 @@
                 <img src="https://i.postimg.cc/Jt19CnsV/recharge-com-natcom-product-card.png" alt="Natcom">
             </div>
             <b>Natcom</b>
+            <span class="rate-tag">16.5% Frè</span>
+        </div>
+    </div>
+
+    <div id="modal-confirm-echanj" class="modal-overlay hidden">
+        <div class="modal-content-premium">
+            <div class="modal-header-pwo">
+                <div class="icon-circle"><i class="fas fa-file-invoice-dollar"></i></div>
+                <h4>Rezime Echanj Ou</h4>
+            </div>
+            
+            <div class="modal-body">
+                <div class="summary-row">
+                    <span>Minit w ap voye:</span>
+                    <b id="sum-minit">0.00</b>
+                </div>
+                
+                <div class="summary-row">
+                    <span>Frè Sistèm (16.5%):</span>
+                    <b id="sum-fre" style="color: #ef4444;">-0.00 HTG</b>
+                </div>
+
+                <div id="box-rabe-premium" class="summary-row rabe-box hidden">
+                    <span>Rabè Byenveni (Parenn):</span>
+                    <b id="sum-rabe" style="color: #10b981;">+9.50 HTG</b>
+                </div>
+
+                <div class="divider-dashed"></div>
+
+                <div class="total-row">
+                    <span>W AP RESEVWA:</span>
+                    <h2 id="sum-total">0.00 HTG</h2>
+                </div>
+            </div>
+
+            <div class="modal-footer-pwo">
+                <button class="btn-cancel-modal" onclick="femenModalEchanj()">Anile</button>
+                <button id="btn-konfime-final" class="btn-confirm-modal">Konfime ak PIN</button>
+            </div>
+            <p class="security-note"><i class="fas fa-lock"></i> Tranzaksyon an ap valide apre verifikasyon minit yo.</p>
         </div>
     </div>
             </section>
+
+
             
 
 
