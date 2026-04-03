@@ -148,7 +148,7 @@ body.night-mode .input-group {
 
 
 /* ==========================================
-   CSS SIDEBAR ELITE V2 - SOLID & VÈT
+   CSS SIDEBAR ELITE - PREMIUM BLACK & GOLD
    ========================================== */
 
 .sidebar-pro {
@@ -157,26 +157,26 @@ body.night-mode .input-group {
     left: -100%;
     width: 300px;
     height: 100vh;
-    background: #ffffff; /* Blanch solid */
+    background: #ffffff; /* Blan Solid */
     z-index: 2500;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 15px 0 50px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
-    border-right: 3px solid #109121; /* Ti liy vèt sou kote a */
 }
 
 .sidebar-pro.active {
     left: 0;
 }
 
-/* 1. HEADER SIDEBAR (VÈT SOLID AK GRADYEN) */
+/* 1. HEADER SIDEBAR (NWA & JÒN) */
 .sidebar-header {
-    padding: 40px 25px 30px 25px;
-    background: linear-gradient(135deg, #109121 0%, #085a14 100%);
+    padding: 50px 25px 30px 25px;
+    background: #000000; /* Nwa Solid */
     color: #ffffff;
     position: relative;
-    border-bottom-right-radius: 35px;
+    border-bottom: 4px solid #facc15; /* Liy Jòn nan pwent lan */
+    border-bottom-right-radius: 40px;
 }
 
 .close-sidebar {
@@ -184,61 +184,58 @@ body.night-mode .input-group {
     top: 20px;
     right: 20px;
     font-size: 22px;
-    color: #ffffff;
+    color: #facc15; /* X la an Jòn */
     cursor: pointer;
-    transition: 0.3s;
 }
 
-.close-sidebar:hover {
-    transform: rotate(90deg);
-}
-
-/* 2. USER META (ID, NON, STATUS) */
+/* 2. USER META (Status & ID) */
 .user-greeting {
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
-    font-weight: 700;
-    opacity: 0.9;
+    font-weight: 800;
+    color: #facc15; /* Jòn */
     margin-bottom: 5px;
+    letter-spacing: 1px;
 }
 
 .security-status {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #ffffff; /* Blan solid pou l ka parèt byen sou vèt la */
-    color: #109121;
+    background: rgba(250, 204, 21, 0.15); /* Jòn transparan */
+    color: #facc15;
     padding: 4px 12px;
     border-radius: 50px;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
     margin-bottom: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border: 1px solid rgba(250, 204, 21, 0.3);
 }
 
 .user-id-badge {
-    background: #ffab00; /* Orange pou l ka flash */
-    color: #000;
+    background: #facc15;
+    color: #000000;
     display: inline-block;
     padding: 3px 10px;
-    border-radius: 8px;
+    border-radius: 6px;
     font-size: 11px !important;
     font-weight: 900 !important;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 #side-name {
     font-size: 20px;
     font-weight: 900;
-    margin: 5px 0;
+    color: #ffffff;
 }
 
 #side-email {
     font-size: 13px;
-    opacity: 0.85;
+    color: #cccccc;
+    font-weight: 400;
 }
 
-/* 3. MENU ITEMS */
+/* 3. MENU ITEMS (Style Minimalist Nwa) */
 .sidebar-menu {
     padding: 30px 15px;
     flex-grow: 1;
@@ -247,10 +244,10 @@ body.night-mode .input-group {
 .menu-item {
     display: flex;
     align-items: center;
-    padding: 15px 20px;
-    margin-bottom: 10px;
+    padding: 16px 20px;
+    margin-bottom: 8px;
     border-radius: 16px;
-    color: #475569;
+    color: #1a1a1a; /* Nwa */
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
@@ -258,51 +255,56 @@ body.night-mode .input-group {
     gap: 15px;
 }
 
-/* Ikon yo an vèt */
 .menu-item i {
     font-size: 18px;
-    color: #109121; 
+    color: #000000; 
     width: 25px;
     text-align: center;
 }
 
-/* Lè yon atik aktif */
+/* Atik ki Aktif la */
 .menu-item.active {
-    background: rgba(16, 145, 33, 0.1);
-    color: #109121;
+    background: #000000;
+    color: #facc15;
 }
 
-.menu-item:hover {
-    background: #f1f5f9;
-    padding-left: 25px; /* Ti efè glise lè w pase sou li */
+.menu-item.active i {
+    color: #facc15;
 }
 
-/* 4. LOGOUT BUTTON (DEKONEKTE) */
+.menu-item:hover:not(.active) {
+    background: #f1f1f1;
+    transform: translateX(5px);
+}
+
+/* 4. LOGOUT BUTTON (Wouj/Nwa) */
 .logout-btn {
     margin: 20px 15px;
-    padding: 15px 20px;
-    background: #fff1f2;
-    color: #e11d48;
+    padding: 16px 20px;
+    background: #000000;
+    color: #ffffff;
     border-radius: 16px;
     font-weight: 800;
     display: flex;
     align-items: center;
     gap: 15px;
     cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .logout-btn i {
-    color: #e11d48;
+    color: #ef4444; /* Ikon dekonekte a wouj pou sekirite */
 }
 
-/* 5. OVERLAY (NWA DÈYÈ A) */
+/* 5. OVERLAY */
 .sidebar-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
     z-index: 2400;
     display: none;
 }
@@ -311,17 +313,16 @@ body.night-mode .input-group {
     display: block;
 }
 
-/* NIGHT MODE */
+/* Night Mode */
 body.night-mode .sidebar-pro {
-    background: #1e293b;
-    border-right-color: #109121;
+    background: #111111;
 }
 body.night-mode .menu-item {
-    color: #cbd5e1;
+    color: #ffffff;
 }
-body.night-mode .menu-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-   }
+body.night-mode .menu-item:hover:not(.active) {
+    background: #1a1a1a;
+       }
    
 
 
