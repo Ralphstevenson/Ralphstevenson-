@@ -1,5 +1,5 @@
 /* ============================================================
-   JS RETRÈ - ECHANJ PLUS V3.2 - KOREKSYON BALANS
+   JS RETRÈ V3.5 - KOREKSYON BALANS AN TAN REYÈL
    ============================================================ */
 import { auth, db } from './script.js';
 import { ref, get, update, serverTimestamp, onValue, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -18,35 +18,38 @@ function kouteDoneFirebase(uid) {
     onValue(userRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-            // Asire nou pran balans lan kòm yon chif (Number)
             const balansDatabase = Number(data.balance || 0);
 
-            // Mizajou global pou tout aplikasyon an wè menm chif la
-            window.userRealBalance = balansDatabase;
-            
-            // Si fonksyon UI a egziste nan script.js, nou rele l
-            if (typeof window.updateBalanceUI === 'function') {
-                window.updateBalanceUI();
+            // --- KOREKSYON BALANS NAN KAT NWA A ---
+            // Nou chèche ID ki nan screenshot la (asire w li rele konsa nan HTML)
+            const balansKatNwa = document.getElementById('display-retre-balance'); 
+            const idKontKatNwa = document.getElementById('display-ars-id');
+
+            if (balansKatNwa) {
+                balansKatNwa.innerText = balansDatabase.toLocaleString('en-US', {minimumFractionDigits: 2}) + " HTG";
+                balansKatNwa.style.color = "#2ecc71"; // Force vèt la si l te blan
             }
             
-            const idEl = document.getElementById('display-ars-id');
-            if (idEl) idEl.innerText = data.arsID || "---";
+            if (idKontKatNwa) {
+                idKontKatNwa.innerText = data.arsID || "ARS-000000";
+            }
 
-            // Sove done pou lòt pati nan script la
+            // Sove done pou lòt fonksyon yo
+            window.userRealBalance = balansDatabase;
             window.userAppData = {
                 hasPin: !!data.transactionPin,
                 correctPin: data.transactionPin || "",
                 fullname: data.fullname || "Itilizatè",
-                gmailEnabled: data.settings ? data.settings.gmail_enabled : true,
-                currentBalance: balansDatabase // Nou sove l isit la tou
+                currentBalance: balansDatabase
             };
 
-            // Verifikasyon bouton an tan reyèl
+            // Re-fè verifikasyon input la depi balans lan chanje
             verifieInputMontan(balansDatabase);
         }
     });
 }
 
+// 2. VERIFIKASYON DINAMIK POU BOUTON AN
 function verifieInputMontan(balans) {
     const inputMontan = document.getElementById('retre-amount');
     const btnMain = document.getElementById('btn-konfime-retre');
@@ -58,7 +61,7 @@ function verifieInputMontan(balans) {
         if (m > balans) {
             btnMain.disabled = true;
             btnMain.innerText = "Balans ensifizan";
-            btnMain.style.background = "#ff5630"; // Wouj erè
+            btnMain.style.background = "#ff5630"; 
         } else if (m < 100 || isNaN(m)) {
             btnMain.disabled = true;
             btnMain.innerText = "Minimòm 100 HTG";
@@ -66,35 +69,30 @@ function verifieInputMontan(balans) {
         } else {
             btnMain.disabled = false;
             btnMain.innerText = "RETIRE KÒB LA";
-            btnMain.style.background = "#109121"; // Vèt siksè
+            btnMain.style.background = "#0052cc"; // Koulè ble bouton ou an
         }
     };
 }
 
-// 3. FINALIZASYON AK DEKLANCHMAN GMAIL (KORÈK)
+// 3. FINALIZASYON TRANZAKSYON
 window.finaliseRetre = async () => {
     const user = auth.currentUser;
     if (!user || !window.userAppData) return;
 
-    const montanStr = document.getElementById('retre-amount').value;
-    const montan = parseFloat(montanStr);
+    const montan = parseFloat(document.getElementById('retre-amount').value);
     const metòd = document.getElementById('retre-method').value;
     const telefòn = document.getElementById('retre-phone').value;
     const nonReseptè = document.getElementById('retre-name').value;
 
-    // Verifikasyon sekirite anvan nou lanse requête la
     if (window.userAppData.currentBalance < montan) {
-        alert("Erè: Balans ou ensifizan.");
-        return closeAllModals();
+        alert("Balans ensifizan.");
+        return;
     }
-
-    document.getElementById('modal-step2')?.classList.add('hidden');
 
     try {
         const transID = "RET-" + Math.floor(Math.random() * 1000000);
         const updates = {};
         
-        // 1. Kreye Tranzaksyon an
         updates[`/transactions/${transID}`] = {
             id: transID,
             uid: user.uid,
@@ -107,40 +105,29 @@ window.finaliseRetre = async () => {
             timestamp: serverTimestamp()
         };
         
-        // 2. RETIRE KÒB LA (itilize increment ak valè negatif pou retire)
+        // Retire kòb la nan balans lan
         updates[`/users/${user.uid}/balance`] = increment(-montan);
 
         await update(ref(db), updates);
 
-        // Notifikasyon Gmail (Si fonksyon an la)
+        // Notifikasyon Gmail
         if (typeof window.voyeGmail === 'function') {
-            window.voyeGmail('retre', {
-                amount: montan,
-                method: metòd,
-                phone: telefòn,
-                name: window.userAppData.fullname
-            });
+            window.voyeGmail('retre', { amount: montan, method: metòd, phone: telefòn, name: window.userAppData.fullname });
         }
         
-        // Netwaye fòm nan
+        // Reset ak siksè
+        document.getElementById('modal-step2')?.classList.add('hidden');
+        document.getElementById('modal-final')?.classList.remove('hidden');
+
+        // Netwaye fòm
+        document.getElementById('retre-amount').value = "";
         document.getElementById('retre-name').value = "";
         document.getElementById('retre-phone').value = "";
-        document.getElementById('retre-amount').value = "";
 
-        // Montre siksè
-        document.getElementById('modal-final')?.classList.remove('hidden');
-        
-        // Redireksyon apre 3 segonn
-        setTimeout(() => {
-            closeAllModals();
-            if (window.showPage) window.showPage('paj-akey'); 
-        }, 3000);
-
-    } catch (erè) {
-        console.error(erè);
-        alert("Gen yon pwoblèm teknik. Kontakte sipò.");
+    } catch (e) {
+        alert("Erè: " + e.message);
     }
 };
 
-// ... rès fonksyon konekteLojikBouton ak closeAllModals yo rete menm jan
-        
+// ... Fonksyon konekteLojikBouton ak closeAllModals rete menm jan ...
+               
