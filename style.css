@@ -609,3 +609,91 @@ body.night-mode .menu-item:hover {
 body.night-mode .card-balance-rect {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
+
+
+
+
+/* ==========================================
+   CSS BOTTOM NAVIGATION - ECHANJ PLUS ELITE
+   ========================================== */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 75px;
+    background: var(--card-white);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    z-index: 2000;
+    padding-bottom: env(safe-area-inset-bottom); /* Pou iPhone ki pa gen bouton home */
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.03);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8; /* Koulè gri pa defo */
+    flex: 1;
+    gap: 5px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+/* Style pou Icon yo */
+.nav-item i {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+/* Style pou Tèks anba icon yo */
+.nav-item span {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* LÈ YON ATIK AKTIF (ACTIVE STATE) */
+.nav-item.active {
+    color: var(--primary-blue);
+}
+
+.nav-item.active i {
+    transform: translateY(-3px); /* Ti animasyon moute */
+}
+
+/* Ti pwen endikatè anba sa ki aktif la */
+.nav-item.active::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    width: 5px;
+    height: 5px;
+    background: var(--primary-blue);
+    border-radius: 50%;
+}
+
+/* Efè lè ou klike (Feedback vizyèl) */
+.nav-item:active i {
+    transform: scale(0.8);
+}
+
+/* ADAPTASYON POU NIGHT MODE */
+body.night-mode .bottom-nav {
+    background: var(--card-white); /* Sa a ap itilize koulè ble fonse a via root variables */
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.night-mode .nav-item {
+    color: #64748b;
+}
+
+body.night-mode .nav-item.active {
+    color: var(--accent-cyan);
+}
