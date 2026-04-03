@@ -155,4 +155,165 @@ body.night-mode #sponsor-input {
    }
 
 
+/* ==========================================
+   CSS SIDEBAR ELITE - ECHANJ PLUS
+   ========================================== */
+
+/* 1. KONTENÈ SIDEBAR LA */
+.sidebar-pro {
+    position: fixed;
+    top: 0;
+    left: -100%; /* Kache pa defo */
+    width: 290px;
+    height: 100vh;
+    background: var(--card-white);
+    z-index: 2100;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 15px 0 40px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Lè sidebar la aktif */
+.sidebar-pro.active {
+    left: 0;
+}
+
+/* 2. HEADER SIDEBAR (GRADYEN) */
+.sidebar-header {
+    padding: 50px 25px 30px 25px;
+    background: linear-gradient(135deg, #0052cc, #0747a6);
+    color: #ffffff;
+    position: relative;
+    border-bottom-right-radius: 40px;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 20px;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.user-meta h4 {
+    font-size: 19px;
+    font-weight: 800;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+}
+
+.user-meta p {
+    font-size: 13px;
+    opacity: 0.8;
+    font-weight: 400;
+}
+
+/* Badge ARS-ID */
+.user-id-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    margin-bottom: 5px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Status Sekirite */
+.security-status {
+    font-size: 11px;
+    background: rgba(54, 179, 126, 0.2);
+    color: #36b37e;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+/* 3. MENI YO (SIDEBAR MENU) */
+.sidebar-menu {
+    padding: 25px 15px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    border-radius: 14px;
+    color: var(--text-soft);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    gap: 15px;
+}
+
+.menu-item i {
+    font-size: 18px;
+    width: 25px;
+    text-align: center;
+}
+
+/* Lè yon atik nan meni an aktif */
+.menu-item.active {
+    background: rgba(0, 82, 204, 0.08);
+    color: var(--primary-blue);
+}
+
+.menu-item:hover {
+    background: #f4f7fe;
+    color: var(--primary-blue);
+}
+
+/* 4. BOUTON DEKONEKTE (LOGOUT) */
+.logout-btn {
+    margin-top: 20px;
+    color: var(--danger);
+    border-top: 1px solid #f1f5f9;
+    padding-top: 25px;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 86, 48, 0.05);
+    color: var(--danger);
+}
+
+/* 5. OVERLAY (NWA DÈYÈ A) */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+    z-index: 2000;
+    display: none;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* Night Mode Support */
+body.night-mode .sidebar-pro {
+    background: var(--card-white);
+}
+
+body.night-mode .menu-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+       }
+
+
+
 
