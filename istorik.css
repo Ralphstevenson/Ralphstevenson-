@@ -128,3 +128,173 @@
     background: #2e7d32 !important; color: white; border: none; padding: 15px; border-radius: 15px; font-weight: 800; cursor: pointer; width: 100%;
    }
    
+
+
+/* ============================================================
+   PAJ ISTORIK & MODAL RESI (PROFESSIONAL FINTECH STYLE)
+   ============================================================ */
+
+/* 1. MODAL OVERLAY (Background nwa a) */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+/* 2. KASET RESI A (RECEIPT CARD) */
+.receipt-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 360px;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    animation: bounceIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes bounceIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* 3. HEADER RESI (KI GEN VÈT LA) */
+.receipt-header {
+    background: #f4fbf5; /* Ti vèt lejè */
+    padding: 25px 20px;
+    text-align: center;
+    border-bottom: 2px dashed #c8e6c9;
+    position: relative;
+}
+
+/* Efè papye rache a (Ti sèk yo) */
+.receipt-header::before, .receipt-header::after {
+    content: '';
+    position: absolute;
+    bottom: -13px;
+    width: 26px;
+    height: 26px;
+    background: #000; /* Dwe menm koulè ak overlay la */
+    border-radius: 50%;
+}
+.receipt-header::before { left: -13px; }
+.receipt-header::after { right: -13px; }
+
+.logo-receipt {
+    font-size: 16px;
+    font-weight: 900;
+    color: #2e7d32;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+/* Status Badge dinamik (JS ap chanje koulè a) */
+.status-badge-rec {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+/* 4. KÒ RESI A (BODY) */
+.receipt-body {
+    padding: 25px 20px;
+}
+
+.rec-amount-box {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.rec-amount-box span {
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.rec-amount-box h2 {
+    font-size: 34px;
+    font-weight: 900;
+    color: #172b4d;
+    margin: 5px 0;
+}
+
+/* Grid enfòmasyon (2 kolòn pafè) */
+.rec-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 20px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-item small {
+    font-size: 10px;
+    color: #9ea9bb;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.info-item p {
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+    word-break: break-all;
+}
+
+/* 5. FOOTER (BOUTON YO) */
+.receipt-footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 20px;
+    background: #f9fbfd;
+}
+
+.btn-share {
+    background: #2e7d32;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.btn-close-rec {
+    background: #ffffff;
+    color: #444;
+    border: 1px solid #e2e8f0;
+    padding: 14px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-share:active { transform: scale(0.96); opacity: 0.9; }
+
+/* Klas pou kache modal la */
+.hidden { display: none !important; }
+   
