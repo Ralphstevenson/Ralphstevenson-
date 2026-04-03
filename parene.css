@@ -1,92 +1,212 @@
-/* --- VARIABLES --- */
+/* ============================================================
+   CSS PARENNAJ ELITE V4.2 - ECHANJ PLUS (GLASS DESIGN)
+   ============================================================ */
+
 :root {
-    --glass-bg: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.15);
     --premium-green: #109121;
-    --text-white: #ffffff;
+    --dark-navy: #1e293b;
+    --glass-white: rgba(255, 255, 255, 0.95);
 }
 
-/* --- HEADER --- */
-.premium-header { padding: 20px 15px; border-left: 4px solid var(--premium-green); margin-bottom: 20px; }
-.page-title { font-weight: 900; font-size: 20px; color: #1e293b; margin: 0; }
-.subtitle-paj { font-size: 13px; color: #64748b; margin-top: 5px; }
+/* 1. HEADER */
+.premium-header {
+    padding: 20px 15px;
+    border-left: 5px solid var(--premium-green);
+    background: white;
+    margin-bottom: 20px;
+    border-radius: 0 15px 15px 0;
+}
 
-/* --- GLASS CARD PRINCIPAL --- */
+.page-title {
+    font-weight: 900;
+    font-size: 20px;
+    color: var(--dark-navy);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.subtitle-paj {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 5px;
+}
+
+/* 2. REFERRAL CARD (GRADIENT & GLASS) */
 .referral-card-glass {
     background: linear-gradient(135deg, #109121, #084d12);
-    padding: 30px 20px; border-radius: 28px; color: white;
+    padding: 30px 20px;
+    border-radius: 28px;
+    color: white;
     box-shadow: 0 15px 35px rgba(16, 145, 33, 0.3);
-    margin-bottom: 25px; position: relative;
+    margin-bottom: 25px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInScale 0.5s ease;
 }
 
-.referral-badge { 
-    position: absolute; top: 15px; right: 20px; 
-    background: rgba(255,255,255,0.2); padding: 5px 12px; 
-    border-radius: 50px; font-size: 10px; font-weight: 800; text-transform: uppercase;
+.referral-badge {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.balance-display { display: flex; align-items: baseline; gap: 8px; margin: 10px 0 25px 0; }
-.balance-display h1 { font-size: 42px; font-weight: 900; margin: 0; letter-spacing: -1.5px; }
+.balance-display h1 {
+    font-size: 45px;
+    font-weight: 900;
+    margin: 5px 0;
+    letter-spacing: -2px;
+}
 
-/* GRID GLASS STATS */
+/* STATS GRID INSIDE CARD */
 .stats-grid-glass {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 15px 5px; border-radius: 20px; margin-bottom: 20px;
+    padding: 15px 5px;
+    border-radius: 20px;
+    margin: 20px 0;
 }
-.stat-box { display: flex; flex-direction: column; align-items: center; border-right: 1px solid rgba(255,255,255,0.1); }
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .stat-box:last-child { border: none; }
-.stat-box span { font-size: 10px; opacity: 0.8; font-weight: 600; text-transform: uppercase; }
+
+.stat-box span {
+    font-size: 9px;
+    opacity: 0.8;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
 .stat-box b { font-size: 14px; font-weight: 800; }
 
 .btn-premium-transfer {
-    width: 100%; height: 55px; background: white; color: #109121;
-    border: none; border-radius: 18px; font-weight: 900; font-size: 16px;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s;
+    width: 100%;
+    height: 55px;
+    background: white;
+    color: var(--premium-green);
+    border: none;
+    border-radius: 18px;
+    font-weight: 900;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
 }
 
-/* --- ZÒN TRANSPARENT KÒD --- */
+.btn-premium-transfer:active { transform: scale(0.96); }
+
+/* 3. TRANSPARENT INPUT BOX */
 .glass-container {
-    background: #ffffff; /* Si se mòd klè */
-    padding: 25px; border-radius: 28px; margin-bottom: 20px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.04); border: 1px solid #f1f5f9;
+    background: white;
+    padding: 25px;
+    border-radius: 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+    border: 1px solid #f1f5f9;
 }
 
-/* Pati transparan ou vle a */
 .input-transparent-box {
-    display: flex; align-items: center; 
-    background: rgba(241, 245, 249, 0.7); /* Efè vè klè */
-    backdrop-filter: blur(5px);
-    border: 2px dashed #cbd5e1; /* Dash border bay li yon look teknisyen */
-    padding: 8px; border-radius: 18px; margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    border: 2px dashed #cbd5e1;
+    padding: 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
 }
 
-.input-transparent-box input {
-    flex: 1; background: transparent; border: none; outline: none;
-    text-align: center; font-size: 20px; font-weight: 900; color: #1e293b;
+#my-ref-code {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--dark-navy);
+    letter-spacing: 1px;
 }
 
 .copy-premium-btn {
-    background: var(--premium-green); color: white;
-    width: 50px; height: 50px; border-radius: 14px; border: none;
-    cursor: pointer; font-size: 18px;
+    background: var(--premium-green);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-/* SHARE GRID */
-.share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px; }
-.share-icon { 
-    height: 55px; border-radius: 16px; display: flex; 
-    align-items: center; justify-content: center; font-size: 22px; color: white; cursor: pointer; 
+/* 4. SHARE SECTION */
+.share-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
 }
-.wa { background: #25D366; } .fb { background: #1877F2; } .tg { background: #0088cc; } .sms { background: #34495e; }
 
-/* NIGHT MODE - Pou sa parèt plis Glass toujou */
+.share-icon {
+    height: 55px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.wa { background: #25D366; }
+.fb { background: #1877F2; }
+.tg { background: #0088cc; }
+.sms { background: #34495e; }
+
+.share-icon:active { transform: translateY(-5px); }
+
+/* 5. LOGIC INFO BOX */
+.logic-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #fff9c4;
+    padding: 15px;
+    border-radius: 18px;
+    margin-bottom: 25px;
+    border: 1px solid #fbc02d;
+}
+
+.logic-icon { font-size: 24px; color: #f39c12; }
+
+/* ANIMATIONS */
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Mòd Nwit (Opsyonèl si w genyen l) */
 body.night-mode .glass-container {
-    background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(15px);
-    border: 1px solid var(--glass-border);
+    background: #0f172a;
+    border-color: #1e293b;
+    color: white;
 }
-body.night-mode .input-transparent-box { background: rgba(15, 23, 42, 0.5); }
-body.night-mode .input-transparent-box input { color: white; }
-body.night-mode .logic-info { background: rgba(16, 145, 33, 0.1); border: 1px solid rgba(16, 145, 33, 0.2); }
+body.night-mode #my-ref-code { color: white; }
+body.night-mode .input-transparent-box { background: #1e293b; border-color: #334155; }
+        
