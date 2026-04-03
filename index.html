@@ -324,21 +324,56 @@
 
 <section id="chat-container" class="hidden">
 
-    <div class="chat-header">
-    <div class="header-left">
-        <div class="profile-avatar-main">
-            <img src="https://i.postimg.cc/zBs03Y9d/file-00000000171471f5a0ff5138fae23eb4.png" class="header-logo" alt="Logo Admin">
-            <div id="presence-indicator" class="status-dot offline"></div>
+    <div class="chat-wrapper">
+        
+        <div class="chat-header">
+            <div class="header-left">
+                <div class="profile-avatar-main">
+                    <img src="https://i.postimg.cc/zBs03Y9d/file-00000000171471f5a0ff5138fae23eb4.png" 
+                         class="header-logo" 
+                         alt="Logo Sipò">
+                    <div id="presence-indicator" class="status-dot offline"></div>
+                </div>
+                <div class="admin-info">
+                    <p class="admin-name">Sipò Echanj Plus</p>
+                    <small id="admin-status-text" class="status-label">De-konekte</small>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn-header-tool" title="Plis opsyon">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+            </div>
         </div>
-        <div class="admin-info">
-            <p class="admin-name">Sipò Echanj Plus</p>
-            <small id="admin-status-text" class="status-label">De-konekte</small>
+
+        <div id="chat-messages" class="chat-body">
+            <div class="chat-security-notice">
+                <i class="fa-solid fa-lock"></i>
+                <p>Konvèsasyon sa a chiffres ak sekirite an bout-an-bout. Pèsonn andeyò chat sa a pa ka li mesaj ou yo.</p>
+            </div>
+            
+            </div>
+
+        <div class="chat-footer">
+            <div class="footer-actions">
+                <label for="chat-file" class="btn-icon-footer">
+                    <i class="fa-solid fa-plus"></i>
+                    <input type="file" id="chat-file" accept="image/*" style="display:none">
+                </label>
+            </div>
+            
+            <div class="input-wrapper">
+                <input type="text" id="chat-input" placeholder="Ekri yon mesaj..." autocomplete="off">
+                <i class="fa-regular fa-face-smile footer-icon-emoji"></i>
+            </div>
+            
+            <button id="btn-send-chat" title="Voye mesaj">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
         </div>
     </div>
-    <div class="header-right">
-        <i class="fa-solid fa-ellipsis-vertical" style="color: #64748b; cursor: pointer;"></i>
-    </div>
-    </div>
+
+    <audio id="chat-notif" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3"></audio>
     
     
 </section>
