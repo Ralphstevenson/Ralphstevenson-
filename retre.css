@@ -1,24 +1,25 @@
 /* ============================================================
-   STYLE PAJ RETRÈ - ECHANJ PLUS V3.2 (PROFESSIONNEL)
+   STYLE PAJ RETRÈ - ECHANJ PLUS PREMIUM (NWA & JÒN)
    ============================================================ */
 
 .paj-retre-kontni {
     padding: 20px;
     max-width: 480px;
     margin: 0 auto;
-    animation: fadeIn 0.5s ease;
+    animation: fadeIn 0.5s ease-out;
 }
 
-/* 1. STATUS BAR (Balans ak ID) */
+/* 1. STATUS BAR (NWA SOLID AK JÒN) */
 .user-status-bar-simple {
     display: flex;
     justify-content: space-between;
-    background: linear-gradient(135deg, #1e293b, #0f172a);
-    padding: 20px;
-    border-radius: 20px;
+    background: #000000; /* Nwa Solid */
+    padding: 25px;
+    border-radius: 24px;
     color: white;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
     margin-bottom: 25px;
+    border-bottom: 4px solid #facc15; /* Liy Jòn anba a */
 }
 
 .status-info {
@@ -28,171 +29,188 @@
 }
 
 .status-info .label {
-    font-size: 11px;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #94a3b8;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    color: #facc15; /* Tit yo an Jòn */
 }
 
 .status-info .value {
-    font-size: 18px;
-    font-weight: 800;
+    font-size: 19px;
+    font-weight: 900;
     color: #ffffff;
 }
 
 #display-balance {
-    color: #4ade80; /* Vèt klere pou kòb la parèt byen */
+    color: #ffffff !important; /* Balans lan rete an blan pou l parèt "clean" */
 }
 
-/* 2. FORMULAIRE DESIGN */
+/* 2. FORMULAIRE DESIGN (MODÈN) */
 .form-container {
     background: #ffffff;
-    padding: 25px;
-    border-radius: 25px;
-    border: 1px solid #f1f5f9;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    padding: 30px 25px;
+    border-radius: 28px;
+    border: 1px solid #eeeeee;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
 }
 
 .form-group {
-    margin-bottom: 18px;
+    margin-bottom: 22px;
 }
 
 .form-group label {
     display: block;
-    font-size: 13px;
-    font-weight: 700;
-    color: #475569;
-    margin-bottom: 8px;
-    margin-left: 5px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #000000;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .form-group input, 
 .form-group select {
     width: 100%;
-    padding: 14px 18px;
-    border-radius: 15px;
-    border: 2px solid #f1f5f9;
-    background: #f8fafc;
+    padding: 16px 20px;
+    border-radius: 18px;
+    border: 2px solid #f1f1f1;
+    background: #f9f9f9;
     font-size: 15px;
-    font-weight: 600;
-    color: #1e293b;
-    transition: 0.3s;
+    font-weight: 700;
+    color: #000000;
+    transition: all 0.3s ease;
     outline: none;
 }
 
+/* Lè w ap tape (Focus) */
 .form-group input:focus, 
 .form-group select:focus {
-    border-color: #109121;
+    border-color: #facc15;
     background: #ffffff;
-    box-shadow: 0 0 0 4px rgba(16, 145, 33, 0.1);
+    box-shadow: 0 0 0 5px rgba(250, 204, 21, 0.15);
 }
 
-/* 3. BOUTON KONFIME */
+/* 3. BOUTON KONFIME (NWA & JÒN) */
 .btn-confirm {
     width: 100%;
-    padding: 16px;
-    background: #109121;
-    color: white;
+    padding: 18px;
+    background: #000000; /* Nwa Solid */
+    color: #facc15; /* Tèks Jòn */
     border: none;
-    border-radius: 15px;
+    border-radius: 18px;
     font-size: 16px;
-    font-weight: 800;
+    font-weight: 900;
     cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 6px 20px rgba(16, 145, 33, 0.25);
-    margin-top: 10px;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    margin-top: 15px;
+    letter-spacing: 1px;
 }
 
 .btn-confirm:active {
-    transform: scale(0.96);
+    transform: scale(0.95);
 }
 
-/* 4. MODALS DESIGN (Glassmorphism Overlay) */
+/* 4. MODALS DESIGN (ELITE OVERLAY) */
 .modal {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.7);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2000;
+    z-index: 3000;
     padding: 20px;
-    transition: 0.3s;
-}
-
-.modal.hidden {
-    display: none;
-    opacity: 0;
 }
 
 .modal-content {
     background: #ffffff;
-    padding: 30px;
-    border-radius: 30px;
+    padding: 35px 30px;
+    border-radius: 35px;
     width: 100%;
     max-width: 400px;
     text-align: center;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    animation: modalSlide 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes modalSlide {
-    from { transform: translateY(30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    border: 2px solid #000000;
 }
 
 .modal-content h3 {
-    font-size: 20px;
-    color: #1e293b;
-    margin-bottom: 15px;
+    font-size: 22px;
+    font-weight: 900;
+    color: #000000;
+    margin-bottom: 20px;
 }
 
+/* REZIME TRANZAKSYON AN */
 #info-recap {
-    background: #f8fafc;
-    padding: 15px;
-    border-radius: 15px;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 20px;
     text-align: left;
-    margin-bottom: 20px;
-    border: 1px dashed #cbd5e1;
+    margin-bottom: 25px;
+    border: 1px dashed #000000;
 }
 
 #info-recap p {
-    margin: 8px 0;
+    margin: 12px 0;
     font-size: 14px;
-    color: #475569;
+    color: #333;
     display: flex;
     justify-content: space-between;
+    font-weight: 600;
+}
+
+#info-recap b {
+    color: #000000;
+    font-weight: 800;
 }
 
 /* BOUTON NAN MODAL */
 .modal-btns {
     display: flex;
-    gap: 12px;
+    gap: 15px;
 }
 
 .btn-cancel {
     flex: 1;
-    padding: 14px;
-    background: #f1f5f9;
-    color: #64748b;
+    padding: 16px;
+    background: #eeeeee;
+    color: #000000;
     border: none;
-    border-radius: 12px;
-    font-weight: 700;
+    border-radius: 16px;
+    font-weight: 800;
     cursor: pointer;
 }
 
-/* SUCCESS TEXT */
+/* SUCCESS TITLE */
 .success-title {
-    color: #109121;
-    font-size: 24px;
-    margin-top: 10px;
+    color: #000000;
+    font-size: 26px;
+    font-weight: 900;
+    margin-top: 15px;
 }
 
-/* RESPONSIVE */
-@media (max-width: 400px) {
-    .paj-retre-kontni { padding: 15px; }
-    .status-info .value { font-size: 16px; }
-    }
-    
+/* Ti pwen jòn pou siksè */
+.success-title::after {
+    content: " ✓";
+    color: #facc15;
+}
+
+/* NIGHT MODE */
+body.night-mode .form-container, 
+body.night-mode .modal-content {
+    background: #111111;
+    border-color: #333;
+}
+body.night-mode .form-group label,
+body.night-mode .modal-content h3 {
+    color: #ffffff;
+}
+body.night-mode .form-group input {
+    background: #1a1a1a;
+    color: #fff;
+   }
+   
