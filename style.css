@@ -533,4 +533,97 @@ body {
 /* CUSTOM SCROLLBAR */
 .notif-content::-webkit-scrollbar { width: 4px; }
 .notif-content::-webkit-scrollbar-thumb { background: #eee; border-radius: 10px; }
-    
+
+
+
+
+/* --- BOTTOM NAVIGATION ELITE --- */
+:root {
+    --nav-bg: #ffffff;
+    --nav-active: #218838; /* Vèt frapan */
+    --nav-inactive: #8a8d91;
+    --nav-shadow: 0 -5px 25px rgba(0, 0, 0, 0.06);
+    --nav-height: 70px;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 15px; /* Floating effect */
+    left: 15px;
+    right: 15px;
+    height: var(--nav-height);
+    background: var(--nav-bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 20px; /* Kwen awondi pou style pwofesyonèl */
+    box-shadow: var(--nav-shadow);
+    border: 1px solid #f1f3f5;
+    z-index: 950;
+    padding: 0 10px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    position: relative;
+    color: var(--nav-inactive);
+}
+
+.nav-item i {
+    font-size: 18px;
+    margin-bottom: 4px;
+    transition: transform 0.3s ease;
+}
+
+.nav-item span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+/* ACTIVE STATE - LÈ YON ATIK CHWAZI */
+.nav-item.active {
+    color: var(--nav-active);
+}
+
+.nav-item.active i {
+    transform: translateY(-2px); /* Ti animasyon monte */
+}
+
+/* TI PWA VÈT KI PARÈT ANBA ATIK KI ACTIVE A */
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    width: 5px;
+    height: 5px;
+    background: var(--nav-active);
+    border-radius: 50%;
+}
+
+/* EFÈ LÈ W KLIKÈ (TAP EFFECT) */
+.nav-item:active {
+    transform: scale(0.9);
+    opacity: 0.7;
+}
+
+/* POU TELEFÒN KI GEN "NOTCH" ANBA (IPHONE) */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .bottom-nav {
+        bottom: calc(15px + env(safe-area-inset-bottom));
+    }
+}
+
+/* KACHE NAVIGASYON AN LÈ W SOU DESKTOP SI W VLE */
+@media (min-width: 768px) {
+    .bottom-nav {
+        display: none; /* Si w gen yon sidebar deja sou PC */
+    }
+}
+
