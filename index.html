@@ -129,10 +129,17 @@
 
 
             
-            <section id="paj-echanj" class="hidden">
+            <section id="paj-echanj" class="tab-content hidden">
     <div class="premium-header">
-        <h3 class="page-title"><i class="fas fa-sync-alt"></i> Echanj Minit</h3>
-        <p class="subtitle-paj">Chwazi rezo w la pou w kòmanse echanj la.</p>
+        <div class="header-main-box">
+            <h3 class="page-title"><i class="fas fa-sync-alt"></i> Echanj Minit</h3>
+            <p class="subtitle-paj">Minit ou yo se kòb kach. Chwazi rezo w la.</p>
+        </div>
+        <div class="mini-flash-info">
+            <marquee behavior="scroll" direction="left">
+                🚀 Frè sistèm nan se 16.5% sèlman | ✅ Rabè 9.5 HTG pou premye echanj si ou gen parenn.
+            </marquee>
+        </div>
     </div>
     
     <div class="provider-container">
@@ -140,58 +147,71 @@
             <div class="card-img-box">
                 <img src="https://i.postimg.cc/1V5TGWk0/23403511-3d46-4460-a669-ccf2a18d8ec3.png" alt="Digicel">
             </div>
-            <b>Digicel</b>
-            <span class="rate-tag">16.5% Frè</span>
+            <div class="card-info">
+                <b>Digicel</b>
+                <span class="rate-tag">16.5% Frè</span>
+            </div>
+            <div class="go-icon"><i class="fas fa-chevron-right"></i></div>
         </div>
 
         <div class="provider-card" onclick="openDialer('natcom')">
             <div class="card-img-box">
                 <img src="https://i.postimg.cc/Jt19CnsV/recharge-com-natcom-product-card.png" alt="Natcom">
             </div>
-            <b>Natcom</b>
-            <span class="rate-tag">16.5% Frè</span>
+            <div class="card-info">
+                <b>Natcom</b>
+                <span class="rate-tag">16.5% Frè</span>
+            </div>
+            <div class="go-icon"><i class="fas fa-chevron-right"></i></div>
         </div>
     </div>
 
     <div id="modal-confirm-echanj" class="modal-overlay hidden">
-        <div class="modal-content-premium">
+        <div class="modal-content-premium animated bounceIn">
             <div class="modal-header-pwo">
-                <div class="icon-circle"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="icon-circle-gold"><i class="fas fa-file-invoice-dollar"></i></div>
                 <h4>Rezime Echanj Ou</h4>
+                <p>Verifye done yo anvan ou konfime.</p>
             </div>
             
             <div class="modal-body">
                 <div class="summary-row">
-                    <span>Minit w ap voye:</span>
-                    <b id="sum-minit">0.00</b>
+                    <span class="label">Minit w ap voye:</span>
+                    <b id="sum-minit" class="val-minit">0.00 HTG</b>
                 </div>
                 
                 <div class="summary-row">
-                    <span>Frè Sistèm (16.5%):</span>
-                    <b id="sum-fre" style="color: #ef4444;">-0.00 HTG</b>
+                    <span class="label">Frè Sistèm (16.5%):</span>
+                    <b id="sum-fre" class="val-fre">-0.00 HTG</b>
                 </div>
 
                 <div id="box-rabe-premium" class="summary-row rabe-box hidden">
-                    <span>Rabè Byenveni (Parenn):</span>
-                    <b id="sum-rabe" style="color: #10b981;">+9.50 HTG</b>
+                    <span class="label">Rabè Byenveni (ARS):</span>
+                    <b id="sum-rabe" class="val-rabe">+9.50 HTG</b>
                 </div>
 
                 <div class="divider-dashed"></div>
 
                 <div class="total-row">
-                    <span>W AP RESEVWA:</span>
-                    <h2 id="sum-total">0.00 HTG</h2>
+                    <span class="total-label">W AP RESEVWA:</span>
+                    <h2 id="sum-total" class="val-total">0.00 HTG</h2>
                 </div>
             </div>
 
             <div class="modal-footer-pwo">
                 <button class="btn-cancel-modal" onclick="femenModalEchanj()">Anile</button>
-                <button id="btn-konfime-final" class="btn-confirm-modal">Konfime ak PIN</button>
+                <button id="btn-konfime-final" class="btn-confirm-modal-premium">
+                    <i class="fas fa-check-circle"></i> Konfime ak PIN
+                </button>
             </div>
-            <p class="security-note"><i class="fas fa-lock"></i> Tranzaksyon an ap valide apre verifikasyon minit yo.</p>
+            
+            <p class="security-note">
+                <i class="fas fa-shield-check"></i> Sekirite ARS aktive. Validasyon nan mwens pase 5 minit.
+            </p>
         </div>
     </div>
             </section>
+            
 
 
             
