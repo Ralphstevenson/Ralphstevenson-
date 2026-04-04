@@ -173,7 +173,7 @@ body.night-mode .input-group {
 /* 1. HEADER SIDEBAR (USER INFO) */
 .sidebar-header {
     padding: 40px 25px;
-    background: #000000;
+    background: #ffffff;
     position: relative;
     border-bottom: 1px solid #222;
 }
@@ -195,7 +195,7 @@ body.night-mode .input-group {
 .user-id-badge {
     display: inline-block;
     background: #facc15;
-    color: #000;
+    color: #fff;
     font-size: 10px;
     font-weight: 900;
     padding: 3px 10px;
