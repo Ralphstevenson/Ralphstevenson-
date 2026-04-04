@@ -145,185 +145,148 @@ body.night-mode .input-group {
 
 
 
-
-
 /* ==========================================
-   CSS SIDEBAR ELITE - PREMIUM BLACK & GOLD
+   SIDEBAR ELITE V5.0 - PREMIUM BLACK & GOLD
+   Lajè optimize ak design minimalist
    ========================================== */
 
 .sidebar-pro {
     position: fixed;
     top: 0;
-    left: -100%;
-    width: 300px;
+    left: -100%; /* Kache pa defo */
+    width: 285px; /* Lajè optimize pou mobil */
     height: 100vh;
-    background: #ffffff; /* Blan Solid */
-    z-index: 2500;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 15px 0 50px rgba(0, 0, 0, 0.2);
+    background: #000000; /* Nwa Solid */
+    z-index: 5000;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Tranzisyon dous */
+    box-shadow: 15px 0 40px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: column;
+    border-right: 2px solid #facc15; /* Liy Jòn sou kote a */
 }
 
+/* Lè Sidebar a ouvri */
 .sidebar-pro.active {
     left: 0;
 }
 
-/* 1. HEADER SIDEBAR (NWA & JÒN) */
+/* 1. HEADER SIDEBAR (USER INFO) */
 .sidebar-header {
-    padding: 50px 25px 30px 25px;
-    background: #000000; /* Nwa Solid */
-    color: #ffffff;
+    padding: 40px 25px;
+    background: #000000;
     position: relative;
-    border-bottom: 4px solid #facc15; /* Liy Jòn nan pwent lan */
-    border-bottom-right-radius: 40px;
+    border-bottom: 1px solid #222;
 }
 
 .close-sidebar {
     position: absolute;
     top: 20px;
     right: 20px;
+    color: #facc15; /* Jòn Gold */
     font-size: 22px;
-    color: #facc15; /* X la an Jòn */
     cursor: pointer;
+    transition: 0.3s;
 }
 
-/* 2. USER META (Status & ID) */
-.user-greeting {
-    font-size: 11px;
-    text-transform: uppercase;
-    font-weight: 800;
-    color: #facc15; /* Jòn */
-    margin-bottom: 5px;
-    letter-spacing: 1px;
-}
-
-.security-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(250, 204, 21, 0.15); /* Jòn transparan */
-    color: #facc15;
-    padding: 4px 12px;
-    border-radius: 50px;
-    font-size: 10px;
-    font-weight: 800;
-    margin-bottom: 15px;
-    border: 1px solid rgba(250, 204, 21, 0.3);
+.user-meta {
+    margin-top: 10px;
 }
 
 .user-id-badge {
-    background: #facc15;
-    color: #000000;
     display: inline-block;
+    background: #facc15;
+    color: #000;
+    font-size: 10px;
+    font-weight: 900;
     padding: 3px 10px;
-    border-radius: 6px;
-    font-size: 11px !important;
-    font-weight: 900 !important;
-    margin-bottom: 10px;
+    border-radius: 50px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
 }
 
 #side-name {
-    font-size: 20px;
-    font-weight: 900;
     color: #ffffff;
+    font-size: 18px;
+    font-weight: 900;
+    margin: 5px 0;
+    letter-spacing: 0.5px;
 }
 
 #side-email {
-    font-size: 13px;
-    color: #cccccc;
-    font-weight: 400;
+    color: #888;
+    font-size: 12px;
+    font-weight: 600;
 }
 
-/* 3. MENU ITEMS (Style Minimalist Nwa) */
+/* 2. MENU ITEMS (DESIGN MODÈN) */
 .sidebar-menu {
-    padding: 30px 15px;
-    flex-grow: 1;
+    flex: 1;
+    padding: 20px 15px;
 }
 
 .menu-item {
     display: flex;
     align-items: center;
-    padding: 16px 20px;
-    margin-bottom: 8px;
-    border-radius: 16px;
-    color: #1a1a1a; /* Nwa */
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
     gap: 15px;
+    padding: 16px 20px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .menu-item i {
+    width: 20px;
     font-size: 18px;
-    color: #000000; 
-    width: 25px;
-    text-align: center;
+    color: #888;
+    transition: 0.3s;
 }
 
-/* Atik ki Aktif la */
-.menu-item.active {
-    background: #000000;
+/* Lè yon meni Aktif oswa sou li (Hover) */
+.menu-item.active, 
+.menu-item:hover {
+    background: rgba(250, 204, 21, 0.1); /* Background jòn transparan */
     color: #facc15;
 }
 
-.menu-item.active i {
+.menu-item.active i,
+.menu-item:hover i {
     color: #facc15;
 }
 
-.menu-item:hover:not(.active) {
-    background: #f1f1f1;
-    transform: translateX(5px);
-}
-
-/* 4. LOGOUT BUTTON (Wouj/Nwa) */
+/* 3. LOGOUT BUTTON (BOUTON DEKONEKTE) */
 .logout-btn {
-    margin: 20px 15px;
-    padding: 16px 20px;
-    background: #000000;
-    color: #ffffff;
-    border-radius: 16px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-top: auto;
+    border-top: 1px solid #222;
+    padding: 25px;
+    color: #ff4d4d !important; /* Wouj pou sekirite */
 }
 
 .logout-btn i {
-    color: #ef4444; /* Ikon dekonekte a wouj pou sekirite */
+    color: #ff4d4d !important;
 }
 
-/* 5. OVERLAY */
+/* OVERLAY (Background nwa ki parèt deyò sidebar a) */
 .sidebar-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
-    z-index: 2400;
+    z-index: 4999;
     display: none;
 }
 
 .sidebar-overlay.active {
     display: block;
-}
+                     }
 
-/* Night Mode */
-body.night-mode .sidebar-pro {
-    background: #111111;
-}
-body.night-mode .menu-item {
-    color: #ffffff;
-}
-body.night-mode .menu-item:hover:not(.active) {
-    background: #1a1a1a;
-       }
-   
+
 
 
    
