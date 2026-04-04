@@ -330,164 +330,121 @@ body {
 
 
 
-
-
-/* --- CONFIGURATION HEADER ELITE --- */
-:root {
-    --primary-green: #218838;
-    --dark-text: #000000;
-    --white: #ffffff;
-    --header-height: 75px;
-    --border-color: #f1f3f5;
-    --shadow-elite: 0 10px 30px rgba(0, 0, 0, 0.05);
-}
-
+/* --- CONFIGURATION HEADER --- */
 .main-header {
-    height: var(--header-height);
-    background: var(--white);
+    height: 70px;
+    background: #ffffff;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 15px;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: var(--shadow-elite);
+    border-bottom: 1px solid #eeeeee;
 }
 
 /* 1. ECHANJ PLUS - KOULÈ VÈT */
 .logo-text {
-    font-size: 20px;
+    color: #28a745; /* Vèt pwofesyonèl */
     font-weight: 900;
-    color: var(--primary-green); /* Koulè vèt jan w mande l la */
-    letter-spacing: 1px;
+    font-size: 18px;
+    letter-spacing: 0.5px;
 }
 
 /* 2. DESEN KLOCH LAN - KOULÈ NWA */
+.notif-wrapper {
+    position: relative;
+    margin-right: 15px;
+}
+
 .notif-wrapper i {
-    font-size: 22px;
-    color: var(--dark-text); /* Klòch la an nwa */
-    cursor: pointer;
-    transition: 0.3s;
+    color: #000000; /* Klòch la an nwa */
+    font-size: 20px;
 }
 
 .notif-badge {
     position: absolute;
-    top: -2px;
-    right: -2px;
-    background: #ff5630;
-    color: white;
+    top: -5px;
+    right: -5px;
+    background: #ffc107; /* Koulè jòn pou l parèt byen sou blan */
+    color: #000;
     font-size: 10px;
-    font-weight: 800;
-    padding: 2px 6px;
-    border-radius: 10px;
-    border: 2px solid white;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 50%;
 }
 
-/* 3. BWAT BALANS LAN - VÈT AK ARYÈL NWA */
+/* 3. BWAT BALANS - ARYÈL NWA AK TÈKS VÈT (Jan l ye nan imaj la) */
 .quick-balance {
-    background: var(--dark-text); /* Aryèl (background) nwa */
-    color: var(--primary-green);   /* Tèks vèt */
-    padding: 8px 15px;
-    border-radius: 12px;
-    text-align: right;
-    border: 1px solid var(--primary-green); /* Ti bordè vèt pou dekorasyon */
+    background: #000000; /* Aryèl nwa */
+    border-radius: 50px; /* Bord wonn tankou nan Screenshot la */
+    padding: 5px 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 110px;
+    justify-content: center;
 }
 
-/* Kantite balans lan an gra (Bold) */
-.quick-balance span.amount {
-    display: block;
-    font-weight: 800;
-    font-size: 16px;
+/* Kantite Balance - EKRI AN GRA */
+.balance-amount {
+    color: #28a745; /* Tèks vèt */
+    font-weight: 800; /* Gra */
+    font-size: 15px;
 }
 
-/* Ref la an piti */
-.quick-balance span.label {
-    display: block;
-    font-size: 10px;
+/* Ref la - EKRI AN PITI */
+.balance-ref {
+    color: #ffffff; /* Ref la an blan pou l ka parèt sou nwa a */
+    font-size: 10px; /* Piti */
     font-weight: 400;
-    text-transform: uppercase;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
-/* PANÈL NOTIFIKASYON */
+/* Ikon Plus (+) an jòn bò kote balans lan si w vle l tankou imaj la */
+.quick-balance::before {
+    content: '+';
+    background: #ff9800;
+    color: white;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* --- PANÈL NOTIFIKASYON --- */
 .notif-panel {
     position: absolute;
-    top: 80px;
-    right: 20px;
-    width: 320px;
+    top: 75px;
+    right: 10px;
+    width: 300px;
     background: white;
-    border-radius: 20px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-    border: 1px solid var(--border-color);
-    display: none; /* Toggle nan JS */
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+    display: none;
     flex-direction: column;
     overflow: hidden;
-    animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-15px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 .notif-header {
-    padding: 20px;
+    padding: 12px;
+    background: #000;
+    color: #ffc107; /* Tèks jòn sou nwa pou Luxury */
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.notif-tabs {
-    display: flex;
-    background: #f8f9fa;
-    margin: 10px 15px;
-    padding: 5px;
-    border-radius: 12px;
-}
-
-.tab-btn {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    background: transparent;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: 0.3s;
 }
 
 .tab-btn.active {
-    background: white;
-    color: var(--primary-green);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.notif-footer {
-    padding: 15px;
-    background: #fdfdfd;
-    border-top: 1px solid var(--border-color);
-}
-
-.logout-btn-elite {
-    background: rgba(255, 86, 48, 0.1);
-    color: #ff5630;
-    padding: 12px;
-    border-radius: 12px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.logout-btn-elite:hover {
-    background: #ff5630;
-    color: white;
+    border-bottom: 3px solid #28a745;
+    color: #28a745;
+    font-weight: bold;
     }
-    
+                                 
