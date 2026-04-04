@@ -242,7 +242,7 @@ body.night-mode .input-group {
     width: 20px;
     font-size: 18px;
     color: #888;
-    transition: 0.3s;
+   transition: 0.3s;
 }
 
 /* Lè yon meni Aktif oswa sou li (Hover) */
@@ -257,167 +257,130 @@ body.night-mode .input-group {
     color: #facc15;
 }
 
-/* 3. LOGOUT BUTTON (BOUTON DEKONEKTE) */
+
+
+
+
+   /* ==========================================
+   SIDEBAR ELITE V5.1 - OPTIMIZASYON VIZYÈL
+   ========================================== */
+
+.sidebar-pro {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    /* Nou redui lajè a pou l kite plis espas sou kote */
+    width: 260px; 
+    height: 100vh;
+    background: #000000;
+    z-index: 9999;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    border-right: 2px solid #facc15; /* Liy jòn ki separe l ak sit la */
+}
+
+/* Lè li ouvri */
+.sidebar-pro.active {
+    left: 0;
+}
+
+/* 1. RANJE KOULÈ TÈKS YO (HEADER) */
+.sidebar-header {
+    padding: 45px 25px 30px;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.user-id-badge {
+    background: #facc15;
+    color: #000;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 4px 12px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+#side-name {
+    color: #ffffff !important; /* Blan pou non an parèt klè */
+    font-size: 20px;
+    font-weight: 900;
+    margin: 5px 0;
+}
+
+#side-email {
+    color: #facc15 !important; /* Jòn pou imel la pou n kreye yon kontras */
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+/* 2. MENU ITEMS (WONT KONTRÈL) */
+.sidebar-menu {
+    padding: 20px 12px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 18px;
+    color: #ffffff; /* Tout tèks nan meni an blan */
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 12px;
+    margin-bottom: 5px;
+    transition: 0.3s;
+}
+
+/* Lè tab la aktif (tankou sou foto a) */
+.menu-item.active {
+    background: rgba(250, 204, 21, 0.15); /* Ti fon jòn trè pal */
+    color: #facc15; /* Tèks la vire jòn */
+}
+
+.menu-item.active i {
+    color: #facc15;
+}
+
+.menu-item i {
+    font-size: 18px;
+    width: 25px;
+    color: #ffffff; /* Ikon yo blan pa defo */
+}
+
+/* 3. DEKONEKTE (WOUJ POU ATANSYON) */
 .logout-btn {
     margin-top: auto;
-    border-top: 1px solid #222;
     padding: 25px;
-    color: #ff4d4d !important; /* Wouj pou sekirite */
+    border-top: 1px solid #1a1a1a;
+    color: #ff4d4d !important;
+    font-weight: 800;
 }
 
 .logout-btn i {
     color: #ff4d4d !important;
 }
 
-/* OVERLAY (Background nwa ki parèt deyò sidebar a) */
+/* 4. OVERLAY POU KACHE RÈS SIT LA LÈ L OUVRI */
 .sidebar-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    z-index: 4999;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(3px); /* Flou rès sit la */
+    z-index: 9998;
     display: none;
 }
 
 .sidebar-overlay.active {
     display: block;
-                     }
-
-
-
-
-   
-/* ==========================================
-   CSS HEADER & QUICK BALANCE - PREMIUM
-   Koulè: Blan, Nwa, Jòn (Gold)
-   ========================================== */
-
-.main-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-    background: #ffffff; /* Blan Solid */
-    height: 75px;
-    position: sticky;
-    top: 0;
-    z-index: 2000;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    border-bottom: 3px solid #000000; /* Liy nwa solid anba a */
-}
-
-/* 1. LOGO & MENU ICON */
-.fa-bars-staggered {
-    font-size: 22px;
-    color: #000000;
-    cursor: pointer;
-}
-
-.logo-text {
-    font-size: 16px;
-    font-weight: 900;
-    color: #000000;
-    letter-spacing: 1px;
-}
-
-/* 2. QUICK BALANCE (TIBWA DOUBLE LA) */
-.quick-balance {
-    background: #000000; /* Fon Nwa */
-    padding: 8px 15px;
-    border-radius: 14px;
-    display: flex;
-    flex-direction: column; /* Mete yo youn sou lòt */
-    align-items: flex-end; /* Aliyen tèks la bò dwat */
-    justify-content: center;
-    min-width: 110px;
-    border-left: 4px solid #facc15; /* Ti dekorasyon jòn sou kote */
-}
-
-/* Balans Prensipal (Anlè) */
-#header-quick-balance {
-    color: #facc15; /* Jòn pou balans prensipal */
-    font-size: 14px;
-    font-weight: 900;
-    line-height: 1.2;
-}
-
-/* Balans Referans (Anba) */
-/* Si w ap mete balans ref la via JS, asire w ou mete l nan yon span oswa ti div konsa */
-.quick-balance .ref-bal {
-    color: #ffffff; /* Blan pou referans lan */
-    font-size: 10px;
-    font-weight: 600;
-    opacity: 0.9;
-    margin-top: 2px;
-}
-
-/* 3. NOTIFIKASYON ICON */
-.notif-wrapper {
-    position: relative;
-    cursor: pointer;
-    background: #f1f1f1;
-    padding: 8px;
-    border-radius: 12px;
-}
-
-.notif-wrapper i {
-    font-size: 18px;
-    color: #000000;
-}
-
-.notif-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #facc15; /* Jòn pou l ka flash sou nwa/blan an */
-    color: #000000;
-    font-size: 10px;
-    font-weight: 800;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #ffffff;
-}
-
-/* 4. PANÈL NOTIFIKASYON (PREMIUM SOLID) */
-.notif-panel {
-    position: fixed;
-    top: 85px;
-    right: -110%;
-    width: 90%;
-    max-width: 350px;
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-    z-index: 3000;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow: hidden;
-    border: 1px solid #eeeeee;
-}
-
-.notif-panel.active {
-    right: 15px;
-}
-
-.notif-header {
-    padding: 15px 20px;
-    background: #000000;
-    color: #facc15; /* Tit an Jòn sou fon Nwa */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.notif-header h4 {
-    font-size: 15px;
-    font-weight: 800;
    }
+   
+
+.
    
 
 /* ============================================================
