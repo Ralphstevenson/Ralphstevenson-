@@ -679,6 +679,16 @@
     <script type="module" src="header-manager.js"></script>
     <script type="module" src="paramet.js"></script>
     <script type="module" src="echanj.js"></script>
+
+    <script type="module">
+    import { toggleNotifPanel, switchNotifTab } from './path/to/notifications.js';
+    
+    // Mete yo disponib pou 'onclick' nan HTML a
+    window.toggleNotifPanel = toggleNotifPanel;
+    window.switchNotifTab = switchNotifTab;
+</script>
+    
+
 </body>
                                              </html>
     
