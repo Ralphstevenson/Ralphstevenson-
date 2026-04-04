@@ -154,3 +154,177 @@ body {
     }
    }
    
+
+
+
+/* --- SIDEBAR PRO CONFIGURATION --- */
+:root {
+    --side-bg: #ffffff;
+    --side-text: #1a1a1a;
+    --side-active-bg: #e9f7ef; /* Vèt trè klè */
+    --side-active-text: #218838; /* Vèt fonsé */
+    --side-border: #f1f3f5;
+    --side-shadow: 15px 0 35px rgba(0, 0, 0, 0.05);
+    --transition-fast: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* CONTAINER SIDEBAR */
+.sidebar-pro {
+    position: fixed;
+    top: 0;
+    left: -280px; /* Hidden pa defo */
+    width: 280px;
+    height: 100vh;
+    background: var(--side-bg);
+    color: var(--side-text);
+    box-shadow: var(--side-shadow);
+    z-index: 1000;
+    transition: var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--side-border);
+}
+
+.sidebar-pro.active {
+    left: 0;
+}
+
+/* HEADER SIDEBAR */
+.sidebar-header {
+    padding: 30px 20px;
+    background: var(--white);
+    border-bottom: 1px solid var(--side-border);
+    position: relative;
+    border-top: 5px solid var(--primary-green); /* Liy dekorasyon vèt anlè a */
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 18px;
+    color: var(--gray-text);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.close-sidebar:hover {
+    color: var(--danger);
+    transform: rotate(90deg);
+}
+
+/* USER META INFO */
+.user-meta {
+    text-align: left;
+}
+
+.user-greeting {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary-green);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.user-id-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--dark-text);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+#side-name {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 5px 0;
+    color: var(--dark-text);
+}
+
+#side-email {
+    font-size: 13px;
+    color: var(--gray-text);
+    word-break: break-all;
+}
+
+/* MENU ITEMS */
+.sidebar-menu {
+    flex: 1;
+    padding: 20px 15px;
+    overflow-y: auto;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 15px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-text);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.menu-item i {
+    width: 25px;
+    font-size: 18px;
+    margin-right: 12px;
+    text-align: center;
+    transition: var(--transition-fast);
+}
+
+/* ACTIVE STATE */
+.menu-item:hover {
+    background: #f8f9fa;
+    color: var(--primary-green);
+}
+
+.menu-item.active {
+    background: var(--side-active-bg);
+    color: var(--side-active-text);
+}
+
+.menu-item.active i {
+    color: var(--side-active-text);
+}
+
+/* DEKONEKTE BOUTON */
+.logout-btn {
+    margin-top: 20px;
+    color: #ff5630;
+    border: 1px solid rgba(255, 86, 48, 0.1);
+}
+
+.logout-btn:hover {
+    background: rgba(255, 86, 48, 0.1);
+    color: #ff5630;
+}
+
+/* OVERLAY LÈ SIDEBAR OUVRI */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    display: none;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* CUSTOM SCROLLBAR SIDEBAR */
+.sidebar-menu::-webkit-scrollbar {
+    width: 4px;
+}
+.sidebar-menu::-webkit-scrollbar-thumb {
+    background: var(--side-border);
+    border-radius: 10px;
+    }
+    
