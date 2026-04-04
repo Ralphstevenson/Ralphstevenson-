@@ -389,7 +389,7 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    height: 38px;
+    height: 50px;
     border: 1px solid #28a745; /* Ti bordè vèt pou l parèt byen */
 }
 
@@ -426,7 +426,7 @@ body {
 /* Ref la - EKRI AN PITI */
 .balance-ref {
     color: #ffffff; /* Ref la an blan pou l ka lizib sou nwa a */
-    font-size: 9px; /* Piti */
+    font-size: 5px; /* Piti */
     font-weight: 400;
     opacity: 0.8;
     margin-top: 2px;
