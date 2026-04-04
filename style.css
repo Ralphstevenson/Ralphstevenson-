@@ -330,121 +330,126 @@ body {
 
 
 
+
 /* --- CONFIGURATION HEADER --- */
 .main-header {
-    height: 70px;
+    height: 60px; /* Redwi wotè a pou l pa twò gwo sou mobil */
     background: #ffffff;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 15px;
+    padding: 0 12px;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid #f0f0f0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 /* 1. ECHANJ PLUS - KOULÈ VÈT */
 .logo-text {
     color: #28a745; /* Vèt pwofesyonèl */
     font-weight: 900;
-    font-size: 18px;
+    font-size: 16px;
     letter-spacing: 0.5px;
+    line-height: 1.1;
 }
 
 /* 2. DESEN KLOCH LAN - KOULÈ NWA */
 .notif-wrapper {
     position: relative;
-    margin-right: 15px;
+    cursor: pointer;
 }
 
 .notif-wrapper i {
     color: #000000; /* Klòch la an nwa */
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .notif-badge {
     position: absolute;
     top: -5px;
     right: -5px;
-    background: #ffc107; /* Koulè jòn pou l parèt byen sou blan */
+    background: #ffc107;
     color: #000;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: bold;
     padding: 2px 5px;
     border-radius: 50%;
+    border: 1px solid white;
 }
 
-/* 3. BWAT BALANS - ARYÈL NWA AK TÈKS VÈT (Jan l ye nan imaj la) */
+/* 3. BWAT BALANS - ARYÈL NWA AK TÈKS VÈT */
 .quick-balance {
     background: #000000; /* Aryèl nwa */
-    border-radius: 50px; /* Bord wonn tankou nan Screenshot la */
-    padding: 5px 15px;
+    border-radius: 30px; /* Bord wonn compact */
+    padding: 4px 12px;
     display: flex;
     align-items: center;
     gap: 8px;
-    min-width: 110px;
+    height: 38px;
+    border: 1px solid #28a745; /* Ti bordè vèt pou l parèt byen */
+}
+
+/* Ikon Plus (+) jòn anndan bwat la */
+.quick-balance::before {
+    content: '+';
+    background: #ff9800;
+    color: white;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+/* Vlope tèks balans lan pou l ka an de liy */
+.balance-info {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
 }
 
 /* Kantite Balance - EKRI AN GRA */
 .balance-amount {
-    color: #28a745; /* Tèks vèt */
+    color: #28a745; /* Tèks vèt frapan */
     font-weight: 800; /* Gra */
-    font-size: 15px;
+    font-size: 13px;
+    line-height: 1;
 }
 
 /* Ref la - EKRI AN PITI */
 .balance-ref {
-    color: #ffffff; /* Ref la an blan pou l ka parèt sou nwa a */
-    font-size: 10px; /* Piti */
+    color: #ffffff; /* Ref la an blan pou l ka lizib sou nwa a */
+    font-size: 9px; /* Piti */
     font-weight: 400;
-    opacity: 0.9;
-}
-
-/* Ikon Plus (+) an jòn bò kote balans lan si w vle l tankou imaj la */
-.quick-balance::before {
-    content: '+';
-    background: #ff9800;
-    color: white;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    font-weight: bold;
-    font-size: 14px;
+    opacity: 0.8;
+    margin-top: 2px;
 }
 
 /* --- PANÈL NOTIFIKASYON --- */
 .notif-panel {
     position: absolute;
-    top: 75px;
+    top: 65px;
     right: 10px;
-    width: 300px;
+    width: 280px;
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    border: 1px solid #ddd;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border: 1px solid #eee;
     display: none;
     flex-direction: column;
     overflow: hidden;
+    animation: slideDown 0.3s ease;
 }
 
-.notif-header {
-    padding: 12px;
-    background: #000;
-    color: #ffc107; /* Tèks jòn sou nwa pou Luxury */
-    display: flex;
-    justify-content: space-between;
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.tab-btn.active {
-    border-bottom: 3px solid #28a745;
-    color: #28a745;
-    font-weight: bold;
-    }
-                                 
