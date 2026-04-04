@@ -1,9 +1,9 @@
 /* ============================================================
-   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V4.0 - MASTER EDITION
+   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V4.2 - AUTH EDITION
    ============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getDatabase, ref, set, get, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // --- 1. KONFIGIRASYON FIREBASE ---
 const firebaseConfig = {
@@ -20,92 +20,129 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 
-// --- 2. ENPÒTE MODIL YO (Maryaj JS yo) ---
-// Asire w fichye sa yo egziste nan menm dosye a
+// --- 2. ENPÒTE MODIL YO ---
 import { initEchanj } from './echanj.js';
 import { initRetre } from './retre.js';
 import { initIstorik } from './istorik.js';
-import { initChat } from './chat.js';
 import { initParennaj } from './parene.js';
 import { initParamet } from './paramet.js';
 
-// --- 3. GESTYON OTANTIFIKASYON ---
+// --- 3. GESTYON OTANTIFIKASYON (STATUS CHECK) ---
 onAuthStateChanged(auth, (user) => {
-    if (user) {
-        console.log("Itilizatè konekte:", user.uid);
-        
-        // Kache paj login, montre dashboard
-        document.getElementById('auth-page')?.classList.add('hidden');
-        document.getElementById('home-page')?.classList.remove('hidden');
+    const authPage = document.getElementById('auth-page');
+    const homePage = document.getElementById('home-page');
 
-        // Lanse tout sèvis yo yon sèl kou
+    if (user) {
+        authPage?.classList.add('hidden');
+        homePage?.classList.remove('hidden');
+        
+        // Lanse modil yo
         updateGlobalUI(user.uid);
         initEchanj(user.uid);
         initRetre(user.uid);
         initIstorik(user.uid);
-        initChat(user.uid);
         initParennaj(user.uid);
         initParamet(user.uid);
     } else {
-        // Redireksyon si l pa konekte
-        document.getElementById('auth-page')?.classList.remove('hidden');
-        document.getElementById('home-page')?.classList.add('hidden');
+        authPage?.classList.remove('hidden');
+        homePage?.classList.add('hidden');
     }
 });
 
-// --- 4. MOTÈ UI (POU HEADER AK BALANS) ---
+// --- 4. LOJIK KONEKSYON (LOGIN) ---
+window.handleLogin = async () => {
+    const email = document.getElementById('login-email').value;
+    const pass = document.getElementById('login-pass').value;
+
+    if (!email || !pass) return alert("Tanpri ranpli tout chan yo.");
+
+    try {
+        await signInWithEmailAndPassword(auth, email, pass);
+    } catch (error) {
+        alert("Erè: " + error.message);
+    }
+};
+
+// --- 5. LOJIK ENSKRIPSYON (SIGNUP) ---
+window.handleSignup = async () => {
+    const name = document.getElementById('sign-name').value;
+    const phone = document.getElementById('sign-phone').value;
+    const email = document.getElementById('sign-email').value;
+    const pass = document.getElementById('sign-pass').value;
+    const sponsorCode = document.getElementById('sponsor-input').value.trim();
+
+    if (!name || !phone || !email || !pass) return alert("Ranpli tout enfòmasyon yo.");
+
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+        const user = userCredential.user;
+
+        // Jenere ARS ID: Non + 4 Chif o aza
+        const randomID = Math.floor(1000 + Math.random() * 9000);
+        const arsID = `ARS-${name.substring(0, 3).toUpperCase()}-${randomID}`;
+
+        // Prepare done pou Firebase
+        const userData = {
+            uid: user.uid,
+            fullname: name,
+            phone: phone,
+            email: email,
+            arsID: arsID,
+            balance: 0,
+            referredBy: sponsorCode || "Sistèm",
+            referral_data: { balance: 0, total_invites: 0 },
+            createdAt: serverTimestamp()
+        };
+
+        // Sove nan Database
+        await set(ref(db, `users/${user.uid}`), userData);
+        
+        // Si gen sponsor, mete itilizatè a nan lis li
+        if (sponsorCode && sponsorCode.startsWith("ARS-")) {
+            console.log("Sponsor detekte:", sponsorCode);
+            // Lojik pou mete nan invite_list sponsor a ka fèt isit la
+        }
+
+        alert("Kont ou kreye ak siksè! Byenvini nan Echanj Plus.");
+    } catch (error) {
+        alert("Erè Enskripsyon: " + error.message);
+    }
+};
+
+// --- 6. TOGGLE LOGIN/SIGNUP ---
+window.toggleAuth = (mode) => {
+    const loginSec = document.getElementById('login-section');
+    const signupSec = document.getElementById('signup-section');
+
+    if (mode === 'signup') {
+        loginSec.classList.add('hidden');
+        signupSec.classList.remove('hidden');
+    } else {
+        signupSec.classList.add('hidden');
+        loginSec.classList.remove('hidden');
+    }
+};
+
+// --- 7. MIZAJOU UI GLOBAL ---
 function updateGlobalUI(uid) {
     onValue(ref(db, `users/${uid}`), (snap) => {
         const data = snap.val();
         if (!data) return;
 
-        // Bwat Balans Luxury (Vèt sou Nwa)
-        const headerBalance = document.getElementById('header-quick-balance');
-        if (headerBalance) {
-            const formattedBal = (data.balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
-            headerBalance.innerHTML = `
-                <div class="balance-info" style="display: flex; flex-direction: column; justify-content: center;">
-                    <span class="balance-amount" style="color: #28a745; font-weight: 800; font-size: 14px;">${formattedBal} HTG</span>
-                    <span class="balance-ref" style="color: #ffffff; font-size: 9px; opacity: 0.8;">Ref: ${data.arsID || '---'}</span>
-                </div>
-            `;
+        const headerBal = document.getElementById('header-quick-balance');
+        if (headerBal) {
+            headerBal.innerHTML = `
+                <div class="bal-pill">
+                    <span style="color:#28a745; font-weight:800;">${(data.balance || 0).toFixed(2)} HTG</span>
+                </div>`;
         }
-
-        // Enfòmasyon Profile
-        const sideName = document.getElementById('side-name');
-        const sideID = document.getElementById('side-id');
-        if (sideName) sideName.innerText = data.fullname || "Itilizatè";
-        if (sideID) sideID.innerText = data.arsID || "ARS-YYYY";
+        
+        document.getElementById('side-name').innerText = data.fullname || "Itilizatè";
+        document.getElementById('side-id').innerText = data.arsID || "ARS-YYYY";
     });
 }
 
-// --- 5. NAVIGASYON (SINGLE PAGE APPLICATION) ---
-window.showPage = (pageId, navElement) => {
-    const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj', 'paj-parametre'];
-    
-    sections.forEach(id => document.getElementById(id)?.classList.add('hidden'));
-    
-    const targetPage = document.getElementById(pageId);
-    if (targetPage) {
-        targetPage.classList.remove('hidden');
-        targetPage.style.animation = "fadeIn 0.3s ease-in-out";
-    }
-
-    // Mizajou klas Active nan Bottom Nav
-    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-    if (navElement) navElement.classList.add('active');
-    
-    // Fèmen sidebar si mobil
-    document.getElementById('sidebar')?.classList.remove('active');
-};
-
-// --- 6. AKSYON GLOBAL ---
 window.handleLogout = () => {
-    if (confirm("Èske ou vle dekonekte?")) {
-        signOut(auth);
-    }
+    if (confirm("Èske ou vle dekonekte?")) signOut(auth);
 };
-
-window.toggleSidebar = () => document.getElementById('sidebar')?.classList.toggle('active');
-window.toggleNotifPanel = () => document.getElementById('notif-panel')?.classList.toggle('active');
-           
+       
