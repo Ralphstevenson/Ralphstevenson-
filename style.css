@@ -319,7 +319,7 @@ body {
     display: block;
 }
 
-/* CUSTOM SCROLLBAR SIDEBAR */
+* CUSTOM SCROLLBAR SIDEBAR */
 .sidebar-menu::-webkit-scrollbar {
     width: 4px;
 }
@@ -334,19 +334,17 @@ body {
 
 /* --- CONFIGURATION HEADER ELITE --- */
 :root {
-    --header-bg: rgba(255, 255, 255, 0.95);
-    --header-height: 70px;
-    --notif-vèt: #218838;
-    --notif-wouj: #ff5630;
-    --text-main: #1a1a1a;
-    --border-light: #f1f3f5;
-    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --primary-green: #218838;
+    --dark-text: #000000;
+    --white: #ffffff;
+    --header-height: 75px;
+    --border-color: #f1f3f5;
+    --shadow-elite: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
-/* MAIN HEADER */
 .main-header {
     height: var(--header-height);
-    background: var(--header-bg);
+    background: var(--white);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -355,53 +353,32 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 900;
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border-light);
-    box-shadow: var(--shadow-sm);
+    z-index: 1000;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-elite);
 }
 
-.fa-bars-staggered {
-    font-size: 20px;
-    color: var(--text-main);
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.fa-bars-staggered:hover {
-    color: var(--notif-vèt);
-}
-
+/* 1. ECHANJ PLUS - KOULÈ VÈT */
 .logo-text {
-    font-size: 18px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    color: var(--text-main);
-}
-
-/* NOTIFICATION ICON & BADGE */
-.notif-wrapper {
-    position: relative;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    transition: 0.3s;
-}
-
-.notif-wrapper:hover {
-    background: var(--light-green);
-}
-
-.notif-wrapper i {
     font-size: 20px;
-    color: var(--text-main);
+    font-weight: 900;
+    color: var(--primary-green); /* Koulè vèt jan w mande l la */
+    letter-spacing: 1px;
+}
+
+/* 2. DESEN KLOCH LAN - KOULÈ NWA */
+.notif-wrapper i {
+    font-size: 22px;
+    color: var(--dark-text); /* Klòch la an nwa */
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .notif-badge {
     position: absolute;
-    top: 0;
-    right: 0;
-    background: var(--notif-wouj);
+    top: -2px;
+    right: -2px;
+    background: #ff5630;
     color: white;
     font-size: 10px;
     font-weight: 800;
@@ -410,220 +387,107 @@ body {
     border: 2px solid white;
 }
 
-/* NOTIFICATION PANEL */
+/* 3. BWAT BALANS LAN - VÈT AK ARYÈL NWA */
+.quick-balance {
+    background: var(--dark-text); /* Aryèl (background) nwa */
+    color: var(--primary-green);   /* Tèks vèt */
+    padding: 8px 15px;
+    border-radius: 12px;
+    text-align: right;
+    border: 1px solid var(--primary-green); /* Ti bordè vèt pou dekorasyon */
+}
+
+/* Kantite balans lan an gra (Bold) */
+.quick-balance span.amount {
+    display: block;
+    font-weight: 800;
+    font-size: 16px;
+}
+
+/* Ref la an piti */
+.quick-balance span.label {
+    display: block;
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+/* PANÈL NOTIFIKASYON */
 .notif-panel {
     position: absolute;
-    top: 75px;
+    top: 80px;
     right: 20px;
     width: 320px;
     background: white;
-    border-radius: 16px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-    border: 1px solid var(--border-light);
-    display: none; /* Toggle via JS */
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    border: 1px solid var(--border-color);
+    display: none; /* Toggle nan JS */
     flex-direction: column;
     overflow: hidden;
-    animation: slideIn 0.3s ease-out;
+    animation: slideDown 0.3s ease-out;
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(-10px); }
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-15px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 .notif-header {
-    padding: 15px 20px;
-    background: var(--white);
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-color);
 }
 
-.notif-header h4 {
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--text-main);
-}
-
-.close-notif {
-    cursor: pointer;
-    color: var(--gray-text);
-}
-
-/* TABS NOTIFIKASYON */
 .notif-tabs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     background: #f8f9fa;
-    padding: 5px;
     margin: 10px 15px;
-    border-radius: 10px;
+    padding: 5px;
+    border-radius: 12px;
 }
 
 .tab-btn {
-    padding: 8px;
+    flex: 1;
+    padding: 10px;
     border: none;
     background: transparent;
     font-size: 12px;
     font-weight: 700;
-    color: var(--gray-text);
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 10px;
     transition: 0.3s;
 }
 
 .tab-btn.active {
     background: white;
-    color: var(--notif-vèt);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    color: var(--primary-green);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* CONTENT AREA */
-.notif-content {
-    max-height: 300px;
-    overflow-y: auto;
-    padding: 10px 15px;
-}
-
-.empty-msg {
-    text-align: center;
-    font-size: 13px;
-    color: #a5adba;
-    padding: 30px 0;
-}
-
-/* FOOTER / LOGOUT */
 .notif-footer {
     padding: 15px;
-    border-top: 1px solid var(--border-light);
     background: #fdfdfd;
+    border-top: 1px solid var(--border-color);
 }
 
 .logout-btn-elite {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    background: rgba(255, 86, 48, 0.1);
+    color: #ff5630;
     padding: 12px;
-    background: rgba(255, 86, 48, 0.05);
-    color: var(--danger);
-    border-radius: 10px;
-    font-size: 13px;
+    border-radius: 12px;
+    text-align: center;
     font-weight: 700;
+    font-size: 13px;
     cursor: pointer;
     transition: 0.3s;
 }
 
 .logout-btn-elite:hover {
-    background: var(--danger);
+    background: #ff5630;
     color: white;
-}
-
-/* QUICK BALANCE HEADER */
-.quick-balance {
-    font-weight: 800;
-    color: var(--notif-vèt);
-    font-size: 14px;
-    background: var(--light-green);
-    padding: 5px 12px;
-    border-radius: 20px;
-}
-
-/* CUSTOM SCROLLBAR */
-.notif-content::-webkit-scrollbar { width: 4px; }
-.notif-content::-webkit-scrollbar-thumb { background: #eee; border-radius: 10px; }
-
-
-
-
-/* --- BOTTOM NAVIGATION ELITE --- */
-:root {
-    --nav-bg: #ffffff;
-    --nav-active: #218838; /* Vèt frapan */
-    --nav-inactive: #8a8d91;
-    --nav-shadow: 0 -5px 25px rgba(0, 0, 0, 0.06);
-    --nav-height: 70px;
-}
-
-.bottom-nav {
-    position: fixed;
-    bottom: 15px; /* Floating effect */
-    left: 15px;
-    right: 15px;
-    height: var(--nav-height);
-    background: var(--nav-bg);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    border-radius: 20px; /* Kwen awondi pou style pwofesyonèl */
-    box-shadow: var(--nav-shadow);
-    border: 1px solid #f1f3f5;
-    z-index: 950;
-    padding: 0 10px;
-}
-
-.nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    flex: 1;
-    position: relative;
-    color: var(--nav-inactive);
-}
-
-.nav-item i {
-    font-size: 18px;
-    margin-bottom: 4px;
-    transition: transform 0.3s ease;
-}
-
-.nav-item span {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-}
-
-/* ACTIVE STATE - LÈ YON ATIK CHWAZI */
-.nav-item.active {
-    color: var(--nav-active);
-}
-
-.nav-item.active i {
-    transform: translateY(-2px); /* Ti animasyon monte */
-}
-
-/* TI PWA VÈT KI PARÈT ANBA ATIK KI ACTIVE A */
-.nav-item.active::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    width: 5px;
-    height: 5px;
-    background: var(--nav-active);
-    border-radius: 50%;
-}
-
-/* EFÈ LÈ W KLIKÈ (TAP EFFECT) */
-.nav-item:active {
-    transform: scale(0.9);
-    opacity: 0.7;
-}
-
-/* POU TELEFÒN KI GEN "NOTCH" ANBA (IPHONE) */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-    .bottom-nav {
-        bottom: calc(15px + env(safe-area-inset-bottom));
     }
-}
-
-/* KACHE NAVIGASYON AN LÈ W SOU DESKTOP SI W VLE */
-@media (min-width: 768px) {
-    .bottom-nav {
-        display: none; /* Si w gen yon sidebar deja sou PC */
-    }
-}
-
+    
