@@ -453,3 +453,95 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+
+
+/* ============================================================
+   BOTTOM NAVIGATION - ECHANJ PLUS V4.5 (LUXURY EDITION)
+   ============================================================ */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: rgba(15, 23, 42, 0.95); /* Nwa pwofesyonèl ak yon ti transparans */
+    backdrop-filter: blur(10px); /* Efè Glass-morphism */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid rgba(255, 215, 0, 0.2); /* Yon ti liy lò byen fen nan tèt la */
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    padding-bottom: env(safe-area-inset-bottom); /* Pou iPhones modèn */
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8; /* Koulè gri lè li pa aktif */
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    flex: 1;
+    position: relative;
+}
+
+/* Style pou Icon yo */
+.nav-item i {
+    font-size: 20px;
+    margin-bottom: 4px;
+    transition: transform 0.3s ease;
+}
+
+/* --- STYLE LÈ YON BOUTON AKTIF (ACTIVE) --- */
+.nav-item.active {
+    color: #f1c40f; /* Koulè Lò (Gold) */
+}
+
+.nav-item.active i {
+    transform: translateY(-5px); /* Ti animasyon monte anlè */
+    text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+}
+
+.nav-item.active span {
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* Ti pwen k ap parèt anba bouton ki aktif la */
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    width: 5px;
+    height: 5px;
+    background: #f1c40f;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #f1c40f;
+}
+
+/* Efè "Ripple" lè ou klike sou li */
+.nav-item:active {
+    transform: scale(0.9);
+    opacity: 0.7;
+}
+
+/* Pou asire kontni paj yo pa kache dèyè nav la */
+body {
+    padding-bottom: 80px;
+}
+
+/* Adaptasyon pou Tablett oswa Ekran ki pi laj */
+@media (min-width: 768px) {
+    .bottom-nav {
+        max-width: 450px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 20px 20px 0 0;
+    }
+                               }
+    
