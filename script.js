@@ -1,9 +1,9 @@
 /* ============================================================
-   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V4.2 - AUTH EDITION
+   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V4.5 - FIXED AUTH
    ============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getDatabase, ref, set, get, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // --- 1. KONFIGIRASYON FIREBASE ---
 const firebaseConfig = {
@@ -22,66 +22,75 @@ export const db = getDatabase(app);
 
 // --- 2. ENPÒTE MODIL YO ---
 import { initEchanj } from './echanj.js';
-import { initRetre } from './retre.js';
-import { initIstorik } from './istorik.js';
 import { initParennaj } from './parene.js';
 import { initParamet } from './paramet.js';
+// Ajoute lòt init yo si w genyen yo (retre, istorik)
 
-// --- 3. GESTYON OTANTIFIKASYON (STATUS CHECK) ---
+// --- 3. STATUS CHECK (VELE SI MOUN NAN KONEKTE) ---
 onAuthStateChanged(auth, (user) => {
     const authPage = document.getElementById('auth-page');
     const homePage = document.getElementById('home-page');
 
     if (user) {
-        authPage?.classList.add('hidden');
-        homePage?.classList.remove('hidden');
+        console.log("✅ Itilizatè konekte:", user.email);
+        if (authPage) authPage.style.display = 'none';
+        if (homePage) homePage.style.display = 'block';
         
-        // Lanse modil yo
+        // Lanse sèvis yo
         updateGlobalUI(user.uid);
-        initEchanj(user.uid);
-        initRetre(user.uid);
-        initIstorik(user.uid);
-        initParennaj(user.uid);
-        initParamet(user.uid);
+        if (typeof initEchanj === 'function') initEchanj(user.uid);
+        if (typeof initParennaj === 'function') initParennaj(user.uid);
+        if (typeof initParamet === 'function') initParamet(user.uid);
     } else {
-        authPage?.classList.remove('hidden');
-        homePage?.classList.add('hidden');
+        console.log("❌ Pèsonn pa konekte");
+        if (authPage) authPage.style.display = 'flex';
+        if (homePage) homePage.style.display = 'none';
     }
 });
 
-// --- 4. LOJIK KONEKSYON (LOGIN) ---
+// --- 4. FONKSYON LOGIN (KONEKSYON) ---
 window.handleLogin = async () => {
-    const email = document.getElementById('login-email').value;
-    const pass = document.getElementById('login-pass').value;
+    const email = document.getElementById('login-email').value.trim();
+    const pass = document.getElementById('login-pass').value.trim();
+    const btn = document.querySelector('#login-section .btn-primary-pro');
 
-    if (!email || !pass) return alert("Tanpri ranpli tout chan yo.");
+    if (!email || !pass) return alert("Antre email ak modpas ou.");
 
     try {
+        btn.innerText = "Y ap konekte...";
+        btn.disabled = true;
         await signInWithEmailAndPassword(auth, email, pass);
     } catch (error) {
-        alert("Erè: " + error.message);
+        console.error(error);
+        alert("Erè: Email oswa modpas pa kòrèk.");
+    } finally {
+        btn.innerText = "KONEKTE";
+        btn.disabled = false;
     }
 };
 
-// --- 5. LOJIK ENSKRIPSYON (SIGNUP) ---
+// --- 5. FONKSYON SIGNUP (ENSKRIPSYON) ---
 window.handleSignup = async () => {
-    const name = document.getElementById('sign-name').value;
-    const phone = document.getElementById('sign-phone').value;
-    const email = document.getElementById('sign-email').value;
-    const pass = document.getElementById('sign-pass').value;
-    const sponsorCode = document.getElementById('sponsor-input').value.trim();
+    const name = document.getElementById('sign-name').value.trim();
+    const phone = document.getElementById('sign-phone').value.trim();
+    const email = document.getElementById('sign-email').value.trim();
+    const pass = document.getElementById('sign-pass').value.trim();
+    const sponsor = document.getElementById('sponsor-input').value.trim();
+    const btn = document.querySelector('#signup-section .btn-primary-pro');
 
-    if (!name || !phone || !email || !pass) return alert("Ranpli tout enfòmasyon yo.");
+    if (!name || !email || !pass) return alert("Ranpli tout chan obligatwa yo.");
 
     try {
+        btn.innerText = "Y ap kreye kont...";
+        btn.disabled = true;
+
         const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
         const user = userCredential.user;
 
-        // Jenere ARS ID: Non + 4 Chif o aza
-        const randomID = Math.floor(1000 + Math.random() * 9000);
-        const arsID = `ARS-${name.substring(0, 3).toUpperCase()}-${randomID}`;
+        // Jenere ARS ID pwofesyonèl
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        const arsID = `ARS-${name.substring(0, 3).toUpperCase()}-${randomNum}`;
 
-        // Prepare done pou Firebase
         const userData = {
             uid: user.uid,
             fullname: name,
@@ -89,27 +98,23 @@ window.handleSignup = async () => {
             email: email,
             arsID: arsID,
             balance: 0,
-            referredBy: sponsorCode || "Sistèm",
-            referral_data: { balance: 0, total_invites: 0 },
-            createdAt: serverTimestamp()
+            referredBy: sponsor || "Sistèm",
+            createdAt: serverTimestamp(),
+            referral_data: { balance: 0, total_invites: 0 }
         };
 
-        // Sove nan Database
         await set(ref(db, `users/${user.uid}`), userData);
-        
-        // Si gen sponsor, mete itilizatè a nan lis li
-        if (sponsorCode && sponsorCode.startsWith("ARS-")) {
-            console.log("Sponsor detekte:", sponsorCode);
-            // Lojik pou mete nan invite_list sponsor a ka fèt isit la
-        }
-
-        alert("Kont ou kreye ak siksè! Byenvini nan Echanj Plus.");
+        alert("Byenvini! Kont ou kreye ak siksè.");
     } catch (error) {
-        alert("Erè Enskripsyon: " + error.message);
+        console.error(error);
+        alert("Erè: " + error.message);
+    } finally {
+        btn.innerText = "ANREJISTRE";
+        btn.disabled = false;
     }
 };
 
-// --- 6. TOGGLE LOGIN/SIGNUP ---
+// --- 6. NAVIGASYON PAJ ---
 window.toggleAuth = (mode) => {
     const loginSec = document.getElementById('login-section');
     const signupSec = document.getElementById('signup-section');
@@ -123,26 +128,41 @@ window.toggleAuth = (mode) => {
     }
 };
 
-// --- 7. MIZAJOU UI GLOBAL ---
+// --- 7. MIZAJOU UI (BALANS AK NON) ---
 function updateGlobalUI(uid) {
     onValue(ref(db, `users/${uid}`), (snap) => {
         const data = snap.val();
         if (!data) return;
 
+        // Mete non ak ID nan sidebar
+        const sideName = document.getElementById('side-name');
+        const sideID = document.getElementById('side-id');
+        if (sideName) sideName.innerText = data.fullname || "Itilizatè";
+        if (sideID) sideID.innerText = data.arsID || "ARS-YYYY";
+
+        // Balans nan Header
         const headerBal = document.getElementById('header-quick-balance');
         if (headerBal) {
-            headerBal.innerHTML = `
-                <div class="bal-pill">
-                    <span style="color:#28a745; font-weight:800;">${(data.balance || 0).toFixed(2)} HTG</span>
-                </div>`;
+            headerBal.innerHTML = `<b style="color:#28a745;">${(data.balance || 0).toFixed(2)} HTG</b>`;
         }
-        
-        document.getElementById('side-name').innerText = data.fullname || "Itilizatè";
-        document.getElementById('side-id').innerText = data.arsID || "ARS-YYYY";
     });
 }
 
+// --- 8. AKSYON LÒT ---
 window.handleLogout = () => {
-    if (confirm("Èske ou vle dekonekte?")) signOut(auth);
+    if (confirm("Vle dekonekte?")) signOut(auth);
 };
-       
+
+window.showPage = (pageId, navElement) => {
+    const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj', 'paj-parametre'];
+    sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+    });
+    
+    const target = document.getElementById(pageId);
+    if (target) target.classList.remove('hidden');
+
+    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    if (navElement) navElement.classList.add('active');
+};
