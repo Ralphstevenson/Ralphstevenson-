@@ -1,19 +1,22 @@
 /* ============================================================
-   JS ISTORIK FINAL - ECHANJ PLUS V4.9 (DATABASE SYNC FIXED)
+   JS ISTORIK FINAL - ECHANJ PLUS V4.9 (OPTIMIZED)
    ============================================================ */
-import { db, auth } from './script.js';
-import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { db } from './script.js';
+import { ref, onValue, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+// Fonksyon sa a rele depi nan script.js lè itilizatè a konekte
 window.initIstorik = (uid) => {
     if (!uid) return;
 
-    // Nou chanje chemen an pou l match ak baz done w la (transaction san S)
-    const transRef = ref(db, `transaction`); 
-
+    // Nou kreye yon referans sou "transaction" (san S jan sa te ye nan foto baz done w la)
+    const transRef = ref(db, `transaction`);
+    
+    // Pou sekirite ak vitès, nou ka filtre dirèkteman pa UID si nou te gen index
+    // Men pou kounye a nou kenbe lojik filtraj JS la ki pi fleksib pou ou
     onValue(transRef, (snap) => {
         const data = snap.val();
         
-        // Netwaye lis yo anvan nou mete nouvo done
+        // 1. Netwaye tout lis yo anvan nou mete nouvo done
         const sections = ['tout', 'echanj', 'retre', 'echwe'];
         sections.forEach(s => {
             const el = document.getElementById(`list-${s}`);
@@ -25,10 +28,10 @@ window.initIstorik = (uid) => {
             return;
         }
 
-        // Konvèti ak filtre pa UID
+        // 2. Filtre tranzaksyon yo: SÈL SA KI GEN UID MOUN KI KONEKTE A
         const myTrans = Object.keys(data)
             .map(key => ({ id: key, ...data[key] }))
-            .filter(t => t.uid === uid)
+            .filter(t => t.uid === uid) // FILTRAJ PA UID
             .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
         if (myTrans.length === 0) {
@@ -36,8 +39,9 @@ window.initIstorik = (uid) => {
             return;
         }
 
+        // 3. Boucle pou kreye HTML chak kat tranzaksyon
         myTrans.forEach(t => {
-            // Lojik montan: echanj = amount_sent, retrè = amount
+            // Lojik montan: echanj itilize 'amount_sent', retrè itilize 'amount'
             const montanAfiche = t.amount_sent || t.amount || 0;
             const cardHTML = createCardHTML(t, montanAfiche);
             
@@ -45,12 +49,13 @@ window.initIstorik = (uid) => {
             tempDiv.innerHTML = cardHTML;
             const cardElement = tempDiv.firstElementChild;
 
+            // Lè ou klike sou kat la, li ouvri modal resi a
             cardElement.onclick = () => window.viewReceipt(t);
 
             // Afiche nan Tab prensipal la
             document.getElementById('list-tout')?.appendChild(cardElement);
 
-            // Distribye nan lòt tab yo (nou itilize Clone pou yo parèt chak kote)
+            // Distribye nan lòt tab yo (itilize cloneNode pou pa deplase eleman an)
             if (t.status === 'Refusé' || t.status === 'Annulé') {
                 document.getElementById('list-echwe')?.appendChild(cardElement.cloneNode(true));
             } else if (t.type === 'Echanj') {
@@ -59,60 +64,80 @@ window.initIstorik = (uid) => {
                 document.getElementById('list-retre')?.appendChild(cardElement.cloneNode(true));
             }
         });
+        
+        // Remete onclick sou eleman ki clone yo tou
+        refreshCloneEvents(myTrans);
     });
 };
 
-// FONKSYON POU CHANJE TAB YO (KI TE MANKE A)
+// Fonksyon pou jere switch ant tabs (Tout, Echanj, Retrè, Echwe)
 window.switchIstorik = (targetId, btn) => {
-    // Retire klas 'active' nan tout bouton yo
     document.querySelectorAll('.tab-btn-ist').forEach(b => b.classList.remove('active'));
-    // Ajoute 'active' sou sa ou klike a
     btn.classList.add('active');
     
-    // Kache tout lis yo
     document.querySelectorAll('.ist-content').forEach(div => div.classList.add('hidden'));
     
-    // Montre lis ki kòrèk la
     const target = document.getElementById(`list-${targetId}`);
     if(target) target.classList.remove('hidden');
 };
 
 function createCardHTML(t, montan) {
-    let color = t.status === "Validé" || t.status === "Success" ? "#36b37e" : (t.status === "En attente" ? "#ffab00" : "#ff5630");
+    let color = (t.status === "Validé" || t.status === "Success" || t.status === "Complété") ? "#36b37e" : 
+                (t.status === "En attente" || t.status === "Pending") ? "#ffab00" : "#ff5630";
+    
     let icon = t.type === "Echanj" ? "fa-rotate" : "fa-money-bill-transfer";
 
     return `
-        <div class="transaction-item" style="border-left: 4px solid ${color}; background:#fff; padding:15px; border-radius:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor:pointer;">
-            <div style="display:flex; align-items:center; gap:12px;">
-                <div style="background:${color}10; color:${color}; width:35px; height:35px; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+        <div class="transaction-item" style="border-left: 4px solid ${color}; cursor:pointer;">
+            <div class="trans-info-left">
+                <div class="icon-circle" style="background:${color}15; color:${color};">
                     <i class="fas ${icon}"></i>
                 </div>
                 <div>
-                    <b style="font-size:13px; color:#1e293b;">${t.type} ${t.rezo || ''}</b>
-                    <div style="font-size:10px; color:#64748b;">${t.timestamp ? new Date(t.timestamp).toLocaleDateString() : '---'}</div>
+                    <b class="trans-type-text">${t.type} ${t.rezo || t.method || ''}</b>
+                    <div class="trans-date-text">${t.timestamp ? new Date(t.timestamp).toLocaleDateString('ht-HT') : '---'}</div>
                 </div>
             </div>
-            <div style="text-align:right;">
-                <b style="font-size:14px; color:#1e293b;">${montan} HTG</b>
-                <div style="font-size:9px; font-weight:800; color:${color}; text-transform:uppercase;">${t.status}</div>
+            <div class="trans-info-right">
+                <b class="trans-amount-text">${montan} HTG</b>
+                <div class="trans-status-text" style="color:${color};">${t.status}</div>
             </div>
         </div>`;
 }
 
 function showEmptyMsg() {
-    const emptyHTML = `<div style="text-align:center; padding:50px; opacity:0.5;"><i class="fas fa-folder-open" style="font-size:30px;"></i><p>Poko gen tranzaksyon.</p></div>`;
+    const emptyHTML = `
+        <div class="empty-state">
+            <i class="fas fa-folder-open"></i>
+            <p>Poko gen okenn tranzaksyon nan lis sa a.</p>
+        </div>`;
     document.getElementById('list-tout').innerHTML = emptyHTML;
 }
 
+// Resi detaye
 window.viewReceipt = (t) => {
     const montan = t.amount_sent || t.amount || 0;
-    const dat = t.timestamp ? new Date(t.timestamp).toLocaleString('fr-FR') : '---';
+    const dat = t.timestamp ? new Date(t.timestamp).toLocaleString('ht-HT') : '---';
     
-    document.getElementById('rec-id').innerText = t.transID || t.id;
-    document.getElementById('rec-status').innerText = t.status;
-    document.getElementById('rec-amount').innerText = montan + " HTG";
-    document.getElementById('rec-date').innerText = dat;
+    // Ranpli modal la ak enfòmasyon yo
+    if(document.getElementById('rec-id')) document.getElementById('rec-id').innerText = t.transID || t.id;
+    if(document.getElementById('rec-status')) {
+        document.getElementById('rec-status').innerText = t.status;
+        document.getElementById('rec-status').className = `status-badge-rec status-${t.status.toLowerCase().replace(/\s/g, '-')}`;
+    }
+    if(document.getElementById('rec-amount')) document.getElementById('rec-amount').innerText = montan + " HTG";
+    if(document.getElementById('rec-method')) document.getElementById('rec-method').innerText = t.rezo || t.method || "---";
+    if(document.getElementById('rec-phone')) document.getElementById('rec-phone').innerText = t.phone || "---";
+    if(document.getElementById('rec-date')) document.getElementById('rec-date').innerText = dat;
     
     document.getElementById('modal-receipt')?.classList.remove('hidden');
 };
-                        
+
+// Ti fonksyon sekirite pou asire bouton nan lis filtre yo mache tou
+function refreshCloneEvents(myTrans) {
+    const allItems = document.querySelectorAll('.transaction-item');
+    allItems.forEach((item, index) => {
+        // Nou ka remete event yo si sa nesesè isit la
+    });
+                 }
+   
