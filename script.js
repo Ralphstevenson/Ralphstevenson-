@@ -1,5 +1,5 @@
 /* ============================================================
-   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V4.5 - FIXED AUTH & UI
+   GWO JS (SÈVO SANTRAL) - ECHANJ PLUS V4.6 - FULL INTEGRATION
    ============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -20,53 +20,56 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 
-// --- 2. ENPÒTE MODIL YO ---
-// Nou itilize try/catch pou si yon fichye manke, sa pa bloke tout App la
+// --- 2. ENPÒTE MODIL SEKSYON YO ---
 async function loadModules(uid) {
     try {
-        const { initEchanj } = await import('./echanj.js');
-        const { initParennaj } = await import('./parene.js');
-        const { initParamet } = await import('./paramet.js');
-        
-        if (initEchanj) initEchanj(uid);
-        if (initParennaj) initParennaj(uid);
-        if (initParamet) initParamet(uid);
+        // Nou chaje tout modil yo an menm tan
+        const [echanj, retre, istorik, chat, parennaj, paramet] = await Promise.all([
+            import('./echanj.js').catch(() => ({})),
+            import('./retre.js').catch(() => ({})),
+            import('./istorik.js').catch(() => ({})),
+            import('./chat.js').catch(() => ({})),
+            import('./parene.js').catch(() => ({})),
+            import('./paramet.js').catch(() => ({}))
+        ]);
+
+        if (echanj.initEchanj) echanj.initEchanj(uid);
+        if (retre.initRetre) retre.initRetre(uid);
+        if (istorik.initIstorik) istorik.initIstorik(uid);
+        if (chat.initChat) chat.initChat(uid);
+        if (parennaj.initParennaj) parennaj.initParennaj(uid);
+        if (paramet.initParamet) paramet.initParamet(uid);
+
     } catch (e) {
-        console.warn("Kèk modil poko chaje pafè:", e.message);
+        console.warn("Gen modil ki gen ti pwoblèm pou chaje:", e.message);
     }
 }
 
-// --- 3. STATUS CHECK (KORÈK) ---
+// --- 3. STATUS CHECK & AUTH LOGIC ---
 onAuthStateChanged(auth, (user) => {
     const authPage = document.getElementById('auth-page');
     const homePage = document.getElementById('home-page');
 
     if (user) {
-        // Itilizatè konekte: Montre Dashboard
-        if (authPage) authPage.classList.add('hidden');
-        if (homePage) homePage.classList.remove('hidden');
-        
+        authPage?.classList.add('hidden');
+        homePage?.classList.remove('hidden');
         updateGlobalUI(user.uid);
         loadModules(user.uid);
     } else {
-        // Itilizatè dekonekte: Montre Paj Login
-        if (authPage) authPage.classList.remove('hidden');
-        if (homePage) homePage.classList.add('hidden');
+        authPage?.classList.remove('hidden');
+        homePage?.classList.add('hidden');
     }
 });
 
 // --- 4. EKSPÒTE FONKSYON POU HTML ---
+
+// Auth Actions
 window.handleLogin = async () => {
     const email = document.getElementById('login-email')?.value.trim();
     const pass = document.getElementById('login-pass')?.value;
-
-    if (!email || !pass) return alert("Ranpli tout chan yo.");
-
-    try {
-        await signInWithEmailAndPassword(auth, email, pass);
-    } catch (error) {
-        alert("Erè: Email oswa Modpas pa bon.");
-    }
+    if (!email || !pass) return alert("Antre email ak modpas ou.");
+    try { await signInWithEmailAndPassword(auth, email, pass); } 
+    catch (e) { alert("Email oswa Modpas enkòrèk."); }
 };
 
 window.handleSignup = async () => {
@@ -76,63 +79,68 @@ window.handleSignup = async () => {
     const phone = document.getElementById('sign-phone')?.value.trim();
     const sponsor = document.getElementById('sponsor-input')?.value.trim();
 
-    if (!name || !email || !pass) return alert("Ranpli tout enfòmasyon yo.");
+    if (!name || !email || !pass) return alert("Tanpri ranpli chan obligatwa yo.");
 
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-        const uid = userCredential.user.uid;
-        const arsID = "ARS-" + Math.floor(1000 + Math.random() * 9000);
+        const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+        const uid = userCred.user.uid;
+        const arsID = "ARS-" + Math.floor(1000 + Math.random() * 8999) + "-2026";
 
         await set(ref(db, `users/${uid}`), {
-            fullname: name,
-            email: email,
-            phone: phone,
-            arsID: arsID,
-            balance: 0,
-            referredBy: sponsor || "Sistèm",
+            fullname: name, email, phone, arsID,
+            balance: 0, referredBy: sponsor || "Sistèm",
             createdAt: serverTimestamp(),
-            referral_data: { balance: 0, total_invites: 0 }
+            transactionPin: "0000" // PIN pa defo
         });
-    } catch (error) {
-        alert("Erè: " + error.message);
-    }
+    } catch (e) { alert("Erè: " + e.message); }
 };
 
 window.toggleAuth = (mode) => {
-    const loginSec = document.getElementById('login-section');
-    const signupSec = document.getElementById('signup-section');
-    if (mode === 'signup') {
-        loginSec?.classList.add('hidden');
-        signupSec?.classList.remove('hidden');
-    } else {
-        signupSec?.classList.add('hidden');
-        loginSec?.classList.remove('hidden');
-    }
+    document.getElementById('login-section')?.classList.toggle('hidden', mode === 'signup');
+    document.getElementById('signup-section')?.classList.toggle('hidden', mode === 'login');
 };
 
-window.handleLogout = () => {
-    if (confirm("Èske ou vle dekonekte?")) signOut(auth);
+window.handleLogout = () => { if (confirm("Dekonekte?")) signOut(auth); };
+
+// Sidebar & Notif UI
+window.toggleSidebar = () => document.getElementById('sidebar')?.classList.toggle('active');
+
+window.toggleNotifPanel = () => document.getElementById('notif-panel')?.classList.toggle('active');
+
+window.switchNotifTab = (tab) => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`tab-${tab}`)?.classList.add('active');
+    document.getElementById('notif-content').innerHTML = `<p class="empty-msg">Chaje notifikasyon ${tab}...</p>`;
 };
 
-// --- 5. UI SYNC ---
+// Modal Receipt Actions
+window.closeReceipt = () => document.getElementById('modal-receipt')?.classList.add('hidden');
+
+window.shareReceipt = () => {
+    const id = document.getElementById('rec-id').innerText;
+    const amt = document.getElementById('rec-amount').innerText;
+    const text = `✅ Echanj Plus - Tranzaksyon Reyisi\nID: ${id}\nMontan: ${amt}`;
+    navigator.share ? navigator.share({title: 'Resi', text}) : (navigator.clipboard.writeText(text), alert("Kopye!"));
+};
+
+// --- 5. UI SYNC (DASHBOARD) ---
 function updateGlobalUI(uid) {
     onValue(ref(db, `users/${uid}`), (snap) => {
         const data = snap.val();
         if (!data) return;
 
-        const sideName = document.getElementById('side-name');
-        const sideID = document.getElementById('side-id');
-        const headerBal = document.getElementById('header-quick-balance');
-
-        if (sideName) sideName.innerText = data.fullname || "Itilizatè";
-        if (sideID) sideID.innerText = data.arsID || "---";
-        if (headerBal) {
-            headerBal.innerHTML = `<b style="color:#28a745;">${(data.balance || 0).toFixed(2)} HTG</b>`;
+        document.getElementById('side-name').innerText = data.fullname || "Itilizatè";
+        document.getElementById('side-email').innerText = data.email || "";
+        document.getElementById('side-id').innerText = data.arsID || "---";
+        
+        const balElement = document.getElementById('header-quick-balance');
+        if (balElement) {
+            balElement.innerHTML = `<b style="color:#f1c40f;">${(data.balance || 0).toFixed(2)} HTG</b>`;
         }
     });
 }
 
-// --- 6. NAVIGASYON ---
+// --- 6. NAVIGASYON (SINGLE PAGE) ---
 window.showPage = (pageId, navElement) => {
     const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj', 'paj-parametre'];
     sections.forEach(id => document.getElementById(id)?.classList.add('hidden'));
@@ -140,7 +148,10 @@ window.showPage = (pageId, navElement) => {
     const target = document.getElementById(pageId);
     if (target) target.classList.remove('hidden');
 
-    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    document.querySelectorAll('.nav-item, .menu-item').forEach(el => el.classList.remove('active'));
     if (navElement) navElement.classList.add('active');
+
+    // Fèmen sidebar otomatikman sou mobil apre klike
+    document.getElementById('sidebar')?.classList.remove('active');
 };
-   
+               
