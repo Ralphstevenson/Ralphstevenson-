@@ -110,23 +110,128 @@
         </header>
 
         <main class="content-wrapper">
-            <section id="paj-akey">
-                
-<div id="header-flash-info" class="flash-info-bar"></div>
-               
-                <div class="carousel-container">
-                    <div class="slides" id="carousel-slider">
-                        <div class="slide"><img src="https://i.postimg.cc/DSHc5ZJV/1771501449871.png"></div>
-                        <div class="slide"><img src="https://i.postimg.cc/s14wys8J/1771501465178.png"></div>
-                        <div class="slide"><img src="https://i.postimg.cc/qNzL8n7K/1771501473121.png"></div>
-                    </div>
-                </div>
-                <div class="card-balance-rect">
-                    <p>Balans ou disponib</p>
-                    <div class="balance-row"><h1 id="user-balance">0.00</h1> <span>HTG</span></div>
-                </div>
-                </section>
 
+            
+
+            <section id="paj-akey">
+    
+    <div id="header-flash-info" class="flash-info-bar"></div>
+   
+    <div class="carousel-container">
+        <div class="slides" id="carousel-slider">
+            <div class="slide">
+                <img src="https://i.postimg.cc/DSHc5ZJV/1771501449871.png" alt="Echanj Minit Rapid">
+            </div>
+            <div class="slide">
+                <img src="https://i.postimg.cc/s14wys8J/1771501465178.png" alt="Pwogram Parennaj">
+            </div>
+            <div class="slide">
+                <img src="https://i.postimg.cc/qNzL8n7K/1771501473121.png" alt="Sekirite Garanti">
+            </div>
+        </div>
+    </div>
+
+    <div class="card-balance-rect">
+        <p>Balans ou disponib</p>
+        <div class="balance-row">
+            <h1 id="user-balance">0.00</h1> 
+            <span>HTG</span>
+        </div>
+    </div>
+
+    <div class="quick-actions-grid">
+        <div class="action-card" onclick="showPage('paj-echanj', document.querySelector('.nav-item:nth-child(2)'))">
+            <div class="action-icon-box"><i class="fas fa-sync-alt"></i></div>
+            <span>Echanj Minit</span>
+        </div>
+        <div class="action-card" onclick="showPage('paj-retre', document.querySelector('.nav-item:nth-child(3)'))">
+            <div class="action-icon-box"><i class="fas fa-wallet"></i></div>
+            <span>Mande Retrè</span>
+        </div>
+        <div class="action-card" onclick="showPage('paj-parennaj', document.querySelector('.menu-item:nth-child(3)'))">
+            <div class="action-icon-box"><i class="fas fa-users"></i></div>
+            <span>Parennaj</span>
+        </div>
+        <div class="action-card" onclick="showPage('chat-container', document.querySelector('.nav-item:nth-child(5)'))">
+            <div class="action-icon-box"><i class="fas fa-comments"></i></div>
+            <span>Sipò Chat</span>
+        </div>
+    </div>
+
+    <div class="live-stats-bar">
+        <div class="stat-mini">
+            <i class="fa-solid fa-circle-check"></i> 
+            <span>Tranzaksyon jodi a: <b id="live-stat-count">...</b></span>
+        </div>
+        <div class="stat-mini">
+            <i class="fa-solid fa-clock"></i> 
+            <span>Tretman: <b>3-5 min</b></span>
+        </div>
+    </div>
+
+    <div class="system-status-card">
+        <div class="gateway-status">
+            <span class="dot-online">●</span> MonCash: <b style="color: #2e7d32;">Operasyonèl</b>
+        </div>
+        <div class="gateway-status">
+            <span class="dot-online">●</span> NatCash: <b style="color: #2e7d32;">Operasyonèl</b>
+        </div>
+    </div>
+
+    <div class="home-info-card">
+        <h4><i class="fa-solid fa-chart-simple"></i> To ak Limit Echanj</h4>
+        <div class="rate-row">
+            <span class="provider-name">
+                <img src="https://i.postimg.cc/1V5TGWk0/23403511-3d46-4460-a669-ccf2a18d8ec3.png" class="mini-logo-provider" alt="Digicel"> Digicel
+            </span>
+            <span class="provider-details">Frè: <b>16.5%</b> | Min: 100 HTG</span>
+        </div>
+        <div class="rate-row">
+            <span class="provider-name">
+                <img src="https://i.postimg.cc/Jt19CnsV/recharge-com-natcom-product-card.png" class="mini-logo-provider" alt="Natcom"> Natcom
+            </span>
+            <span class="provider-details">Frè: <b>16.5%</b> | Min: 100 HTG</span>
+        </div>
+    </div>
+
+    <div class="home-info-card">
+        <h4><i class="fa-solid fa-clock-rotate-left"></i> Dènye Aktivite</h4>
+        <div id="home-recent-activity">
+            <p class="empty-msg-mini">Ap chaje done depi nan Firebase...</p>
+        </div>
+    </div>
+
+    <div class="home-info-card">
+        <h4><i class="fa-solid fa-circle-question"></i> Sant Èd / FAQ</h4>
+        
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>Konbyen tan yon echanj pran?</span> 
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer hidden">
+                Echanj yo trete otomatikman. Validasyon an pran ant 3 a 5 minit maksimòm.
+            </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>Ki limit minimòm pou m mande retrè?</span> 
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer hidden">
+                Ou ka mande retrè kòmanse nan 100 HTG sou MonCash oswa NatCash.
+            </div>
+        </div>
+    </div>
+
+    <div class="security-tip-box">
+        <div class="sec-icon-shield"><i class="fa-solid fa-shield-halved"></i></div>
+        <p><b>🔐 Konsèy ARS:</b> Pa janm pataje PIN tranzaksyon ou oswa modpas ou ak pèsonn, menm ak yon administratè Echanj Plus.</p>
+    </div>
+
+                                                           </section>
+    
 
             
             <section id="paj-echanj" class="tab-content hidden">
