@@ -1,0 +1,246 @@
+/* ==========================================================================
+   STYLE POU NOUVO ELEMAN PAJ AKÈY (ECHANJ PLUS 2026)
+   ========================================================================== */
+
+/* --- 1. Griy Bouton Aksyon Rapid --- */
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 10px 20px;
+    margin-top: 15px;
+}
+
+.action-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px 10px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.action-card:active {
+    transform: scale(0.95);
+    background-color: #fcfcfc;
+}
+
+.action-icon-box {
+    font-size: 24px;
+    color: #109121; /* Vèt Echanj Plus */
+    margin-bottom: 8px;
+}
+
+.action-card span {
+    font-size: 13px;
+    font-weight: 700;
+    color: #333333;
+    display: block;
+}
+
+
+/* --- 2. Estatistik an Direk (Live Stats) --- */
+.live-stats-bar {
+    display: flex;
+    justify-content: space-between;
+    background: #e8f5e9;
+    margin: 15px 20px 10px 20px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #1b5e20;
+    font-weight: 600;
+    border: 1px solid rgba(16, 145, 33, 0.1);
+}
+
+.stat-mini {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stat-mini i {
+    color: #109121;
+}
+
+
+/* --- 3. Estati Pòtay Peman (Gateway Status) --- */
+.system-status-card {
+    display: flex;
+    justify-content: space-around;
+    background: #ffffff;
+    margin: 0 20px 15px 20px;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    font-size: 13px;
+    border: 1px solid rgba(0, 0, 0, 0.01);
+}
+
+.gateway-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #444444;
+}
+
+.dot-online {
+    color: #2e7d32;
+    font-size: 14px;
+    animation: statusPulse 2.5s infinite;
+}
+
+@keyframes statusPulse {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
+}
+
+
+/* --- 4. Bwat Info Yo (To, Limit, Dènye Aktivite, FAQ) --- */
+.home-info-card {
+    background: #ffffff;
+    margin: 15px 20px;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.01);
+}
+
+.home-info-card h4 {
+    font-size: 14px;
+    color: #222222;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+}
+
+.home-info-card h4 i {
+    color: #109121;
+}
+
+
+/* --- 5. Liy To ak Limit yo --- */
+.rate-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    padding: 12px 0;
+    border-bottom: 1px dashed #eeeeee;
+}
+
+.rate-row:last-child {
+    border-bottom: none;
+}
+
+.provider-name {
+    font-weight: 600;
+    color: #444444;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mini-logo-provider {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.provider-details {
+    color: #666666;
+}
+
+.provider-details b {
+    color: #109121;
+}
+
+
+/* --- 6. Ti Dènye Aktivite (Firebase Loader) --- */
+.empty-msg-mini {
+    font-size: 12px;
+    color: #999999;
+    text-align: center;
+    margin: 10px 0;
+    font-style: italic;
+}
+
+
+/* --- 7. Akòdeyon FAQ (Sant Èd) --- */
+.faq-item {
+    border-bottom: 1px solid #f5f5f5;
+    padding: 12px 0;
+    cursor: pointer;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444444;
+    user-select: none;
+}
+
+.faq-question i {
+    font-size: 11px;
+    color: #888888;
+    transition: transform 0.3s ease;
+}
+
+.faq-answer {
+    font-size: 12px;
+    color: #666666;
+    margin-top: 8px;
+    line-height: 1.5;
+    display: block; /* Pou animasyon/kache ak klas .hidden */
+}
+
+/* Klas pou kache / montre dinamikman */
+.faq-answer.hidden {
+    display: none;
+}
+
+.faq-item.open .faq-question i {
+    transform: rotate(180deg);
+    color: #109121;
+}
+
+
+/* --- 8. Bwat Alèt ak Sekirite (ARS Guard) --- */
+.security-tip-box {
+    display: flex;
+    gap: 12px;
+    background: #fff8e1; /* Jòn sekirite dous */
+    border: 1px solid #ffe082;
+    margin: 15px 20px 35px 20px;
+    padding: 12px 15px;
+    border-radius: 10px;
+    align-items: center;
+}
+
+.sec-icon-shield {
+    font-size: 20px;
+    color: #ffb300;
+    display: flex;
+    align-items: center;
+}
+
+.security-tip-box p {
+    font-size: 11.5px;
+    color: #5d4037;
+    margin: 0;
+    line-height: 1.4;
+}
