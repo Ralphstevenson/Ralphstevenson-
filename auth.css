@@ -1,0 +1,177 @@
+/* ============================================================
+   DIZAYN PREMIUM GLASSMORPHISM POU PAJ AUTH (ECHANJ PLUS 2026)
+   ============================================================ */
+
+/* 1. Veso Prensipal la (Background Nyaj ak Logo Fonn) */
+.auth-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: url('https://images.unsplash.com/photo-1534088568595-a066f410bcda?q=80&w=1920') no-repeat center center/cover;
+    overflow: hidden;
+}
+
+/* Kouch sekrè pou mete Gwo Logo Echanj Plus la anba kat la ak opasite */
+.auth-container::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    height: 600px;
+    background: url('https://i.postimg.cc/vTtVtB8P/20260205-163353-removebg-preview.png') no-repeat center center/contain;
+    opacity: 0.08; /* Opasite ki ba anpil pou l fonn nan nyaj yo */
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* 2. Kat Glassmorphism nan (Kat k ap flote a) */
+.auth-card {
+    position: relative;
+    z-index: 2; /* Pou l pase anlè logo fonn lan */
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 30px;
+    background: rgba(255, 255, 255, 0.45); /* Efè vitre translisid */
+    backdrop-filter: blur(16px) saturate(120%); /* Flou dèyè a tankou foto a */
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border-radius: 28px; /* Kwen byen wonn */
+    border: 1px solid rgba(255, 255, 255, 0.6); /* Liy dous sou bò yo */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), 
+                0 5px 15px rgba(0, 0, 0, 0.04);
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* 3. Ti Logo ki nan tèt kat la */
+.auth-logo {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 50%; /* Won nèt */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+/* Titles */
+.auth-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+/* 4. Chan Antre yo (Inputs) */
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
+    margin-bottom: 16px;
+    padding: 0 15px;
+    transition: all 0.3s ease;
+}
+
+.input-group:focus-within {
+    border-color: #109121; /* Koulè vèt prensipal pwojè a */
+    box-shadow: 0 0 0 3px rgba(16, 145, 33, 0.15);
+    background: #ffffff;
+}
+
+.input-group i {
+    color: #757575;
+    font-size: 16px;
+    margin-right: 12px;
+    width: 20px;
+    text-align: center;
+}
+
+.input-group input, 
+#sponsor-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 14px 0;
+    font-size: 15px;
+    color: #2c3e50;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Antre Kòd Sponsor ki pa nan gwoup */
+#sponsor-input {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
+    padding: 14px 15px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+#sponsor-input:focus {
+    border-color: #109121;
+    box-shadow: 0 0 0 3px rgba(16, 145, 33, 0.15);
+    background: #ffffff;
+}
+
+/* 5. Bouton Premium lan */
+.btn-primary-pro {
+    width: 100%;
+    background: #111111; /* Bouton nwa dapan jan l ye sou makèt la */
+    color: #ffffff;
+    border: none;
+    border-radius: 14px;
+    padding: 15px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+
+.btn-primary-pro:hover {
+    background: #222222;
+    transform: translateY(-1px);
+}
+
+.btn-primary-pro:active {
+    transform: translateY(1px);
+}
+
+/* 6. Lyen anba yo */
+.auth-footer {
+    font-size: 14px;
+    color: #555555;
+    margin-top: 20px;
+}
+
+.auth-footer span {
+    color: #111111;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.auth-footer span:hover {
+    color: #109121;
+}
+
+/* Klas pou kache eleman */
+.hidden {
+    display: none !important;
+  }
+
