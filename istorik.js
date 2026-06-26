@@ -1,8 +1,8 @@
 /* ============================================================
-   JS ISTORIK FINAL - ECHANJ PLUS V4.9 (CORRECTED & OPTIMIZED)
+   JS ISTORIK FINAL - ECHANJ PLUS V5.0 (FULL UPDATE)
    ============================================================ */
 import { db } from './script.js';
-import { ref, onValue, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // Fonksyon sa a rele depi nan script.js lè itilizatè a konekte
 export function initIstorik(uid) {
@@ -38,13 +38,13 @@ export function initIstorik(uid) {
 
         // 3. Boucle pou distribye tranzaksyon yo nan bon kategori
         myTrans.forEach(t => {
-            const montanAfiche = t.amount_sent || t.amount || 0;
+            const montanAfiche = t.amount_sent || t.amount || 0; //
             
             // Kreye eleman HTML la pou "TOUT"
             const cardElement = createCardElement(t, montanAfiche);
             document.getElementById('list-tout')?.appendChild(cardElement);
 
-            // Kreye kopi separe pou lòt tab yo pou evite pèdi evènman klike yo
+            // Kreye kopi separe pou chak kategori pou evite pèdi evènman klike yo
             if (t.status === 'Refusé' || t.status === 'Annulé' || t.status === 'Echwé') {
                 const echweCard = createCardElement(t, montanAfiche);
                 document.getElementById('list-echwe')?.appendChild(echweCard);
@@ -76,13 +76,13 @@ export function initIstorik(uid) {
 // Fonksyon pou kreye yon kat tranzaksyon ak tout kout klike li kle
 function createCardElement(t, montan) {
     let color = (t.status === "Validé" || t.status === "Success" || t.status === "Complété") ? "#36b37e" : 
-                (t.status === "En attente" || t.status === "Pending") ? "#ffab00" : "#ff5630";
+                (t.status === "En attente" || t.status === "Pending") ? "#ffab00" : "#ff5630"; //
     
-    let icon = t.type === "Echanj" ? "fa-rotate" : "fa-money-bill-transfer";
+    let icon = t.type === "Echanj" ? "fa-rotate" : "fa-money-bill-transfer"; //
     
     const div = document.createElement('div');
     div.className = "transaction-item";
-    div.style.cssText = `border-left: 4px solid ${color}; cursor:pointer; display:flex; justify-content:between; align-items:center; padding:15px; margin-bottom:10px; background:#fff; border-radius:8px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);`;
+    div.style.cssText = `border-left: 4px solid ${color}; cursor:pointer; display:flex; justify-content:space-between; align-items:center; padding:15px; margin-bottom:10px; background:#fff; border-radius:8px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);`;
     
     div.innerHTML = `
         <div class="trans-info-left" style="display:flex; align-items:center; gap:12px; flex:1;">
@@ -101,8 +101,8 @@ function createCardElement(t, montan) {
             <div class="trans-status-text" style="font-size:12px; color:${color}; font-weight:600; margin-top:2px;">● ${t.status}</div>
         </div>`;
 
-    // Evènman klike pou louvri resi a
-    div.onclick = () => window.viewReceipt(t);
+    // Evènman klike pou louvri resi detaye a
+    div.onclick = () => window.viewReceipt(t); //
     return div;
 }
 
@@ -122,29 +122,48 @@ function showEmptyMsg() {
 
 // Jere switch ant tabs yo (Tout, Echanj, Retrè, Echwe)
 window.switchIstorik = (targetId, btn) => {
-    document.querySelectorAll('.tab-btn-ist').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+    document.querySelectorAll('.tab-btn-ist').forEach(b => b.classList.remove('active')); //
+    btn.classList.add('active'); //
     
-    document.querySelectorAll('.ist-content').forEach(div => div.classList.add('hidden'));
+    document.querySelectorAll('.ist-content').forEach(div => div.classList.add('hidden')); //
     
-    const target = document.getElementById(`list-${targetId}`);
-    if (target) target.classList.remove('hidden');
+    const target = document.getElementById(`list-${targetId}`); //
+    if (target) target.classList.remove('hidden'); //
 };
 
-// Resi detaye nan modal la
+// Resi detaye nan modal la ak opsyon pou telechaje kòm PDF
 window.viewReceipt = (t) => {
-    const montan = t.amount_sent || t.amount || 0;
-    const dat = t.date || (t.timestamp ? new Date(t.timestamp).toLocaleString('ht-HT') : '---');
+    const montan = t.amount_sent || t.amount || 0; //
+    const dat = t.date || (t.timestamp ? new Date(t.timestamp).toLocaleString('ht-HT') : '---'); //
     
-    if (document.getElementById('rec-id')) document.getElementById('rec-id').innerText = t.transID || t.id || '---';
+    if (document.getElementById('rec-id')) document.getElementById('rec-id').innerText = t.transID || t.id || '---'; //
     if (document.getElementById('rec-status')) {
-        document.getElementById('rec-status').innerText = t.status;
-        document.getElementById('rec-status').className = `status-badge-rec status-${t.status.toLowerCase().replace(/\s/g, '-')}`;
+        document.getElementById('rec-status').innerText = t.status; //
+        document.getElementById('rec-status').className = `status-badge-rec status-${t.status.toLowerCase().replace(/\s/g, '-')}`; //
     }
-    if (document.getElementById('rec-amount')) document.getElementById('rec-amount').innerText = montan + " HTG";
-    if (document.getElementById('rec-method')) document.getElementById('rec-method').innerText = t.rezo || t.method || t.provider || "---";
-    if (document.getElementById('rec-phone')) document.getElementById('rec-phone').innerText = t.phone || t.number || "---";
-    if (document.getElementById('rec-date')) document.getElementById('rec-date').innerText = dat;
+    if (document.getElementById('rec-amount')) document.getElementById('rec-amount').innerText = montan + " HTG"; //
+    if (document.getElementById('rec-method')) document.getElementById('rec-method').innerText = t.rezo || t.method || t.provider || "---"; //
+    if (document.getElementById('rec-phone')) document.getElementById('rec-phone').innerText = t.phone || t.number || "---"; //
+    if (document.getElementById('rec-date')) document.getElementById('rec-date').innerText = dat; //
     
-    document.getElementById('modal-receipt')?.classList.remove('hidden');
+    // Jere bouton "Telechaje Resi (PDF)" la pou l pa repete kreyasyon
+    let btnDownload = document.getElementById('btn-download-pdf');
+    if (!btnDownload) {
+        btnDownload = document.createElement('button');
+        btnDownload.id = 'btn-download-pdf';
+        btnDownload.className = 'btn-primary-pro';
+        btnDownload.style.cssText = "background: #109121; color: white; margin-top: 15px; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;";
+        btnDownload.innerHTML = `<i class="fas fa-download"></i> Telechaje Resi (PDF)`;
+        
+        // Deklanche bwat enpresyon/sove PDF sistèm nan
+        btnDownload.onclick = () => {
+            window.print();
+        };
+        
+        // Entegre bouton an andedan veso kontni modal resi a
+        const contentBox = document.querySelector('.modal-receipt-content') || document.getElementById('modal-receipt');
+        if (contentBox) contentBox.appendChild(btnDownload);
+    }
+
+    document.getElementById('modal-receipt')?.classList.remove('hidden'); //
 };
