@@ -1,0 +1,115 @@
+/* ============================================================
+   DIZAYN PREMIUM POU CAROUSEL AK KAT BALANS (ECHANJ PLUS)
+   ============================================================ */
+
+/* ---------- 1. CAROUSEL HORIZONTAL (ANIME) ---------- */
+.carousel-container {
+    width: calc(100% - 40px); /* Kite espas sou kote yo */
+    max-width: 450px;
+    margin: 20px auto;
+    border-radius: 16px;
+    overflow: hidden; /* Kache imaj ki deyò yo */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    position: relative;
+    background: #f0f0f0;
+}
+
+.slides {
+    display: flex;
+    width: 300%; /* Paske gen 3 imaj (100% x 3) */
+    height: auto;
+    /* Animasyon 45 segond an total (15s pou chak slide) k ap repete san rete */
+    animation: gliseCarousel 45s infinite ease-in-out; 
+}
+
+.slide {
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.slide img {
+    width: 100%;
+    height: 160px; /* Wotè fiks pou l pa depase */
+    object-fit: cover; /* Adapte imaj la san l pa kraze */
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+/* Lojik Animasyon CSS pi (Chak slide rete 15 segond) */
+@keyframes gliseCarousel {
+    /* Slide 1 (Digicel/Natcom) */
+    0%, 28% { transform: translateX(0); }
+    
+    /* Tranzisyon pou Slide 2 */
+    33%, 61% { transform: translateX(-33.333%); }
+    
+    /* Tranzisyon pou Slide 3 */
+    66%, 95% { transform: translateX(-66.666%); }
+    
+    /* Retounen nan premye a dousman */
+    100% { transform: translateX(0); }
+}
+
+
+/* ---------- 2. KAT BALANS PRENSIPAL (DÈNYE NIVO) ---------- */
+.card-balance-rect {
+    width: calc(100% - 40px);
+    max-width: 450px;
+    margin: 15px auto;
+    padding: 24px 20px;
+    /* Gradyan nwa/vèt fonse pou yon stil liks ak finans */
+    background: linear-gradient(135deg, #111111 0%, #0d2b14 100%);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(13, 43, 20, 0.15), 
+                0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Ti liy lumineux dekoratif nan background kat la */
+.card-balance-rect::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(16, 145, 33, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* Tèks "Balans ou disponib" */
+.card-balance-rect p {
+    font-size: 13px;
+    font-weight: 500;
+    color: #a0a0a0;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 0 0 8px 0;
+}
+
+/* Liy Balans lan (Chif + Lajan) */
+.balance-row {
+    display: flex;
+    align-items: baseline; /* Mete anba tèks yo sou menm liy */
+    gap: 8px;
+}
+
+/* Gwo Chif Balans lan */
+.balance-row h1 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.5px;
+}
+
+/* Siy HTG a */
+.balance-row span {
+    font-size: 16px;
+    font-weight: 700;
+    color: #109121; /* Vèt Echanj Plus la */
+    letter-spacing: 0.5px;
+}
