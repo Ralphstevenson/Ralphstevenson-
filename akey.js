@@ -1,10 +1,12 @@
 /* ============================================================
-   MODIL PAJ AKÈY - ECHANJ PLUS - DINAMIK FIREBASE
+   MODIL PAJ AKÈY - ECHANJ PLUS - DINAMIK FIREBASE (UPDATED)
    ============================================================ */
-import { ref, onValue, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { ref, onValue, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 import { db } from "./script.js"; // Nou enpòte db k ap soti nan sèvo santral la
 
 export function initAkey(uid) {
+    if (!uid) return;
+
     // A. Koute Balans lan pou paj akèy la
     const akeyBalanceEl = document.getElementById('user-balance');
     if (akeyBalanceEl) {
@@ -59,24 +61,38 @@ export function initAkey(uid) {
         }
     });
 
-    // D. Chaje 3 dènye tranzaksyon pèsonèl yo pou "Dènye Aktivite"
+    // D. MIZAJOU: Chaje 3 dènye tranzaksyon pèsonèl yo pou "Dènye Aktivite" nan gwo branch lan
     const recentActivityDiv = document.getElementById("home-recent-activity");
     if (recentActivityDiv) {
-        const keryTrans = query(ref(db, `users/${uid}/transactions`), limitToLast(3));
+        // Nou filtre branch global 'transactions' la pa UID pou respekte Règleman sekirite yo
+        const keryTrans = query(ref(db, 'transactions'), orderByChild('uid'), equalTo(uid));
+        
         onValue(keryTrans, (snapshot) => {
             recentActivityDiv.innerHTML = "";
+            
             if (snapshot.exists()) {
-                const lisTranzaksyon = Object.values(snapshot.val()).reverse();
-                lisTranzaksyon.forEach(trans => {
-                    let badgeColor = trans.status === "Validé" ? "#2e7d32" : (trans.status === "En attente" ? "#ffb300" : "#c62828");
+                const data = snapshot.val();
+                
+                // Konvèti an lis, epi klase depi sou pi nouvo a (timestamp)
+                const myTrans = Object.keys(data)
+                    .map(key => ({ id: key, ...data[key] }))
+                    .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                
+                // Pran sèlman 3 premye yo pou paj akèy la
+                const hometrans = myTrans.slice(0, 3);
+                
+                hometrans.forEach(trans => {
+                    const montan = trans.amount_sent || trans.amount || 0;
+                    let badgeColor = (trans.status === "Validé" || trans.status === "Success" || trans.status === "Complété") ? "#2e7d32" : (trans.status === "En attente" ? "#ffb300" : "#c62828");
                     let icon = trans.type === "Echanj" ? "fa-sync-alt" : "fa-wallet";
+                    
                     recentActivityDiv.innerHTML += `
-                        <div class="rate-row" style="border-bottom: 1px solid #f9f9f9; padding: 10px 0;">
+                        <div class="rate-row" style="border-bottom: 1px solid #f9f9f9; padding: 10px 0; display: flex; justify-content: space-between; align-items: center;">
                             <span class="provider-name" style="font-size: 12px;">
-                                <i class="fas ${icon}" style="color: #109121; font-size: 14px;"></i> ${trans.type} - ${trans.provider || 'Sistèm'}
+                                <i class="fas ${icon}" style="color: #109121; font-size: 14px;"></i> ${trans.type} - ${trans.rezo || trans.method || trans.provider || 'Sistèm'}
                             </span>
                             <span style="font-size: 12px; text-align: right;">
-                                <b>${trans.amount} HTG</b><br>
+                                <b>${montan} HTG</b><br>
                                 <small style="color: ${badgeColor}; font-weight: bold;">● ${trans.status}</small>
                             </span>
                         </div>`;
