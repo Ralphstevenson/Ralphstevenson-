@@ -119,4 +119,5 @@ window.toggleFaq = (element) => {
     const answer = element.querySelector('.faq-answer');
     if (answer) answer.classList.toggle('hidden');
 };
-                       
+
+
