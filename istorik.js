@@ -167,3 +167,4 @@ window.viewReceipt = (t) => {
 
     document.getElementById('modal-receipt')?.classList.remove('hidden'); //
 };
+                                                                              
