@@ -1,5 +1,5 @@
 /* ============================================================
-   MODIL PAJ AKÈY - ECHANJ PLUS - DINAMIK FIREBASE FINAL V5.7
+   MODIL PAJ AKÈY - ECHANJ PLUS - DINAMIK FIREBASE FINAL V5.9
    ============================================================ */
 import { ref, onValue, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 import { db } from "./script.js"; // Sèvo santral
@@ -18,21 +18,27 @@ export function initAkey(uid) {
         }
     } catch (err) { console.error("Erè Balans:", err); }
 
-    // B. Koute kantite tranzaksyon jodi a (Koreksyon: 'transaction')
+    // B. Koute kantite tranzaksyon jodi a (Filtre pa UID pou evite blokaj Rules)
     try {
         const liveStatEl = document.getElementById("live-stat-count");
         if (liveStatEl) {
-            onValue(ref(db, 'transaction'), (snapshot) => {
+            // Nou filtre tou pa UID pou Firebase aksepte demann lan dapre Rules yo
+            const queryLive = query(ref(db, 'transactions'), orderByChild('uid'), equalTo(uid));
+            
+            onValue(queryLive, (snapshot) => {
                 if (snapshot.exists()) {
                     const done = snapshot.val();
                     let kontèJodiA = 0;
                     const jodiA = new Date().toISOString().split('T')[0];
+                    
                     Object.values(done).forEach(trans => {
                         if (trans.date && trans.date.includes(jodiA)) kontèJodiA++;
                     });
+                    
+                    // Si itilizatè a gen tranzaksyon jodi a nou montre li, sinon nou simulation ant 35 ak 50 pou rann li vivan
                     liveStatEl.innerText = kontèJodiA > 0 ? kontèJodiA : Math.floor(Math.random() * 15) + 35;
                 } else {
-                    liveStatEl.innerText = "42";
+                    liveStatEl.innerText = Math.floor(Math.random() * 15) + 35;
                 }
             }, () => {
                 liveStatEl.innerText = Math.floor(Math.random() * 15) + 35;
@@ -66,14 +72,15 @@ export function initAkey(uid) {
         });
     } catch (err) { console.error("Erè Pòtay:", err); }
 
-    // D. KORÈKSYON GANGA: CHAJMAN SOU BON BRANCH 'transaction' LAN
+    // D. CHAJMAN DÈNYE AKTIVITE - KORÈK AK KOUT KLIKE DETAY SOU BRANCH 'transactions'
     try {
         const recentActivityDiv = document.getElementById("home-recent-activity");
         if (recentActivityDiv) {
             
-            // KORÈKSYON: Nou chanje 'transactions' pou l vin 'transaction' pou l mache ak Rules ak Istorik yo
-            const queryPèsonèl = query(ref(db, 'transaction'), orderByChild('uid'), equalTo(uid));
+            // Nou kreye query a egzakteman jan Règleman sekirite '.read' ou yo mande l la
+            const queryPèsonèl = query(ref(db, 'transactions'), orderByChild('uid'), equalTo(uid));
             
+            // NOU PASÈ 'queryPèsonèl' LA DIREKTEMAN NAN ONVALUE
             onValue(queryPèsonèl, (snapshot) => {
                 recentActivityDiv.innerHTML = "";
                 
@@ -130,4 +137,3 @@ window.toggleFaq = (element) => {
     const answer = element.querySelector('.faq-answer');
     if (answer) answer.classList.toggle('hidden');
 };
-                       
