@@ -1,5 +1,5 @@
 /* ============================================================
-   MODIL PAJ AKÈY - ECHANJ PLUS - DINAMIK FIREBASE FINAL V5.5
+   MODIL PAJ AKÈY - ECHANJ PLUS - DINAMIK FIREBASE FINAL V5.6
    ============================================================ */
 import { ref, onValue, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 import { db } from "./script.js"; // Sèvo santral
@@ -40,7 +40,7 @@ export function initAkey(uid) {
         }
     } catch (err) { console.error("Erè Live Stat:", err); }
 
-    // C. Koute estati pòtay peman yo (Sove kont bloquage)
+    // C. Koute estati pòtay peman yo
     try {
         onValue(ref(db, 'system_status'), (snapshot) => {
             const moncashTxt = document.getElementById("moncash-status");
@@ -66,12 +66,12 @@ export function initAkey(uid) {
         });
     } catch (err) { console.error("Erè Pòtay:", err); }
 
-    // D. CHAJMAN TRANZAKSYON - FILTRE PA UID YO (Egzakteman pou Rules yo)
+    // D. KORÈKSYON FINAL: CHAJMAN "DÈNYE AKTIVITE" AK KOUT KLIKE DETAY RESI
     try {
         const recentActivityDiv = document.getElementById("home-recent-activity");
         if (recentActivityDiv) {
             
-            // Nou kreye query a sou branch 'transactions' la
+            // Rele branch 'transactions' global la epi filtre pa UID pèsonèl (Firebase Rules compliance)
             const queryPèsonèl = query(ref(db, 'transactions'), orderByChild('uid'), equalTo(uid));
             
             onValue(queryPèsonèl, (snapshot) => {
@@ -80,12 +80,12 @@ export function initAkey(uid) {
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     
-                    // Konvèti an lis epi klase depi sou pi nouvo a (timestamp)
+                    // Konvèti an lis epi klase pa pi nouvo (timestamp)
                     const myTrans = Object.keys(data)
                         .map(key => ({ id: key, ...data[key] }))
                         .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                     
-                    // Pran sèlman 3 premye yo
+                    // Limite a 3 tranzaksyon sèlman pou paj akèy la
                     const top3Trans = myTrans.slice(0, 3);
                     
                     top3Trans.forEach(trans => {
@@ -93,17 +93,29 @@ export function initAkey(uid) {
                         let badgeColor = (trans.status === "Validé" || trans.status === "Success" || trans.status === "Complété") ? "#2e7d32" : (trans.status === "En attente" ? "#ffb300" : "#c62828");
                         let icon = trans.type === "Echanj" ? "fa-sync-alt" : "fa-wallet";
                         
-                        recentActivityDiv.innerHTML += `
-                            <div class="rate-row" style="border-bottom: 1px solid #f9f9f9; padding: 10px 0; display: flex; justify-content: space-between; align-items: center;">
-                                <span class="provider-name" style="font-size: 12px; display: flex; align-items: center; gap: 6px;">
-                                    <i class="fas ${icon}" style="color: #109121; font-size: 13px;"></i> 
-                                    <b>${trans.type}</b> - ${trans.rezo || trans.method || trans.provider || 'Sistèm'}
-                                </span>
-                                <span style="font-size: 12px; text-align: right;">
-                                    <b style="color: #1a1a1a;">${montan} HTG</b><br>
-                                    <small style="color: ${badgeColor}; font-weight: bold;">● ${trans.status}</small>
-                                </span>
-                            </div>`;
+                        // Kreye eleman an nan DOM la pou nou ka lye fonksyon klike window.viewReceipt la san pèdi done
+                        const row = document.createElement('div');
+                        row.className = "rate-row";
+                        row.style.cssText = "border-bottom: 1px solid #f9f9f9; padding: 12px 0; display: flex; justify-content: space-between; align-items: center; cursor: pointer;";
+                        
+                        row.innerHTML = `
+                            <span class="provider-name" style="font-size: 12px; display: flex; align-items: center; gap: 6px;">
+                                <i class="fas ${icon}" style="color: #109121; font-size: 13px;"></i> 
+                                <b>${trans.type}</b> - ${trans.rezo || trans.method || trans.provider || 'Sistèm'}
+                            </span>
+                            <span style="font-size: 12px; text-align: right;">
+                                <b style="color: #1a1a1a;">${montan} HTG</b><br>
+                                <small style="color: ${badgeColor}; font-weight: bold;">● ${trans.status}</small>
+                            </span>`;
+                        
+                        // Lè moun nan klike sou liy aktivite sa a dirèkteman sou paj akèy la, modal la ap louvri pafè!
+                        row.onclick = () => {
+                            if (typeof window.viewReceipt === 'function') {
+                                window.viewReceipt(trans);
+                            }
+                        };
+                        
+                        recentActivityDiv.appendChild(row);
                     });
                 } else {
                     recentActivityDiv.innerHTML = `<p class="empty-msg-mini" style="text-align:center; color:#757575; font-size:13px; margin: 15px 0;">Ou poko fè okenn tranzaksyon.</p>`;
@@ -119,5 +131,4 @@ window.toggleFaq = (element) => {
     const answer = element.querySelector('.faq-answer');
     if (answer) answer.classList.toggle('hidden');
 };
-
-
+               
