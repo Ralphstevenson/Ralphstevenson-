@@ -1,5 +1,5 @@
 /* ============================================================
-   MODIL PAJ AKÈY - ECHANJ PLUS - DINAMIK FIREBASE FINAL V5.6
+   MODIL PAJ AKÈY - ECHANJ PLUS - DINAMIK FIREBASE FINAL V5.7
    ============================================================ */
 import { ref, onValue, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 import { db } from "./script.js"; // Sèvo santral
@@ -18,11 +18,11 @@ export function initAkey(uid) {
         }
     } catch (err) { console.error("Erè Balans:", err); }
 
-    // B. Koute kantite tranzaksyon jodi a
+    // B. Koute kantite tranzaksyon jodi a (Koreksyon: 'transaction')
     try {
         const liveStatEl = document.getElementById("live-stat-count");
         if (liveStatEl) {
-            onValue(ref(db, 'transactions'), (snapshot) => {
+            onValue(ref(db, 'transaction'), (snapshot) => {
                 if (snapshot.exists()) {
                     const done = snapshot.val();
                     let kontèJodiA = 0;
@@ -66,13 +66,13 @@ export function initAkey(uid) {
         });
     } catch (err) { console.error("Erè Pòtay:", err); }
 
-    // D. KORÈKSYON FINAL: CHAJMAN "DÈNYE AKTIVITE" AK KOUT KLIKE DETAY RESI
+    // D. KORÈKSYON GANGA: CHAJMAN SOU BON BRANCH 'transaction' LAN
     try {
         const recentActivityDiv = document.getElementById("home-recent-activity");
         if (recentActivityDiv) {
             
-            // Rele branch 'transactions' global la epi filtre pa UID pèsonèl (Firebase Rules compliance)
-            const queryPèsonèl = query(ref(db, 'transactions'), orderByChild('uid'), equalTo(uid));
+            // KORÈKSYON: Nou chanje 'transactions' pou l vin 'transaction' pou l mache ak Rules ak Istorik yo
+            const queryPèsonèl = query(ref(db, 'transaction'), orderByChild('uid'), equalTo(uid));
             
             onValue(queryPèsonèl, (snapshot) => {
                 recentActivityDiv.innerHTML = "";
@@ -93,7 +93,6 @@ export function initAkey(uid) {
                         let badgeColor = (trans.status === "Validé" || trans.status === "Success" || trans.status === "Complété") ? "#2e7d32" : (trans.status === "En attente" ? "#ffb300" : "#c62828");
                         let icon = trans.type === "Echanj" ? "fa-sync-alt" : "fa-wallet";
                         
-                        // Kreye eleman an nan DOM la pou nou ka lye fonksyon klike window.viewReceipt la san pèdi done
                         const row = document.createElement('div');
                         row.className = "rate-row";
                         row.style.cssText = "border-bottom: 1px solid #f9f9f9; padding: 12px 0; display: flex; justify-content: space-between; align-items: center; cursor: pointer;";
@@ -108,7 +107,7 @@ export function initAkey(uid) {
                                 <small style="color: ${badgeColor}; font-weight: bold;">● ${trans.status}</small>
                             </span>`;
                         
-                        // Lè moun nan klike sou liy aktivite sa a dirèkteman sou paj akèy la, modal la ap louvri pafè!
+                        // Louvri detay resi yo lè moun klike sou li sou paj akèy la
                         row.onclick = () => {
                             if (typeof window.viewReceipt === 'function') {
                                 window.viewReceipt(trans);
@@ -131,4 +130,4 @@ window.toggleFaq = (element) => {
     const answer = element.querySelector('.faq-answer');
     if (answer) answer.classList.toggle('hidden');
 };
-               
+                       
