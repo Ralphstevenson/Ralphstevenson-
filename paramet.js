@@ -1,5 +1,5 @@
 /* ============================================================
-   JS PARAMÈTRES ELITE V4.5 - ECHANJ PLUS (SYSTEM SYNC)
+   JS PARAMÈT RESEVWA V4.6 - KOREKSYON JADEN PIN (FINAL)
    ============================================================ */
 import { auth, db } from './script.js';
 import { ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -12,7 +12,7 @@ window.userAppData = {
     email: ""
 };
 
-// 1. INISYALIZASYON PARAMÈT (Sèvo Santral la ap rele l)
+// 1. INISYALIZASYON PARAMÈT
 export function initParamet(uid) {
     console.log("Modil Paramètres aktive pou:", uid);
     const userRef = ref(db, `users/${uid}`);
@@ -24,7 +24,7 @@ export function initParamet(uid) {
         // A. Enfòmasyon Profil
         const settName = document.getElementById('sett-name');
         const settEmail = document.getElementById('sett-email');
-        const settArsId = document.getElementById('sett-ars-id'); // Asire w ou gen ID sa nan HTML la
+        const settArsId = document.getElementById('sett-ars-id');
 
         if (settName) settName.innerText = data.fullname || "Itilizatè Echanj";
         if (settEmail && auth.currentUser) {
@@ -33,9 +33,9 @@ export function initParamet(uid) {
         }
         if (settArsId) settArsId.innerText = data.arsID || "---";
 
-        // B. Done PIN pou sekirite
-        window.userAppData.hasPin = !!data.transactionPin;
-        window.userAppData.currentPin = data.transactionPin || "";
+        // B. KOREKSYON: Nou chanje transactionPin pou l vin 'pin' nèt
+        window.userAppData.hasPin = !!data.pin;
+        window.userAppData.currentPin = data.pin || "";
 
         // C. Jere Switch Gmail la
         const gmailToggle = document.getElementById('gmail-notif-toggle');
@@ -86,7 +86,11 @@ if (btnSavePin) {
 
         try {
             const uid = auth.currentUser.uid;
-            await update(ref(db, `users/${uid}`), { transactionPin: pinVal });
+            
+            // KOREKSYON FINAL: Nou ekri 'pin' nan plas 'transactionPin' 
+            // pou l ka pase san blokaj nan Rules yo
+            await update(ref(db, `users/${uid}`), { pin: pinVal });
+            
             alert("✅ PIN sove ak siksè!");
             pinInput.value = "";
             window.closeModal('modal-pin');
@@ -144,5 +148,4 @@ if (darkToggle) {
         document.body.classList.toggle('dark-theme', isDark);
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
-   }
-       
+       }
