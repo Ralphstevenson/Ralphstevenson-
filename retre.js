@@ -1,9 +1,9 @@
 /* ============================================================
-   JS RETRÈ V3.9 - KOREKSYON SEKIRITE AK PIN (FINAL)
+   JS RETRÈ V5.0 - SYSTEM SYNC (OTOMATIK DESANN BALANS)
    ============================================================ */
 import { auth, db } from './script.js';
-import { ref, serverTimestamp, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-import { update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"; // Enpòtasyon 'update' korèk
+// KOREKSYON: Nou ajoute 'increment' nan enpòtasyon yo pou nou ka soustrae kòb la otomatikman
+import { ref, serverTimestamp, onValue, update, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 // 1. KOUTE DONE FIREBASE
@@ -27,7 +27,6 @@ function kouteDoneFirebase(uid) {
             if (balansEl) balansEl.innerText = balansDatabase.toLocaleString('en-US', {minimumFractionDigits: 2}) + " HTG";
             if (idKontEl) idKontEl.innerText = data.arsID || "ARS-000000";
 
-            // KOREKSYON: Nou vize 'pin' egzakteman jan l ye nan Rules Firebase ou yo
             window.userAppData = {
                 hasPin: !!data.pin,
                 correctPin: data.pin || "",
@@ -85,7 +84,6 @@ function konekteLojikBouton() {
     if (btnVerifyPin) {
         btnVerifyPin.onclick = () => {
             const pinInput = document.getElementById('pin-retre-input');
-            // Konparezon sekirite ak jaden 'pin' lan
             if (pinInput.value === String(window.userAppData.correctPin)) {
                 document.getElementById('modal-pin-retre')?.classList.add('hidden');
                 
@@ -102,7 +100,7 @@ function konekteLojikBouton() {
     }
 }
 
-// 3. FONKSYON FINAL KI EKZEKITE NAN FIREBASE
+// 3. FONKSYON FINAL KI OTOMATIKMAN DESANN BALANS LAN
 window.finaliseRetre = async () => {
     const user = auth.currentUser;
     const montan = parseFloat(document.getElementById('retre-amount').value);
@@ -113,9 +111,8 @@ window.finaliseRetre = async () => {
         const transID = "RET-" + Math.floor(Math.random() * 1000000);
         const updates = {};
         
-        // KOREKSYON SEKIRITE: Nou voye demand lan nan 'transactions' sèlman.
-        // Nou retire liy ki t ap modifye 'balance' lan dirèkteman paske Rules yo bloke sa!
-        updates[`/transactions/${transID}`] = {
+        // A. Nou voye demand lan nan '/withdrawals/' ak tout 'uid' anndan l pou Rules yo ka asepte l
+        updates[`/withdrawals/${transID}`] = {
             id: transID,
             uid: user.uid,
             type: "Retrè",
@@ -127,7 +124,10 @@ window.finaliseRetre = async () => {
             timestamp: serverTimestamp()
         };
 
-        // Egzekite sou Firebase
+        // B. KOREKSYON SIKOLÒJIK: Nou retire kòb la nan balans li imedyatman
+        updates[`/users/${user.uid}/balance`] = increment(-montan);
+
+        // N ap egzekite tou de operasyon yo ansanm nan yon sèl kou
         await update(ref(db), updates);
 
         // Notifikasyon Gmail
@@ -177,5 +177,4 @@ function verifieInputMontan(balans) {
             btn.disabled = false; btn.innerText = "RETIRE KÒB LA"; btn.style.background = "#109121";
         }
     };
-                                                     }
-           
+}
