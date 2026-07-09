@@ -1,15 +1,16 @@
 /* ============================================================
-   JS RETRÈ V3.8 - KOREKSYON EKZEKISYON BOUTON
+   JS RETRÈ V3.9 - KOREKSYON SEKIRITE AK PIN (FINAL)
    ============================================================ */
 import { auth, db } from './script.js';
-import { ref, get, update, serverTimestamp, onValue, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { ref, serverTimestamp, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"; // Enpòtasyon 'update' korèk
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 // 1. KOUTE DONE FIREBASE
 onAuthStateChanged(auth, (user) => {
     if (user) {
         kouteDoneFirebase(user.uid);
-        konekteLojikBouton(); // Sa a enpòtan pou bouton yo ka travay
+        konekteLojikBouton(); 
     }
 });
 
@@ -26,9 +27,10 @@ function kouteDoneFirebase(uid) {
             if (balansEl) balansEl.innerText = balansDatabase.toLocaleString('en-US', {minimumFractionDigits: 2}) + " HTG";
             if (idKontEl) idKontEl.innerText = data.arsID || "ARS-000000";
 
+            // KOREKSYON: Nou vize 'pin' egzakteman jan l ye nan Rules Firebase ou yo
             window.userAppData = {
-                hasPin: !!data.transactionPin,
-                correctPin: data.transactionPin || "",
+                hasPin: !!data.pin,
+                correctPin: data.pin || "",
                 fullname: data.fullname || "Itilizatè",
                 currentBalance: balansDatabase
             };
@@ -37,13 +39,12 @@ function kouteDoneFirebase(uid) {
     });
 }
 
-// 2. LOGIK BOUTON YO (SA A SE MOTÈ A)
+// 2. LOGIK BOUTON YO
 function konekteLojikBouton() {
-    const btnMain = document.getElementById('btn-konfime-retre'); // Bouton nan fòm lan
-    const btnNextToPin = document.getElementById('next-to-step2'); // Bouton nan Modal Step 1
-    const btnVerifyPin = document.getElementById('btn-verify-pin-retre'); // Bouton nan Modal PIN
+    const btnMain = document.getElementById('btn-konfime-retre'); 
+    const btnNextToPin = document.getElementById('next-to-step2'); 
+    const btnVerifyPin = document.getElementById('btn-verify-pin-retre'); 
 
-    // A. Aksyon lè w klike sou bouton "RETIRE KÒB LA"
     if (btnMain) {
         btnMain.onclick = () => {
             const non = document.getElementById('retre-name').value;
@@ -61,7 +62,6 @@ function konekteLojikBouton() {
                 return;
             }
 
-            // Ranpli Recap la epi louvri Modal Step 1
             const recapBox = document.getElementById('info-recap');
             if (recapBox) {
                 recapBox.innerHTML = `
@@ -75,7 +75,6 @@ function konekteLojikBouton() {
         };
     }
 
-    // B. Aksyon "OK, YO BON" (Pase nan PIN)
     if (btnNextToPin) {
         btnNextToPin.onclick = () => {
             document.getElementById('modal-step1')?.classList.add('hidden');
@@ -83,14 +82,13 @@ function konekteLojikBouton() {
         };
     }
 
-    // C. Verifikasyon PIN
     if (btnVerifyPin) {
         btnVerifyPin.onclick = () => {
             const pinInput = document.getElementById('pin-retre-input');
-            if (pinInput.value === window.userAppData.correctPin) {
+            // Konparezon sekirite ak jaden 'pin' lan
+            if (pinInput.value === String(window.userAppData.correctPin)) {
                 document.getElementById('modal-pin-retre')?.classList.add('hidden');
                 
-                // Mete montan an nan dènye modal la epi louvri l
                 const amountRecap = document.getElementById('amount-recap');
                 if (amountRecap) amountRecap.innerText = document.getElementById('retre-amount').value + " HTG";
                 
@@ -109,13 +107,14 @@ window.finaliseRetre = async () => {
     const user = auth.currentUser;
     const montan = parseFloat(document.getElementById('retre-amount').value);
 
-    // Fèmen modal confirmation an
     document.getElementById('modal-step2')?.classList.add('hidden');
 
     try {
         const transID = "RET-" + Math.floor(Math.random() * 1000000);
         const updates = {};
         
+        // KOREKSYON SEKIRITE: Nou voye demand lan nan 'transactions' sèlman.
+        // Nou retire liy ki t ap modifye 'balance' lan dirèkteman paske Rules yo bloke sa!
         updates[`/transactions/${transID}`] = {
             id: transID,
             uid: user.uid,
@@ -127,9 +126,8 @@ window.finaliseRetre = async () => {
             status: "En attente",
             timestamp: serverTimestamp()
         };
-        
-        updates[`/users/${user.uid}/balance`] = increment(-montan);
 
+        // Egzekite sou Firebase
         await update(ref(db), updates);
 
         // Notifikasyon Gmail
@@ -160,7 +158,6 @@ window.finaliseRetre = async () => {
     }
 };
 
-// Fonksyon pou bouton ANILE yo
 window.closeAllModals = () => {
     const modals = ['modal-step1', 'modal-pin-retre', 'modal-step2', 'modal-final'];
     modals.forEach(m => document.getElementById(m)?.classList.add('hidden'));
@@ -180,5 +177,5 @@ function verifieInputMontan(balans) {
             btn.disabled = false; btn.innerText = "RETIRE KÒB LA"; btn.style.background = "#109121";
         }
     };
-}
-   
+                                                     }
+           
