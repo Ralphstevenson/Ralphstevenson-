@@ -9,7 +9,14 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* ---------- 1. KAT BALANS PREMIUM ---------- */
+/* --- 1. BANNER FLASH ENFO --- */
+.flash-info-bar {
+    width: 100%;
+    min-height: 30px;
+    margin-bottom: 10px;
+}
+
+/* --- 2. KAT BALANS PREMIUM --- */
 .balance-card-pro {
     background: linear-gradient(135deg, #097969 0%, #044b41 100%);
     border-radius: 24px;
@@ -51,7 +58,7 @@
     letter-spacing: -0.5px;
 }
 
-/* ---------- 2. CAROUSEL BANNER KLIYEN ---------- */
+/* --- 3. CAROUSEL BANNER KLIYEN --- */
 .carousel-container-pro {
     background: linear-gradient(135deg, #04544b 0%, #0c8c7c 100%);
     border-radius: 24px;
@@ -77,11 +84,6 @@
     margin-bottom: 12px;
 }
 
-.mini-logo-slide {
-    height: 14px;
-    width: auto;
-}
-
 .carousel-slide-pro h2 {
     color: #ffffff;
     font-size: 19px;
@@ -100,7 +102,6 @@
     position: relative;
 }
 
-/* Pwen Carousel yo */
 .carousel-dots-pro {
     display: flex;
     justify-content: center;
@@ -122,7 +123,7 @@
     border-radius: 10px;
 }
 
-/* ---------- 3. GRID AKSYON RAPID (4 BOUTON WONN) ---------- */
+/* --- 4. GRID BOUTON WONN AKSYON YO --- */
 .quick-actions-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -172,7 +173,7 @@
     word-wrap: break-word;
 }
 
-/* ---------- 4. STAT STATUS AK TO (GATEWAYS) ---------- */
+/* --- 5. ESTANTI PÒTAY PEMAN AK LIMIT --- */
 .system-status-card {
     display: flex;
     justify-content: space-around;
@@ -206,7 +207,7 @@
     100% { opacity: 0.4; }
 }
 
-/* ---------- 5. SEKSYON LATEST NEWS & TO ---------- */
+/* --- 6. BWAT POU LATEST NEWS / TO / FIREBASE ACTIVITY --- */
 .news-section-pro {
     background: #ffffff;
     border-radius: 24px;
@@ -220,7 +221,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 15px;
 }
 
 .news-header-pro h3 {
@@ -230,11 +231,14 @@
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.news-header-pro i {
-    color: #64748b;
-    font-size: 13px;
+.news-header-pro h3 i {
+    color: #097969;
+    font-size: 14px;
 }
 
 .news-list-pro {
@@ -260,10 +264,10 @@
     width: 65px;
     height: 65px;
     border-radius: 16px;
-    background-size: cover;
-    background-position: center;
+    object-fit: cover;
     background-color: #f1f5f9;
     flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
 .news-info-pro {
@@ -277,7 +281,6 @@
     font-weight: 700;
     color: #1e293b;
     margin: 0;
-    line-height: 1.4;
 }
 
 .news-info-pro p {
@@ -287,7 +290,57 @@
     line-height: 1.4;
 }
 
-/* ---------- 6. INTEGRASYON LÒT KAT ENFO / SEKIRITE ---------- */
+.empty-msg-mini {
+    font-size: 12px;
+    color: #94a3b8;
+    text-align: center;
+    margin: 10px 0;
+    font-style: italic;
+}
+
+/* --- 7. FAQ AKÒDEYON SANT ÈD --- */
+.faq-item {
+    border-bottom: 1px solid #f1f5f9;
+    padding: 12px 0;
+    cursor: pointer;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.faq-question i {
+    font-size: 11px;
+    color: #64748b;
+    transition: transform 0.3s ease;
+}
+
+.faq-answer {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+.faq-answer.hidden {
+    display: none;
+}
+
+.faq-item.open .faq-question i {
+    transform: rotate(180deg);
+    color: #097969;
+}
+
+/* --- 8. SECURITY ARS GUARD BANNER --- */
 .security-tip-box {
     display: flex;
     gap: 12px;
@@ -313,7 +366,7 @@
     font-weight: 500;
 }
 
-/* ---------- 7. DARK MODE ADAPTATION ---------- */
+/* --- 9. DARK MODE COMPLETION --- */
 [data-theme="dark"] #paj-akey {
     background: linear-gradient(180deg, #01161a 0%, #000000 65%);
 }
@@ -343,11 +396,20 @@
 [data-theme="dark"] .news-card-pro {
     border-bottom-color: #1f2937;
 }
+[data-theme="dark"] .faq-item {
+    border-bottom-color: #1f2937;
+}
+[data-theme="dark"] .faq-question {
+    color: #cbd5e1;
+}
+[data-theme="dark"] .faq-answer {
+    color: #94a3b8;
+}
 [data-theme="dark"] .security-tip-box {
     background: #1c1917;
     border-color: #292524;
 }
 [data-theme="dark"] .security-tip-box p {
     color: #f5f5f4;
-       }
+   }
    
