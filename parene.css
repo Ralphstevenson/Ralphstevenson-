@@ -1,246 +1,207 @@
 /* ============================================================
-   CSS PARENNAJ ELITE V4.3 - PREMIUM BLACK & GOLD
+   AJISTEMAN AK NETWAYAJ CSS PARENNAJ
    ============================================================ */
 
-:root {
-    --premium-gold: #facc15;
-    --deep-black: #000000;
-    --soft-white: #ffffff;
+.parennaj-wrapper-pro {
+    padding: 20px 16px 120px 16px;
+    background: linear-gradient(180deg, #022329 0%, #033942 20%, #f4f7fe 60%);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
 }
 
-/* 1. HEADER PAJ LA */
-.premium-header {
-    padding: 25px 20px;
-    border-left: 6px solid var(--premium-gold);
-    background: var(--soft-white);
+/* 1. ENTÈT CORRECTION */
+.parennaj-header-section {
     margin-bottom: 25px;
-    border-radius: 0 20px 20px 0;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    margin-top: 10px;
+    padding-left: 4px; /* Korije soti nan padding-dash */
 }
 
-.page-title {
-    font-weight: 950;
-    font-size: 22px;
-    color: var(--deep-black);
-    margin: 0;
+.parennaj-title-main {
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 6px 0;
     display: flex;
     align-items: center;
-    gap: 12px;
-    text-transform: uppercase;
-    letter-spacing: -0.5px;
-}
-
-.page-title i {
-    color: var(--premium-gold);
-}
-
-.subtitle-paj {
-    font-size: 11px;
-    color: #666;
-    margin-top: 6px;
-    font-weight: 700;
-    text-transform: uppercase;
+    gap: 10px;
     letter-spacing: 0.5px;
 }
 
-/* 2. REFERRAL CARD (NWA SOLID AK LOGO GOLD) */
-.referral-card-glass {
-    background: linear-gradient(145deg, #1a1a1a, #000000);
-    padding: 35px 25px;
-    border-radius: 32px;
-    color: white;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+.parennaj-subtitle-alert {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.5px;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+/* 2. KAT PRENSIPAL KÒD LA */
+.share-card-pro {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f1f5f9;
     margin-bottom: 30px;
     position: relative;
-    overflow: hidden;
-    border: 1px solid #333;
 }
 
-/* Ti dekorasyon VIP nan kwen an */
-.referral-badge {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: var(--premium-gold);
-    color: var(--deep-black);
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 10px;
-    font-weight: 900;
-    text-transform: uppercase;
-    box-shadow: 0 4px 10px rgba(250, 204, 21, 0.3);
-}
-
-.balance-display span {
-    font-size: 12px;
-    color: var(--premium-gold);
-    font-weight: 800;
-    text-transform: uppercase;
-}
-
-.balance-display h1 {
-    font-size: 48px;
-    font-weight: 950;
-    margin: 8px 0;
-    letter-spacing: -2px;
-    color: #ffffff;
-}
-
-/* STATS GRID (BLACK DESIGN) */
-.stats-grid-glass {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 18px 5px;
-    border-radius: 24px;
-    margin: 25px 0;
-}
-
-.stat-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.stat-box:last-child { border: none; }
-
-.stat-box span {
-    font-size: 9px;
-    color: #aaa;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 4px;
-}
-
-.stat-box b { 
-    font-size: 16px; 
-    font-weight: 900; 
-    color: var(--premium-gold);
-}
-
-/* BOUTON TRANSFERE (JÒN FLASH) */
-.btn-premium-transfer {
-    width: 100%;
-    height: 60px;
-    background: var(--premium-gold);
-    color: var(--deep-black);
-    border: none;
-    border-radius: 20px;
-    font-weight: 900;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 10px 20px rgba(250, 204, 21, 0.2);
-    text-transform: uppercase;
-}
-
-.btn-premium-transfer:active { transform: scale(0.95); }
-
-/* 3. KÒD REFERAL (BLACK DASHED BOX) */
-.glass-container {
-    background: var(--soft-white);
-    padding: 30px;
-    border-radius: 32px;
-    margin-bottom: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-    border: 1px solid #f1f1f1;
-}
-
-.input-transparent-box {
-    display: flex;
-    align-items: center;
-    background: #f9f9f9;
-    border: 2px dashed var(--deep-black); /* Liy nwa tire-tire */
-    padding: 12px;
-    border-radius: 22px;
-    margin-bottom: 15px;
-}
-
-#my-ref-code {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    text-align: center;
-    font-size: 24px;
-    font-weight: 950;
-    color: var(--deep-black);
-    letter-spacing: 2px;
-}
-
-.copy-premium-btn {
-    background: var(--deep-black);
-    color: var(--premium-gold);
+.gift-icon-container {
     width: 55px;
     height: 55px;
-    border-radius: 18px;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
-    font-size: 18px;
-}
-
-.copy-premium-btn:active { background: var(--premium-gold); color: var(--deep-black); }
-
-/* 4. SHARE BUTTONS (MINIMALIST) */
-.share-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-}
-
-.share-icon {
-    height: 58px;
-    border-radius: 20px;
+    background: #fef3c7; /* Koulè jòn pal kat la */
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
+    margin: 0 auto 15px auto;
 }
 
-.wa { background: #000; border: 1px solid #333; } /* Nwa pou tout pou look VIP */
-.fb { background: #000; border: 1px solid #333; }
-.tg { background: #000; border: 1px solid #333; }
-.sms { background: #000; border: 1px solid #333; }
+.gift-icon-container i {
+    color: #f59e0b; /* Koulè jòn icon an */
+    font-size: 22px;
+}
 
-/* Ti pwen jòn sou ikon nwa yo */
-.share-icon i { color: var(--premium-gold); }
+.share-card-pro h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+}
 
-.share-icon:hover { background: var(--premium-gold); }
-.share-icon:hover i { color: var(--deep-black); }
+.share-desc {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+}
 
-/* 5. INFO BOX (GOLDEN SOFT) */
-.logic-info {
+/* CHAN KOPYE KÒD LA */
+.copy-box-pro {
+    display: flex;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 6px 6px 6px 16px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#my-ref-code {
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    font-weight: 800;
+    color: #0f172a;
+    width: 60%;
+    letter-spacing: 1px;
+    outline: none;
+}
+
+.btn-copy-pro {
+    background: linear-gradient(135deg, #097969 0%, #12a38f 100%);
+    color: #ffffff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 15px;
-    background: rgba(250, 204, 21, 0.08);
-    padding: 18px;
-    border-radius: 20px;
-    margin-bottom: 30px;
-    border: 1px solid rgba(250, 204, 21, 0.2);
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(9, 121, 105, 0.2);
+    transition: transform 0.2s;
 }
 
-.logic-icon { font-size: 24px; color: var(--premium-gold); }
-
-.logic-info p {
-    font-size: 12px;
-    color: #444;
-    font-weight: 600;
-    margin: 0;
+.btn-copy-pro:active {
+    transform: scale(0.95);
 }
 
-/* NIGHT MODE */
-body.night-mode .glass-container {
-    background: #111;
-    border-color: #222;
+/* 3. GRID STATISTIK YO (FÒM WONN PARFÈ) */
+.parennaj-stats-grid {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin: 20px 0;
 }
-body.night-mode #my-ref-code,
-body.night-mode .logic-info p { color: white; }
-body.night-mode .input-transparent-box { border-color: var(--premium-gold); }
-   
+
+.stat-item-pro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.stat-icon-circle {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #097969 0%, #12a38f 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 15px rgba(9, 121, 105, 0.2);
+    margin-bottom: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.bonus-gold {
+    background: linear-gradient(135deg, #d4af37 0%, #f59e0b 100%) !important;
+    box-shadow: 0 6px 15px rgba(212, 175, 55, 0.25) !important;
+}
+
+.stat-icon-circle i {
+    color: #ffffff;
+    font-size: 22px;
+}
+
+.stat-number {
+    font-size: 16px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 2px;
+}
+
+.stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+}
+
+/* ANIMASYON BADJ LIVE */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* MOD NWIT (DARK MODE INTEGRATION) */
+[data-theme="dark"] .parennaj-wrapper-pro {
+    background: linear-gradient(180deg, #01161a 0%, #000000 60%);
+}
+[data-theme="dark"] .share-card-pro {
+    background: #111827;
+    border-color: #1f2937;
+}
+[data-theme="dark"] .share-card-pro h3 {
+    color: #f8fafc;
+}
+[data-theme="dark"] .share-desc {
+    color: #94a3b8;
+}
+[data-theme="dark"] .copy-box-pro {
+    background: #1f2937;
+    border-color: #374151;
+}
+[data-theme="dark"] #my-ref-code {
+    color: #f8fafc;
+}
+[data-theme="dark"] .stat-number {
+    color: #f8fafc;
+}
+[data-theme="dark"] .stat-label {
+    color: #cbd5e1;
+}
