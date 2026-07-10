@@ -583,100 +583,113 @@
 </section>
     
 
-        <section id="paj-parennaj" class="tab-content hidden">
+
+
+            <section id="paj-parennaj" class="tab-content hidden">
+    <div class="parennaj-wrapper-pro">
+        
+        <div class="parennaj-header-section">
+            <h3 class="parennaj-title-main">
+                <i class="fas fa-users-viewfinder"></i> SISTÈM PARENNAJ
+            </h3>
+            <p class="parennaj-subtitle-alert">Envite zanmi w, ganyen rekonpans ansanm!</p>
+        </div>
+
+        <div class="share-card-pro" style="margin-bottom: 20px; padding: 20px;">
+            <p class="share-desc" style="margin-bottom: 5px; font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;">
+                Balans Komisyon
+            </p>
+            <h1 style="font-size: 32px; font-weight: 800; color: #0f172a; margin: 0 0 15px 0;">
+                <span id="komisyon-balans">0.00</span> <span style="font-size: 16px; color: #64748b; font-weight: 700;">HTG</span>
+            </h1>
+            
+            <div style="display: flex; justify-content: space-between; background: #f8fafc; padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0;">
+                <div style="text-align: left;">
+                    <span style="font-size: 10px; color: #64748b; display: block; font-weight: 600;">Parenn mwen</span>
+                    <b id="my-sponsor" style="font-size: 12px; color: #0f172a;">---</b>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-size: 10px; color: #64748b; display: block; font-weight: 600;">Nivo</span>
+                    <b style="font-size: 12px; color: #ffc107; font-weight: 800;"><i class="fas fa-crown"></i> ELITE</b>
+                </div>
+            </div>
+
+            <button class="btn-copy-pro" onclick="demannTransfere()" style="width: 100%; justify-content: center; height: 45px; font-size: 13px;">
+                <i class="fas fa-bolt"></i> Transfere nan Balans Prensipal
+            </button>
+        </div>
+
+        <div class="share-card-pro">
+            <div class="gift-icon-container">
+                <i class="fas fa-gift"></i>
+            </div>
+            
+            <h3>Kòd ARS Envitasyon Ou</h3>
+            <p class="share-desc">Pataje kòd sa a ak zanmi w yo pou n touche komisyon sou chak echanj yo fè.</p>
+            
+            <div class="copy-box-pro">
+                <input type="text" id="my-ref-code" value="ARS-XXXX" readonly>
+                <button onclick="kopiyeKod()" class="btn-copy-pro" id="btn-copy-ref">KOPYE</button>
+            </div>
+        </div>
+
+        <div class="parennaj-stats-grid">
+            <div class="stat-item-pro">
+                <div class="stat-icon-circle">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="stat-number" id="total-invites">12</div>
+                <div class="stat-label">Fiyèl</div>
+            </div>
+
+            <div class="stat-item-pro">
+                <div class="stat-icon-circle bonus-gold">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="stat-number">350 HTG</div>
+                <div class="stat-label">Bonus Ganyen</div>
+            </div>
+        </div>
+
+        <div class="share-card-pro" style="margin-top: 30px; padding: 15px; text-align: left; display: flex; gap: 12px; align-items: center;">
+            <div style="width: 40px; height: 40px; background: #e0f2fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="fas fa-gem" style="color: #0284c7; font-size: 16px;"></i>
+            </div>
+            <div>
+                <h4 style="margin: 0 0 2px 0; font-size: 13px; font-weight: 700; color: #0f172a;">Lojik Rabè & Komisyon</h4>
+                <p style="margin: 0; font-size: 11px; color: #64748b; line-height: 1.4;">
+                    Moun ou envite a jwenn <b>9.5 HTG rabè</b>. Ou touche <b>4.5% komisyon</b> otomatikman depi tranzaksyon an validé.
+                </p>
+            </div>
+        </div>
+
+        <div class="share-card-pro" style="margin-top: 20px; padding: 15px;">
+            <p class="share-desc" style="margin-bottom: 12px; font-weight: 700; text-align: left; color: #0f172a;">Pataje lyen an sou :</p>
+            <div style="display: flex; justify-content: space-around; gap: 10px;">
+                <div onclick="patajeLien('whatsapp')" style="cursor:pointer; width: 45px; height: 45px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 10px rgba(37,211,102,0.2);"><i class="fab fa-whatsapp"></i></div>
+                <div onclick="patajeLien('facebook')" style="cursor:pointer; width: 45px; height: 45px; background: #1877F2; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 10px rgba(24,119,242,0.2);"><i class="fab fa-facebook"></i></div>
+                <div onclick="patajeLien('telegram')" style="cursor:pointer; width: 45px; height: 45px; background: #0088cc; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 10px rgba(0,136,204,0.2);"><i class="fab fa-telegram"></i></div>
+                <div onclick="patajeLien('sms')" style="cursor:pointer; width: 45px; height: 45px; background: #475569; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 10px rgba(71,85,105,0.2);"><i class="fas fa-comment-alt"></i></div>
+            </div>
+        </div>
+
+        <div class="share-card-pro" style="margin-top: 20px; padding: 20px 15px; text-align: left;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+                <h4 style="margin: 0; font-size: 13px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.5px;">Moun ou envite yo</h4>
+                <span style="background: #ef4444; color: white; font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 20px; animation: pulse 1.5s infinite;">LIVE</span>
+            </div>
+            
+            <div id="container-lis-envite">
+                <div style="text-align: center; padding: 20px; color: #94a3b8;">
+                    <i class="fas fa-user-clock" style="font-size: 24px; margin-bottom: 8px; display: block;"></i>
+                    <p style="margin: 0; font-size: 12px;">Poko gen okenn aktivite nan ekip ou a.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+            </section>
     
-    <div class="premium-header">
-        <div class="header-main-box">
-            <h3 class="page-title"><i class="fas fa-users-viewfinder"></i> Pwogram Parennaj</h3>
-            <p class="subtitle-paj">Fè 4.5% komisyon sou premye echanj chak moun ou envite.</p>
-        </div>
-    </div>
-
-    <div class="referral-card-glass animated fadeInUp">
-        <div class="referral-badge-gold">
-            <i class="fas fa-crown"></i> Patnè ARS Elite
-        </div>
-        
-        <p class="ref-label">Balans Komisyon</p>
-        <div class="balance-display-box">
-            <h1 id="komisyon-balans">0.00</h1> 
-            <span class="currency-tag">HTG</span>
-        </div>
-
-        <div class="stats-grid-luxury">
-            <div class="stat-item">
-                <span class="stat-label">Parenn mwen</span>
-                <b id="my-sponsor" class="stat-val">---</b>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Ekip mwen</span>
-                <b id="total-invites" class="stat-val">0</b>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Nivo</span>
-                <b class="stat-val" style="color: #FFD700;">ELITE</b>
-            </div>
-        </div>
-
-        <button class="btn-premium-transfer-flash" onclick="demannTransfere()">
-            <i class="fas fa-bolt"></i> Transfere nan Balans Prensipal
-        </button>
-    </div>
-
-    <div class="glass-container-luxury">
-        
-        <div class="logic-info-card">
-            <div class="logic-icon-circle"><i class="fas fa-gem"></i></div>
-            <div class="logic-text">
-                <h4>Lojik Rabè & Komisyon</h4>
-                <p>Moun ou envite a jwenn <b>9.5 HTG rabè</b>. Ou touche komisyon w otomatikman depi tranzaksyon an <b>Validé</b>.</p>
-            </div>
-        </div>
-
-        <div class="referral-code-section">
-            <label class="premium-label-small">Kòd ARS Pèsonèl Ou</label>
-            <div class="input-luxury-group">
-                <input type="text" id="my-ref-code" value="ARS-..." readonly>
-                <button onclick="kopiyeKod()" class="copy-premium-btn" id="btn-copy-ref">
-                    <i class="fas fa-copy"></i>
-                </button>
-            </div>
-        </div>
-        
-        <div class="share-premium-section">
-            <p class="share-title">Pataje lyen an sou :</p>
-            <div class="share-grid-elite">
-                <div class="share-icon-circle wa" onclick="patajeLien('whatsapp')" title="WhatsApp">
-                    <i class="fab fa-whatsapp"></i>
-                </div>
-                <div class="share-icon-circle fb" onclick="patajeLien('facebook')" title="Facebook">
-                    <i class="fab fa-facebook"></i>
-                </div>
-                <div class="share-icon-circle tg" onclick="patajeLien('telegram')" title="Telegram">
-                    <i class="fab fa-telegram"></i>
-                </div>
-                <div class="share-icon-circle sms" onclick="patajeLien('sms')" title="SMS">
-                    <i class="fas fa-comment-alt"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="glass-container-luxury team-list-section">
-        <div class="list-header-flex">
-            <h4 class="section-subtitle-luxury">Moun ou envite yo</h4>
-            <span class="badge-live-pulse">LIVE</span>
-        </div>
-        
-        <div id="container-lis-envite" class="list-wrapper-premium">
-            <div class="empty-state-box">
-                <i class="fas fa-user-clock"></i>
-                <p>Poko gen okenn aktivite nan ekip ou a.</p>
-            </div>
-        </div>
-    </div>
-
-                    </section>
             
 
             
