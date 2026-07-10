@@ -116,96 +116,122 @@
 
             
 
+
             <section id="paj-akey">
     
     <div id="header-flash-info" class="flash-info-bar"></div>
    
-    <div class="carousel-container">
-        <div class="slides" id="carousel-slider">
-            <div class="slide">
-                <img src="https://i.postimg.cc/DSHc5ZJV/1771501449871.png" alt="Echanj Minit Rapid">
-            </div>
-            <div class="slide">
-                <img src="https://i.postimg.cc/s14wys8J/1771501465178.png" alt="Pwogram Parennaj">
-            </div>
-            <div class="slide">
-                <img src="https://i.postimg.cc/qNzL8n7K/1771501473121.png" alt="Sekirite Garanti">
-            </div>
-        </div>
+    <div class="balance-card-pro">
+        <p class="balance-title">Balans ou disponib</p>
+        <h1><span id="user-balance">0.00</span> <span style="font-size: 18px; color: rgba(255,255,255,0.8); font-weight:700;">HTG</span></h1>
     </div>
 
-    <div class="card-balance-rect">
-        <p>Balans ou disponib</p>
-        <div class="balance-row">
-            <h1 id="user-balance">0.00</h1> 
-            <span>HTG</span>
+    <div class="carousel-container-pro" style="padding: 0; min-height: auto; background: transparent; box-shadow: none;">
+        <div class="carousel-container" style="width: 100%; margin: 0 auto;">
+            <div class="slides" id="carousel-slider" style="width: 500%;"> <div class="slide">
+                    <img src="https://i.postimg.cc/V0yt4nQr/1783633053417.png" alt="Nouvo Banner 1">
+                </div>
+                <div class="slide">
+                    <img src="https://i.postimg.cc/YhHgW6zd/1783633136030.png" alt="Nouvo Banner 2">
+                </div>
+                <div class="slide">
+                    <img src="https://i.postimg.cc/HVg5yw9S/1783633241635.png" alt="Nouvo Banner 3">
+                </div>
+                <div class="slide">
+                    <img src="https://i.postimg.cc/mtsMHYy3/1783633318726.png" alt="Nouvo Banner 4">
+                </div>
+                <div class="slide">
+                    <img src="https://i.postimg.cc/RNBfH7LR/1783633550877.png" alt="Nouvo Banner 5">
+                </div>
+            </div>
+        </div>
+        
+        <div class="carousel-dots-pro" style="margin-top: 10px;">
+            <span class="dot-pro active"></span>
+            <span class="dot-pro"></span>
+            <span class="dot-pro"></span>
+            <span class="dot-pro"></span>
+            <span class="dot-pro"></span>
         </div>
     </div>
 
     <div class="quick-actions-grid">
-        <div class="action-card" onclick="showPage('paj-echanj', document.querySelector('.nav-item:nth-child(2)'))">
-            <div class="action-icon-box"><i class="fas fa-sync-alt"></i></div>
-            <span>Echanj Minit</span>
+        <div class="action-item-pro" onclick="showPage('paj-echanj', document.querySelector('.nav-item:nth-child(2)'))">
+            <div class="action-icon-circle">
+                <i class="fas fa-sync-alt"></i>
+            </div>
+            <span>Exchange Minit</span>
         </div>
-        <div class="action-card" onclick="showPage('paj-retre', document.querySelector('.nav-item:nth-child(3)'))">
-            <div class="action-icon-box"><i class="fas fa-wallet"></i></div>
+        
+        <div class="action-item-pro" onclick="showPage('paj-retre', document.querySelector('.nav-item:nth-child(3)'))">
+            <div class="action-icon-circle">
+                <i class="fas fa-wallet"></i>
+            </div>
             <span>Mande Retrè</span>
         </div>
-        <div class="action-card" onclick="showPage('paj-parennaj', document.querySelector('.menu-item:nth-child(3)'))">
-            <div class="action-icon-box"><i class="fas fa-users"></i></div>
-            <span>Parennaj</span>
+        
+        <div class="action-item-pro" onclick="showPage('paj-parennaj', document.querySelector('.menu-item:nth-child(3)'))">
+            <div class="action-icon-circle">
+                <i class="fas fa-users"></i>
+            </div>
+            <span>My Referral Network</span>
         </div>
-        <div class="action-card" onclick="showPage('chat-container', document.querySelector('.nav-item:nth-child(5)'))">
-            <div class="action-icon-box"><i class="fas fa-comments"></i></div>
-            <span>Sipò Chat</span>
-        </div>
-    </div>
-
-    <div class="live-stats-bar">
-        <div class="stat-mini">
-            <i class="fa-solid fa-circle-check"></i> 
-            <span>Tranzaksyon jodi a: <b id="live-stat-count">...</b></span>
-        </div>
-        <div class="stat-mini">
-            <i class="fa-solid fa-clock"></i> 
-            <span>Tretman: <b>3-5 min</b></span>
+        
+        <div class="action-item-pro" onclick="showPage('chat-container', document.querySelector('.nav-item:nth-child(5)'))">
+            <div class="action-icon-circle">
+                <i class="fas fa-comments"></i>
+            </div>
+            <span>Secure Transfer</span>
         </div>
     </div>
 
     <div class="system-status-card">
         <div class="gateway-status">
-            <span id="moncash-dot" class="dot-status status-active">●</span> MonCash: <b id="moncash-status" style="color: #2e7d32;">Operasyonèl</b>
+            <span id="moncash-dot" class="dot-online">●</span> MonCash: <b id="moncash-status" style="color: #16a34a;">Operasyonèl</b>
         </div>
         <div class="gateway-status">
-            <span id="natcash-dot" class="dot-status status-active">●</span> NatCash: <b id="natcash-status" style="color: #2e7d32;">Operasyonèl</b>
+            <span id="natcash-dot" class="dot-online">●</span> NatCash: <b id="natcash-status" style="color: #16a34a;">Operasyonèl</b>
         </div>
     </div>
 
-    <div class="home-info-card">
-        <h4><i class="fa-solid fa-chart-simple"></i> To ak Limit Echanj</h4>
-        <div class="rate-row">
-            <span class="provider-name">
-                <img src="https://i.postimg.cc/1V5TGWk0/23403511-3d46-4460-a669-ccf2a18d8ec3.png" class="mini-logo-provider" alt="Digicel"> Digicel
-            </span>
-            <span class="provider-details">Frè: <b>16.5%</b> | Min: 100 HTG</span>
+    <div class="news-section-pro">
+        <div class="news-header-pro">
+            <h3>Latest News & Analytics</h3>
+            <i class="fa-solid fa-chevron-right"></i>
         </div>
-        <div class="rate-row">go
-            <span class="provider-name">
-                <img src="https://i.postimg.cc/Jt19CnsV/recharge-com-natcom-product-card.png" class="mini-logo-provider" alt="Natcom"> Natcom
-            </span>
-            <span class="provider-details">Frè: <b>16.5%</b> | Min: 100 HTG</span>
+
+        <div class="news-list-pro">
+            <div class="news-card-pro">
+                <img src="https://i.postimg.cc/1V5TGWk0/23403511-3d46-4460-a669-ccf2a18d8ec3.png" class="news-thumb" alt="Digicel">
+                <div class="news-info-pro">
+                    <h4>Echanj Plus | Digicel Gateway</h4>
+                    <p>Frè: <b>16.5%</b> | Limit Minimòm: 100 HTG. Tretman an dirèk san pèdi tan.</p>
+                </div>
+            </div>
+
+            <div class="news-card-pro">
+                <img src="https://i.postimg.cc/Jt19CnsV/recharge-com-natcom-product-card.png" class="news-thumb" alt="Natcom">
+                <div class="news-info-pro">
+                    <h4>Echanj Plus | Natcom Gateway</h4>
+                    <p>Frè: <b>16.5%</b> | Limit Minimòm: 100 HTG. Validasyon otomatik.</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="home-info-card">
-        <h4><i class="fa-solid fa-clock-rotate-left"></i> Dènye Aktivite</h4>
+    <div class="news-section-pro">
+        <div class="news-header-pro">
+            <h3><i class="fa-solid fa-clock-rotate-left"></i> Dènye Aktivite</h3>
+        </div>
         <div id="home-recent-activity">
             <p class="empty-msg-mini">Ap chaje done depi nan Firebase...</p>
         </div>
     </div>
 
-    <div class="home-info-card">
-        <h4><i class="fa-solid fa-circle-question"></i> Sant Èd / FAQ</h4>
+    <div class="news-section-pro">
+        <div class="news-header-pro">
+            <h3><i class="fa-solid fa-circle-question"></i> Sant Èd / FAQ</h3>
+        </div>
         
         <div class="faq-item" onclick="toggleFaq(this)">
             <div class="faq-question">
@@ -233,8 +259,9 @@
         <p><b>🔐 Konsèy ARS:</b> Pa janm pataje PIN tranzaksyon ou oswa modpas ou ak pèsonn, menm ak yon administratè Echanj Plus.</p>
     </div>
 
-</section>
-
+    </section>
+    
+            
 
             
             <section id="paj-echanj" class="tab-content hidden">
