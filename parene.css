@@ -1,84 +1,73 @@
 /* ============================================================
-   AJISTEMAN AK NETWAYAJ CSS PARENNAJ
+   PAJ PARENNAJ - ECHANJ PLUS PREMIUM GOLD UI
    ============================================================ */
 
 .parennaj-wrapper-pro {
-    padding: 20px 16px 120px 16px;
-    background: linear-gradient(180deg, #022329 0%, #033942 20%, #f4f7fe 60%);
+    padding: 24px 20px 120px 20px;
+    background: linear-gradient(180deg, #011d22 0%, #03323a 40%, #f6f9fc 100%);
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* 1. ENTÈT CORRECTION */
+/* 1. ENTÈT AK IKÒN */
 .parennaj-header-section {
     margin-bottom: 25px;
     margin-top: 10px;
-    padding-left: 4px; /* Korije soti nan padding-dash */
 }
 
 .parennaj-title-main {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 800;
     color: #ffffff;
     margin: 0 0 6px 0;
     display: flex;
     align-items: center;
-    gap: 10px;
-    letter-spacing: 0.5px;
+    gap: 12px;
+}
+
+.parennaj-title-main i {
+    color: #12a38f;
+    background: rgba(18, 163, 143, 0.15);
+    padding: 10px;
+    border-radius: 14px;
+    font-size: 18px;
 }
 
 .parennaj-subtitle-alert {
     font-size: 11px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.6);
     letter-spacing: 0.5px;
     margin: 0;
-    text-transform: uppercase;
 }
 
-/* 2. KAT PRENSIPAL KÒD LA */
+/* 2. LABRÈS KAT BLAN YO (SHARE-CARD-PRO) */
 .share-card-pro {
     background: #ffffff;
     border-radius: 24px;
-    padding: 30px 20px;
-    text-align: center;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f1f5f9;
-    margin-bottom: 30px;
+    padding: 24px 20px;
+    box-shadow: 0 12px 35px rgba(2, 35, 41, 0.05);
+    border: 1px solid rgba(226, 232, 240, 0.8);
     position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
 }
 
-.gift-icon-container {
-    width: 55px;
-    height: 55px;
-    background: #fef3c7; /* Koulè jòn pal kat la */
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 15px auto;
+/* 3. STYLING POU GRAD LÒ AK BALANS KOMISYON */
+#komisyon-balans {
+    background: linear-gradient(135deg, #b38600 0%, #ffd700 50%, #b38600 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
 }
 
-.gift-icon-container i {
-    color: #f59e0b; /* Koulè jòn icon an */
-    font-size: 22px;
+.fa-crown, .bonus-gold i {
+    color: #ffd700 !important;
+    text-shadow: 0 2px 4px rgba(179, 134, 0, 0.3);
 }
 
-.share-card-pro h3 {
-    font-size: 18px;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0 0 8px 0;
-}
-
-.share-desc {
-    font-size: 12px;
-    color: #64748b;
-    line-height: 1.5;
-    margin: 0 0 20px 0;
-}
-
-/* CHAN KOPYE KÒD LA */
+/* 4. CHAN KOPYE KÒD LA */
 .copy-box-pro {
     display: flex;
     background: #f8fafc;
@@ -87,121 +76,170 @@
     padding: 6px 6px 6px 16px;
     align-items: center;
     justify-content: space-between;
+    margin-top: 15px;
 }
 
 #my-ref-code {
     border: none;
     background: transparent;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 800;
     color: #0f172a;
     width: 60%;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     outline: none;
+    text-transform: uppercase;
 }
 
+/* BOUTON YO (KOPYE AK TRANSFÈ) */
 .btn-copy-pro {
     background: linear-gradient(135deg, #097969 0%, #12a38f 100%);
     color: #ffffff;
     border: none;
-    padding: 10px 22px;
-    border-radius: 12px;
-    font-size: 12px;
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-size: 13px;
     font-weight: 700;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 6px;
-    box-shadow: 0 4px 12px rgba(9, 121, 105, 0.2);
-    transition: transform 0.2s;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(9, 121, 105, 0.25);
+    transition: all 0.2s ease;
 }
 
 .btn-copy-pro:active {
-    transform: scale(0.95);
+    transform: scale(0.96);
 }
 
-/* 3. GRID STATISTIK YO (FÒM WONN PARFÈ) */
+/* 5. GRID STATISTIK YO (STYLE REVOLUT) */
 .parennaj-stats-grid {
     display: flex;
-    justify-content: center;
-    gap: 50px;
-    margin: 20px 0;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
 }
 
 .stat-item-pro {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    background: #ffffff;
+    padding: 20px 15px;
+    border-radius: 24px;
+    width: 50%;
+    box-shadow: 0 10px 25px rgba(2, 35, 41, 0.03);
+    border: 1px solid rgba(226, 232, 240, 0.6);
 }
 
 .stat-icon-circle {
-    width: 68px;
-    height: 68px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #097969 0%, #12a38f 100%);
+    background: #e6f6f4;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 15px rgba(9, 121, 105, 0.2);
-    margin-bottom: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.15);
-}
-
-.bonus-gold {
-    background: linear-gradient(135deg, #d4af37 0%, #f59e0b 100%) !important;
-    box-shadow: 0 6px 15px rgba(212, 175, 55, 0.25) !important;
+    margin-bottom: 12px;
 }
 
 .stat-icon-circle i {
-    color: #ffffff;
-    font-size: 22px;
+    color: #12a38f;
+    font-size: 18px;
+}
+
+.bonus-gold {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
 }
 
 .stat-number {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 800;
     color: #0f172a;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 
 .stat-label {
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 12px;
+    font-weight: 600;
     color: #64748b;
 }
 
-/* ANIMASYON BADJ LIVE */
-@keyframes pulse {
-    0% { opacity: 0.6; }
-    50% { opacity: 1; }
-    100% { opacity: 0.6; }
+/* CONTAINER FOOTER / ICONS */
+.gift-icon-container {
+    width: 54px;
+    height: 54px;
+    background: #e6f6f4;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px auto;
 }
 
-/* MOD NWIT (DARK MODE INTEGRATION) */
+.gift-icon-container i {
+    color: #12a38f;
+    font-size: 22px;
+}
+
+.share-card-pro h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+    text-align: center;
+}
+
+.share-desc {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ANIMASYON LIVE PULSE */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.08); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* ============================================================
+   6. ADAPTASYON MOD NWIT (DARK MODE)
+   ============================================================ */
 [data-theme="dark"] .parennaj-wrapper-pro {
-    background: linear-gradient(180deg, #01161a 0%, #000000 60%);
+    background: linear-gradient(180deg, #011114 0%, #000000 70%);
 }
-[data-theme="dark"] .share-card-pro {
-    background: #111827;
-    border-color: #1f2937;
+
+[data-theme="dark"] .share-card-pro,
+[data-theme="dark"] .stat-item-pro {
+    background: #0f172a;
+    border-color: #1e293b;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
-[data-theme="dark"] .share-card-pro h3 {
-    color: #f8fafc;
+
+[data-theme="dark"] .share-card-pro h3,
+[data-theme="dark"] .stat-number,
+[data-theme="dark"] b[style*="color: #0f172a"] {
+    color: #f8fafc !important;
 }
-[data-theme="dark"] .share-desc {
+
+[data-theme="dark"] .share-desc,
+[data-theme="dark"] .stat-label {
     color: #94a3b8;
 }
-[data-theme="dark"] .copy-box-pro {
-    background: #1f2937;
-    border-color: #374151;
+
+[data-theme="dark"] .copy-box-pro,
+[data-theme="dark"] div[style*="background: #f8fafc"] {
+    background: #1e293b !important;
+    border-color: #334155 !important;
 }
+
 [data-theme="dark"] #my-ref-code {
     color: #f8fafc;
 }
-[data-theme="dark"] .stat-number {
-    color: #f8fafc;
-}
-[data-theme="dark"] .stat-label {
-    color: #cbd5e1;
-}
+
+[data-theme="dark"] .gift-icon-container,
+[data-theme="dark"] .stat-icon-circle:not(.bonus-gold) {
+    background: rgba(18, 163, 143, 0.15);
+       }
