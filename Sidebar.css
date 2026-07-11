@@ -1,0 +1,192 @@
+/* ============================================================
+   SIDEBAR AVANSE & MINIMALIST (PI PITI - ECHANJ PLUS)
+   ============================================================ */
+
+.sidebar-pro {
+    position: fixed;
+    top: 0;
+    left: -280px; /* Lajè redui soti 300px+ pou l pi fen */
+    width: 260px; /* Lajè pafè, pi piti e pi elegant */
+    height: 100vh;
+    background: var(--card-bg, #ffffff);
+    box-shadow: 15px 0 35px rgba(15, 23, 42, 0.06);
+    z-index: 10001; /* Toujou anlè header a */
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+}
+
+/* Klas pou lè JS louvri sidebar a (Egz: sidebar.classList.toggle('active')) */
+.sidebar-pro.active {
+    left: 0;
+}
+
+/* 1. ENTÈT SIDEBAR LA (USER META) */
+.sidebar-header {
+    padding: 20px 16px 16px 16px; /* Padding redui pou l pi sere */
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+    position: relative;
+    text-align: left;
+}
+
+/* Ikòn pou fèmen sidebar a */
+.close-sidebar {
+    position: absolute;
+    top: 18px;
+    right: 16px;
+    font-size: 16px;
+    color: var(--text-sub, #64748b);
+    cursor: pointer;
+    padding: 4px;
+    transition: transform 0.2s;
+}
+
+.close-sidebar:active {
+    transform: scale(0.85);
+}
+
+/* Done Itilizatè a (User Meta) */
+.user-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Ti chips pou salitasyon ak sekirite */
+.user-greeting {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-sub, #64748b);
+}
+
+.security-status {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--primary, #097969);
+    margin-bottom: 4px;
+}
+
+/* Badge ID Itilizatè a */
+.user-id-badge {
+    font-size: 10px;
+    font-weight: 800;
+    background: rgba(9, 121, 105, 0.08);
+    color: var(--primary, #097969);
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    width: fit-content;
+    margin: 0 0 6px 0;
+    letter-spacing: 0.5px;
+}
+
+/* Non ak Email kliyan an */
+#side-name {
+    font-size: 15px; /* Redui pou l pa parèt twò gwo */
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    margin: 0;
+}
+
+#side-email {
+    font-size: 11px;
+    color: var(--text-sub, #64748b);
+    margin: 0;
+    font-weight: 500;
+    word-break: break-all;
+}
+
+/* 2. MENI SIDEBAR LA */
+.sidebar-menu {
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Ti espas ant opsyon yo */
+    flex: 1;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px; /* Redui pou lis la pi sere e pwofesyonèl */
+    font-size: 13px; /* Font pi fen */
+    font-weight: 600;
+    color: var(--text-sub, #64748b);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Ikòn nan Meni an */
+.menu-item i {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    color: var(--text-sub, #64748b);
+    transition: color 0.2s;
+}
+
+/* HOVER / ACTIVE STATE (OPSYON KI SELEKSYONE A) */
+.menu-item:hover, 
+.menu-item.active {
+    background: rgba(9, 121, 105, 0.06); /* Vèt pal anpil */
+    color: var(--primary, #097969);
+}
+
+.menu-item.active i,
+.menu-item:hover i {
+    color: var(--primary, #097969);
+}
+
+/* BOUTON DEKONEKTE (LOGOUT-BTN) */
+.menu-item.logout-btn {
+    margin-top: auto; /* Pouse bouton an desann nèt anba */
+    color: #ef4444;
+}
+
+.menu-item.logout-btn i {
+    color: #ef4444;
+}
+
+.menu-item.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.06);
+    color: #ef4444;
+}
+
+.menu-item:active {
+    transform: scale(0.98);
+}
+
+/* ============================================================
+   INTEGRASYON POU MOD NWIT (DARK MODE)
+   ============================================================ */
+[data-theme="dark"] .sidebar-pro {
+    background: #111827;
+    box-shadow: 15px 0 40px rgba(0, 0, 0, 0.3);
+    border-right: 1px solid #1f2937;
+}
+[data-theme="dark"] .sidebar-header {
+    border-bottom-color: #1f2937;
+}
+[data-theme="dark"] #side-name {
+    color: #f8fafc;
+}
+[data-theme="dark"] .user-id-badge {
+    background: rgba(18, 163, 143, 0.12);
+    color: #12a38f;
+}
+[data-theme="dark"] .menu-item.active,
+[data-theme="dark"] .menu-item:hover {
+    background: rgba(18, 163, 143, 0.1);
+    color: #12a38f;
+}
+[data-theme="dark"] .menu-item.active i,
+[data-theme="dark"] .menu-item:hover i {
+    color: #12a38f;
+}
+[data-theme="dark"] .menu-item.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.12);
+}
