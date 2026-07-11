@@ -1,5 +1,5 @@
 /* ============================================================
-   JS PARENE ELITE V4.5 - ECHANJ PLUS (SYSTEM SYNC)
+   JS PARENE ELITE V4.5 - ECHANJ PLUS (SYSTEM SYNC 2026)
    ============================================================ */
 import { auth, db } from './script.js'; 
 import { ref, onValue, update, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -23,10 +23,11 @@ export function initParennaj(uid) {
         const mySponsorEl = document.getElementById('my-sponsor');
 
         if (balEl) {
+            // Netwaye piske HTG a deja nan HTML la apa
             balEl.innerText = Number(refData.balance || 0).toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
-            }) + " HTG";
+            });
         }
         
         if (countEl) countEl.innerText = refData.total_invites || 0;
@@ -42,26 +43,28 @@ export function initParennaj(uid) {
     });
 }
 
-// 2. FONKSYON POU KOPIYE KÒD LA
+// 2. FONKSYON POU KOPIYE KÒD LA (Mizajou ak Nouvo Bouton an)
 window.kopiyeKod = () => {
     const codeInput = document.getElementById('my-ref-code');
+    const btn = document.getElementById('btn-copy-ref');
     if (!codeInput || codeInput.value.includes("...")) return;
 
     codeInput.select();
-    codeInput.setSelectionRange(0, 99999); // Pou mobil
+    codeInput.setSelectionRange(0, 99999); // Pou aparèy mobil yo
 
     navigator.clipboard.writeText(codeInput.value).then(() => {
-        const btn = document.querySelector('.copy-premium-btn');
         if (btn) {
-            const originalIcon = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check"></i>';
-            btn.style.background = "#28a745"; // Vèt Echanj Plus la
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> OK';
+            btn.style.background = "#16a34a"; // Koulè vèt lè l kopye
 
             setTimeout(() => {
-                btn.innerHTML = originalIcon;
-                btn.style.background = "#000000"; // Retounen nan nwa pwofesyonèl
+                btn.innerHTML = originalText;
+                btn.style.background = ""; // Retounen nan gradyan CSS la otomatikman
             }, 2000);
         }
+    }).catch(err => {
+        console.error("Erè nan kopye kòd la: ", err);
     });
 };
 
@@ -70,11 +73,14 @@ window.demannTransfere = async () => {
     const uid = auth.currentUser?.uid;
     if (!uid) return;
 
+    const balEl = document.getElementById('komisyon-balans');
+    if (!balEl) return;
+
     // Rekipere montan an san lèt oswa vigil
-    const balRaw = document.getElementById('komisyon-balans').innerText.replace(/[^\d.]/g, '');
+    const balRaw = balEl.innerText.replace(/[^\d.]/g, '');
     const montant = parseFloat(balRaw);
 
-    if (montant < 50) {
+    if (isNaN(montant) || montant < 50) {
         alert("❌ Minimòm transfè se 50.00 HTG.");
         return;
     }
@@ -93,18 +99,22 @@ window.demannTransfere = async () => {
             }
             alert("✅ Transfè fèt ak siksè!");
         } catch (err) {
-            alert("Erè: " + err.message);
+            alert("Erè nan transfè a: " + err.message);
         }
     }
 };
 
-// 4. MIZAJOU LIS MOUN YO (UI Pwofesyonèl)
+// 4. MIZAJOU LIS MOUN YO (Konpatib ak nouvo kat blan an)
 function updateInviteList(inviteList) {
     const container = document.getElementById('container-lis-envite');
     if (!container) return;
 
     if (!inviteList || Object.keys(inviteList).length === 0) {
-        container.innerHTML = `<p style="text-align:center; padding:20px; color:#999;">Poko gen moun nan ekip ou a.</p>`;
+        container.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: #94a3b8;">
+                <i class="fas fa-user-clock" style="font-size: 24px; margin-bottom: 8px; display: block;"></i>
+                <p style="margin: 0; font-size: 12px;">Poko gen okenn aktivite nan ekip ou a.</p>
+            </div>`;
         return;
     }
 
@@ -114,16 +124,48 @@ function updateInviteList(inviteList) {
     sortedList.forEach(invite => {
         const isSuccess = invite.status === "Success" || invite.status === "Validé";
         html += `
-            <div class="invite-item" style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:#fff; border-radius:12px; margin-bottom:8px; border: 1px solid #eee;">
+            <div class="invite-item" style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom: 1px solid #f1f5f9;">
                 <div>
-                    <b style="display:block; font-size:14px;">${invite.name || 'Itilizatè'}</b>
-                    <small style="color:#777;">ID: ${invite.arsID || '---'}</small>
+                    <b style="display:block; font-size:13px; color:#1e293b;">${invite.name || 'Itilizatè'}</b>
+                    <small style="color:#64748b; font-size:11px;">ID: ${invite.arsID || '---'}</small>
                 </div>
-                <span style="font-size:10px; padding:4px 10px; border-radius:20px; background:${isSuccess ? '#dcfce7' : '#fff9c4'}; color:${isSuccess ? '#166534' : '#854d0e'}; font-weight:bold;">
+                <span style="font-size:10px; padding:4px 10px; border-radius:20px; background:${isSuccess ? '#dcfce7' : '#fef3c7'}; color:${isSuccess ? '#166534' : '#854d0e'}; font-weight:bold; text-transform: uppercase;">
                     ${isSuccess ? 'VALIDÉ' : 'ATANT'}
                 </span>
             </div>`;
     });
     container.innerHTML = html;
 }
+
+// 5. FONKSYON PATAJE LYEN RAPID SOU REZO YO
+window.patajeLien = (platform) => {
+    const codeInput = document.getElementById('my-ref-code');
+    const myCode = (codeInput && !codeInput.value.includes("...")) ? codeInput.value : "mwen";
+    
+    // Tèks mesaj la ak lyen aplikasyon w lan
+    const mesay = `Alo! Enskri sou Echanj Plus avèk kòd envitasyon mwen an: *${myCode}* pou w ka vann minit Digicel/Natcom epi resevwa kòb ou sou MonCash oswa NatCash byen rapid!`;
+    const urlAplikasyon = window.location.href; // Oswa mete lyen sit ou a fix si w vle (egz: "https://echanjplus.com")
+    
+    const textKòde = encodeURIComponent(`${mesay} \nEnskri la a: ${urlAplikasyon}`);
+    let lyenPataje = "";
+
+    switch(platform) {
+        case 'whatsapp':
+            lyenPataje = `https://api.whatsapp.com/send?text=${textKòde}`;
+            break;
+        case 'facebook':
+            lyenPataje = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(urlAplikasyon)}&quote=${encodeURIComponent(mesay)}`;
+            break;
+        case 'telegram':
+            lyenPataje = `https://t.me/share/url?url=${encodeURIComponent(urlAplikasyon)}&text=${encodeURIComponent(mesay)}`;
+            break;
+        case 'sms':
+            lyenPataje = `sms:?body=${textKòde}`;
+            break;
+    }
+
+    if (lyenPataje !== "") {
+        window.open(lyenPataje, '_blank');
+    }
+};
    
