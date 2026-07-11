@@ -1,177 +1,159 @@
 /* ============================================================
-   DIZAYN PREMIUM GLASSMORPHISM POU PAJ AUTH (ECHANJ PLUS 2026)
+   PAJ KONEKSYON AK ENSKRIPSYON (AUTH PAGE) - GOLDEN PREMIUM
    ============================================================ */
 
-/* 1. Veso Prensipal la (Background Nyaj ak Logo Fonn) */
 .auth-container {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    /* Nouvo lyen imaj ofisyèl ou an kòm background */
+    background: url('https://i.postimg.cc/P5zTMtrT/20260711-030437.jpg') no-repeat center center;
+    background-size: cover;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     padding: 20px;
-    background: url('https://images.unsplash.com/photo-1534088568595-a066f410bcda?q=80&w=1920') no-repeat center center/cover;
-    overflow: hidden;
+    box-sizing: border-box;
+    z-index: 10002;
 }
 
-/* Kouch sekrè pou mete Gwo Logo Echanj Plus la anba kat la ak opasite */
-.auth-container::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    max-width: 600px;
-    height: 600px;
-    background: url('https://i.postimg.cc/vTtVtB8P/20260205-163353-removebg-preview.png') no-repeat center center/contain;
-    opacity: 0.08; /* Opasite ki ba anpil pou l fonn nan nyaj yo */
-    pointer-events: none;
-    z-index: 1;
-}
-
-/* 2. Kat Glassmorphism nan (Kat k ap flote a) */
+/* KAD FÒMILÈ A (AUTH CARD PREMIUM GLASS) */
 .auth-card {
-    position: relative;
-    z-index: 2; /* Pou l pase anlè logo fonn lan */
     width: 100%;
-    max-width: 420px;
-    padding: 40px 30px;
-    background: rgba(255, 255, 255, 0.45); /* Efè vitre translisid */
-    backdrop-filter: blur(16px) saturate(120%); /* Flou dèyè a tankou foto a */
-    -webkit-backdrop-filter: blur(16px) saturate(120%);
-    border-radius: 28px; /* Kwen byen wonn */
-    border: 1px solid rgba(255, 255, 255, 0.6); /* Liy dous sou bò yo */
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), 
-                0 5px 15px rgba(0, 0, 0, 0.04);
+    max-width: 360px;
+    /* Efè glas transparan pou kite background nan parèt dèyè l dousman */
+    background: rgba(17, 24, 39, 0.65); 
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 28px;
+    padding: 30px 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(250, 204, 21, 0.15); /* Ti liy lò fen nan rebò yo */
     text-align: center;
     box-sizing: border-box;
+    animation: fadeInAuth 0.4s ease-out;
 }
 
-/* 3. Ti Logo ki nan tèt kat la */
+@keyframes fadeInAuth {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* LOGO KI ANLÈ FÒMILÈ A */
 .auth-logo {
-    width: 75px;
-    height: 75px;
-    object-fit: contain;
-    background: #ffffff;
-    padding: 10px;
-    border-radius: 50%; /* Won nèt */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
+    width: 70px;
+    height: auto;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
 }
 
-/* Titles */
+/* TIT YO (Konekte / Kreye Kont) */
 .auth-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #facc15; /* Koulè jòn lò */
+    margin: 0 0 20px 0;
+    letter-spacing: 0.5px;
 }
 
-/* 4. Chan Antre yo (Inputs) */
+/* SISTÈM INPUT GROUP YO */
 .input-group {
     position: relative;
+    margin-bottom: 14px;
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 14px;
-    margin-bottom: 16px;
-    padding: 0 15px;
-    transition: all 0.3s ease;
-}
-
-.input-group:focus-within {
-    border-color: #109121; /* Koulè vèt prensipal pwojè a */
-    box-shadow: 0 0 0 3px rgba(16, 145, 33, 0.15);
-    background: #ffffff;
 }
 
 .input-group i {
-    color: #757575;
-    font-size: 16px;
-    margin-right: 12px;
-    width: 20px;
-    text-align: center;
+    position: absolute;
+    left: 14px;
+    color: #facc15; /* Ikòn jòn lò */
+    font-size: 14px;
+    opacity: 0.8;
 }
 
 .input-group input, 
 #sponsor-input {
     width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 14px 0;
-    font-size: 15px;
-    color: #2c3e50;
-    font-family: 'Inter', sans-serif;
-}
-
-/* Antre Kòd Sponsor ki pa nan gwoup */
-#sponsor-input {
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 14px;
-    padding: 14px 15px;
-    margin-bottom: 16px;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-}
-
-#sponsor-input:focus {
-    border-color: #109121;
-    box-shadow: 0 0 0 3px rgba(16, 145, 33, 0.15);
-    background: #ffffff;
-}
-
-/* 5. Bouton Premium lan */
-.btn-primary-pro {
-    width: 100%;
-    background: #111111; /* Bouton nwa dapan jan l ye sou makèt la */
+    height: 46px;
+    background: rgba(255, 255, 255, 0.07); /* Nwa transparan pou andedan bwat yo */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0 16px 0 42px; /* Espas pou ikòn nan */
+    font-size: 13px;
+    font-weight: 600;
     color: #ffffff;
+    outline: none;
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+}
+
+/* Ajisteman pou input sponsor a (ki pa gen ikòn) */
+#sponsor-input {
+    padding-left: 16px;
+    margin-bottom: 18px;
+}
+
+.input-group input:focus, 
+#sponsor-input:focus {
+    border-color: #facc15; /* Li klere an jòn lò lè w klike ladan l */
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.15);
+}
+
+.input-group input::placeholder,
+#sponsor-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 500;
+}
+
+/* BOUTON PRENSIPAL LA */
+.auth-card .btn-primary-pro {
+    width: 100%;
+    height: 48px;
+    background: linear-gradient(135deg, #facc15 0%, #eab308 100%); /* Bouton lò solid */
+    color: #000000; /* Tèks nwa pou l ka lizib nèt */
     border: none;
     border-radius: 14px;
-    padding: 15px;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(234, 179, 8, 0.25);
+    transition: all 0.2s;
+    margin-top: 5px;
 }
 
-.btn-primary-pro:hover {
-    background: #222222;
-    transform: translateY(-1px);
+.auth-card .btn-primary-pro:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(234, 179, 8, 0.15);
 }
 
-.btn-primary-pro:active {
-    transform: translateY(1px);
-}
-
-/* 6. Lyen anba yo */
+/* FOOTER PAJ LA (Tèks anba a) */
 .auth-footer {
-    font-size: 14px;
-    color: #555555;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
     margin-top: 20px;
+    margin-bottom: 0;
 }
 
 .auth-footer span {
-    color: #111111;
-    font-weight: 600;
+    color: #facc15;
+    font-weight: 700;
     cursor: pointer;
-    text-decoration: underline;
-    transition: color 0.2s;
+    text-decoration: none;
+    margin-left: 3px;
+    transition: opacity 0.2s;
 }
 
 .auth-footer span:hover {
-    color: #109121;
+    opacity: 0.8;
 }
 
-/* Klas pou kache eleman */
+/* Klas pou kache eleman (hidden) */
 .hidden {
     display: none !important;
-  }
-
+}
