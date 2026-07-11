@@ -1,0 +1,102 @@
+/* ============================================================
+   BAR NAVIGASYON ANBA (BOTTOM NAV) - PREMIUM FINTECH STYLE
+   ============================================================ */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 450px; /* Pou l pa janm twò laj sou gwo ekran */
+    height: 68px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px); /* Efè glas flou ki alamòd lan */
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.04);
+    z-index: 9999;
+    padding-bottom: env(safe-area-inset-bottom); /* Pou iOS (iPhone) pa kache tèks yo */
+}
+
+/* CHAK ATIK NAN NAVIGASYON AN */
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 100%;
+    cursor: pointer;
+    position: relative;
+    color: #64748b; /* Koulè gri-ble pwofesyonèl pou sa ki pa aktif yo */
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 4px;
+}
+
+/* STIL POU IKÒN YO */
+.nav-item i {
+    font-size: 20px;
+    transition: transform 0.2s ease;
+}
+
+/* STIL POU TÈKS YO */
+.nav-item span {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+/* --- ELEMAN KI AKTIF LA (ACTIVE STATE) --- */
+.nav-item.active {
+    color: #097969; /* Bèl vèt Echanj Plus la */
+}
+
+.nav-item.active i {
+    transform: translateY(-2px); /* Ti soulèvman lejè pou ikòn nan */
+}
+
+.nav-item.active span {
+    font-weight: 800; /* Tèks la vin pi gra */
+}
+
+/* Ti liy vèt endikatè anlè opsyon ki aktif la */
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 24px;
+    height: 3px;
+    background: linear-gradient(90deg, #097969, #12a38f);
+    border-radius: 0 0 4px 4px;
+}
+
+/* TI ANIME LÈ YON MOUN KLIKE (FEEDBACK) */
+.nav-item:active i {
+    transform: scale(0.85);
+}
+
+/* ============================================================
+   INTEGRASYON POU MOD NWIT (DARK MODE)
+   ============================================================ */
+[data-theme="dark"] .bottom-nav {
+    background: rgba(17, 24, 39, 0.9); /* Koulè nwa ble fonse */
+    border-top-color: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .nav-item {
+    color: #94a3b8; /* Gri klè pou mod nwit */
+}
+
+[data-theme="dark"] .nav-item.active {
+    color: #12a38f; /* Vèt la vin pi briyan yon ti kras nan nwa a */
+}
+
+[data-theme="dark"] .nav-item.active::after {
+    background: linear-gradient(90deg, #12a38f, #22c55e);
+  }
+
