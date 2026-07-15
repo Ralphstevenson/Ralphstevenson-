@@ -23,13 +23,13 @@ export const db = getDatabase(app);
 // --- 2. ENPÒTE MODIL SEKSYON YO ---
 async function loadModules(uid) {
     try {
-        // Nou chaje tout modil yo an menm tan (nou ajoute akey.js)
-        const [akey, echanj, retre, istorik, chat, parennaj, paramet] = await Promise.all([
+        // Nou chaje tout modil yo an menm tan (Nou ajoute akey.js ak notif.js)
+        const [akey, notif, echanj, retre, istorik, chat, parennaj, paramet] = await Promise.all([
             import('./akey.js').catch((err) => { console.error("Erè akey.js:", err); return {}; }),
+            import('./notif.js').catch((err) => { console.error("Erè notif.js:", err); return {}; }),
             import('./echanj.js').catch(() => ({})),
             import('./retre.js').catch(() => ({})),
             import('./istorik.js').catch(() => ({})),
-            import('./chat.js').catch(() => ({})),
             import('./parene.js').catch(() => ({})),
             import('./paramet.js').catch(() => ({}))
         ]);
@@ -37,6 +37,9 @@ async function loadModules(uid) {
         // Lanse akèy la pou kliyan sa a
         if (akey.initAkeyDone) akey.initAkeyDone(uid);
         if (akey.initHomeCarousel) akey.initHomeCarousel();
+
+        // Lanse sistèm notifikasyon yo
+        if (notif.initNotifikasyon) notif.initNotifikasyon(uid);
 
         // Lanse rès modil yo
         if (echanj.initEchanj) echanj.initEchanj(uid);
@@ -108,9 +111,11 @@ window.toggleAuth = (mode) => {
 
 window.handleLogout = () => { if (confirm("Dekonekte?")) signOut(auth); };
 
-// Sidebar & Notif UI
+// Sidebar UI
 window.toggleSidebar = () => document.getElementById('sidebar')?.classList.toggle('active');
 
+// N.B: toggleNotifPanel ak switchNotifTab ap jere nèt anndan notif.js lè l fin chaje.
+// Nou kite vèsyon "fallback" sa yo sèlman si notif.js poko fin chaje nèt pou evite erè nan HTML la.
 window.toggleNotifPanel = () => document.getElementById('notif-panel')?.classList.toggle('active');
 
 window.switchNotifTab = (tab) => {
@@ -160,4 +165,3 @@ window.showPage = (pageId, navElement) => {
     // Fèmen sidebar otomatikman sou mobil apre klike
     document.getElementById('sidebar')?.classList.remove('active');
 };
-            
