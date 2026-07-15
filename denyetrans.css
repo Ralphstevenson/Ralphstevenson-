@@ -1,0 +1,139 @@
+/* ============================================================
+   SEKSYON DÈNYE AKTIVITE - HOME RECENT ACTIVITY
+   ============================================================ */
+.news-section-pro {
+    background: var(--card-bg, #ffffff);
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 20px;
+    border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.news-header-pro h3 {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.news-header-pro h3 i {
+    color: var(--primary, #097969);
+}
+
+/* KAD CHAK AKTIVITE YO */
+.activity-item-pro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color, #f1f5f9);
+    animation: slideUpActivity 0.3s ease;
+}
+
+.activity-item-pro:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+@keyframes slideUpActivity {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.activity-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* IKÒN STATUS */
+.activity-icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+/* Diferan koulè pou chak estati */
+.activity-icon-box.status-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981; /* Vèt pou Validé */
+}
+
+.activity-icon-box.status-pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b; /* Jòn pou En atant */
+}
+
+.activity-icon-box.status-failed {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444; /* Wouj pou Echwe */
+}
+
+/* DETAY YO */
+.activity-details {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.activity-type {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text-main, #0f172a);
+}
+
+.activity-date {
+    font-size: 10.5px;
+    color: var(--text-sub, #64748b);
+    margin-top: 1px;
+}
+
+/* KÒB AK STATU LABEL (BÒ DWAT LA) */
+.activity-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.activity-amount {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+}
+
+.activity-status-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin-top: 3px;
+}
+
+.activity-status-label.status-success { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.activity-status-label.status-pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.activity-status-label.status-failed { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+.empty-msg-mini {
+    font-size: 11px;
+    color: var(--text-sub, #64748b);
+    text-align: center;
+    padding: 10px 0;
+    margin: 0;
+}
+
+/* Mod Nwit (Dark Mode Support) */
+[data-theme="dark"] .activity-type,
+[data-theme="dark"] .activity-amount {
+    color: #f8fafc;
+}
+[data-theme="dark"] .activity-item-pro {
+    border-bottom-color: #1f2937;
+}
