@@ -1,14 +1,14 @@
 /**
  * ============================================================
- * ECHANJ PLUS - JESTYON HEADER AK NOTIFIKASYON (notif.js)
- * Depann nèt sou script.js pou koneksyon Firebase v10
+ * ECHANJ PLUS - JESTYON HEADER AK NOTIFIKASYON (header.js)
+ * ES Module - Konekte dirèkteman ak script.js pou Firebase v10
  * ============================================================
  */
 
 import { db } from "./script.js";
-import { ref, onValue, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { ref, onValue, query, orderByChild, equalTo, limitToLast } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// Sere done yo lokalman pou lè n ap chanje tab
+// Done lokal pou notifikasyon yo
 let koneksyonLogs = [];
 let transakLogs = [];
 let activeTab = "koneksyon"; // Tab pa defo
@@ -19,10 +19,8 @@ let activeTab = "koneksyon"; // Tab pa defo
 export function initNotifikasyon(uid) {
     if (!uid) return;
 
-    const badge = document.getElementById('notif-badge');
-
-    // A. Koute Istorik Koneksyon yo
-    const connRef = ref(db, `logs/connections/${uid}`);
+    // A. Koute Istorik Koneksyon yo (Pran 5 dènye yo)
+    const connRef = query(ref(db, `logs/connections/${uid}`), limitToLast(5));
     onValue(connRef, (snapshot) => {
         koneksyonLogs = [];
         if (snapshot.exists()) {
@@ -34,13 +32,16 @@ export function initNotifikasyon(uid) {
             koneksyonLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         }
         updateNotifUI();
+    }, (error) => {
+        console.error("Erè lekti koneksyon logs:", error);
     });
 
-    // B. Koute Tranzaksyon yo pou Notifikasyon
+    // B. Koute Tranzaksyon yo pou Notifikasyon (Pran 5 dènye yo)
     const transQuery = query(
         ref(db, 'transactions'),
         orderByChild('uid'),
-        equalTo(uid)
+        equalTo(uid),
+        limitToLast(5)
     );
     onValue(transQuery, (snapshot) => {
         transakLogs = [];
@@ -57,6 +58,8 @@ export function initNotifikasyon(uid) {
             });
         }
         updateNotifUI();
+    }, (error) => {
+        console.error("Erè lekti tranzaksyon logs:", error);
     });
 }
 
@@ -68,7 +71,7 @@ function updateNotifUI() {
     const badge = document.getElementById('notif-badge');
     if (!notifContent) return;
 
-    // Jere kantite total notifikasyon pou Badge la
+    // Kalkile kantite total notifikasyon pou Badge la
     const totalNotifs = koneksyonLogs.length + transakLogs.length;
     if (badge) {
         if (totalNotifs > 0) {
@@ -79,7 +82,7 @@ function updateNotifUI() {
         }
     }
 
-    // Afiche kontni an depann de tab ki aktif la
+    // Netwaye bwat la anvan nou mete nouvo done
     notifContent.innerHTML = "";
 
     if (activeTab === "koneksyon") {
@@ -91,7 +94,7 @@ function updateNotifUI() {
         koneksyonLogs.forEach(log => {
             const dat = log.timestamp ? new Date(log.timestamp).toLocaleString('ht-HT') : '---';
             const device = log.device || "Aparèy Enkoni";
-            const ip = log.ip ? `IP: ${log.ip}` : '';
+            const ip = log.ip ? `IP: ${log.ip}` : 'IP kache';
 
             const html = `
                 <div class="notif-item">
@@ -147,13 +150,18 @@ function updateNotifUI() {
 }
 
 // ==========================================
-// 3. FONKSYON GLOBAL POU KLIK SOU TAB AK PANEL
+// 3. EKSPÒTE FONKSYON YO SOU WINDOW POU HTML
 // ==========================================
+
+// Louvri / Fèmen panèl notifikasyon an
 window.toggleNotifPanel = function() {
     const panel = document.getElementById('notif-panel');
-    if (panel) panel.classList.toggle('active');
+    if (panel) {
+        panel.classList.toggle('active');
+    }
 };
 
+// Chanje ant tab "Koneksyon" ak "Tranzaksyon"
 window.switchNotifTab = function(tab) {
     activeTab = tab;
     
@@ -163,8 +171,11 @@ window.switchNotifTab = function(tab) {
     });
 
     const activeBtn = document.getElementById(`tab-${tab}`);
-    if (activeBtn) activeBtn.classList.add('active');
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+    }
 
-    // Rafrechi lis la
+    // Rafrechi lis la imedyatman
     updateNotifUI();
 };
+                             
