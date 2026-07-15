@@ -23,8 +23,9 @@ export const db = getDatabase(app);
 // --- 2. ENPÒTE MODIL SEKSYON YO ---
 async function loadModules(uid) {
     try {
-        // Nou chaje tout modil yo an menm tan
-        const [echanj, retre, istorik, chat, parennaj, paramet] = await Promise.all([
+        // Nou chaje tout modil yo an menm tan (nou ajoute akey.js)
+        const [akey, echanj, retre, istorik, chat, parennaj, paramet] = await Promise.all([
+            import('./akey.js').catch((err) => { console.error("Erè akey.js:", err); return {}; }),
             import('./echanj.js').catch(() => ({})),
             import('./retre.js').catch(() => ({})),
             import('./istorik.js').catch(() => ({})),
@@ -33,6 +34,11 @@ async function loadModules(uid) {
             import('./paramet.js').catch(() => ({}))
         ]);
 
+        // Lanse akèy la pou kliyan sa a
+        if (akey.initAkeyDone) akey.initAkeyDone(uid);
+        if (akey.initHomeCarousel) akey.initHomeCarousel();
+
+        // Lanse rès modil yo
         if (echanj.initEchanj) echanj.initEchanj(uid);
         if (retre.initRetre) retre.initRetre(uid);
         if (istorik.initIstorik) istorik.initIstorik(uid);
@@ -154,4 +160,4 @@ window.showPage = (pageId, navElement) => {
     // Fèmen sidebar otomatikman sou mobil apre klike
     document.getElementById('sidebar')?.classList.remove('active');
 };
-               
+            
