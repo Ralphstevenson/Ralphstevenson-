@@ -1,41 +1,46 @@
-// Sipoze ou gen Firebase Auth ak Database ki inisyalize deja kòm "auth" ak "database"
-
-// Koute si kondisyon koneksyon itilizatè a chanje
 auth.onAuthStateChanged((user) => {
     const activityContainer = document.getElementById('home-recent-activity');
+    if (!activityContainer) return;
     
     if (user) {
         const userId = user.uid;
-        // Ref sou branch tranzaksyon itilizatè a (chanje chemen an si pa w la rele yon lòt jan)
-        const dbRef = firebase.database().ref(`users/${userId}/transactions`);
+        
+        // 1. Nou vize branch "transactions" ki nan rasin nan dirèkteman
+        // 2. Nou ajoute filtè "orderByChild" ak "equalTo" pou obeyi Rules sekirite yo
+        const dbRef = firebase.database().ref('transactions')
+                        .orderByChild('uid')
+                        .equalTo(userId);
 
-        // Rale done yo an tan reyèl
         dbRef.on('value', (snapshot) => {
+            // Depi nou jwenn repons nan men Firebase, nou retire mesaj "Ap chaje..." a
+            activityContainer.innerHTML = ''; 
+
             if (snapshot.exists()) {
                 const data = snapshot.val();
-                
-                // Konvèti objè a an Array pou n ka manipile l
                 let transactionsList = [];
+                
+                // Transfòme done yo an Array
                 for (let key in data) {
                     transactionsList.push({ id: key, ...data[key] });
                 }
 
-                // 1. Triye tranzaksyon yo depi sou sa ki pi resan an (Dat ki pi fò)
-                transactionsList.sort((a, b) => new Date(b.date) - new Date(a.date));
+                // Triye tranzaksyon yo depi sou sa ki pi resan an (timestamp/date)
+                transactionsList.sort((a, b) => {
+                    // Si w gen timestamp li pi bon, sinon nou itilize dat la
+                    const dateA = a.timestamp ? new Date(a.timestamp) : new Date(a.date);
+                    const dateB = b.timestamp ? new Date(b.timestamp) : new Date(b.date);
+                    return dateB - dateA;
+                });
 
-                // 2. Pran sèlman 3 premye yo (3 dènye tranzaksyon yo fè)
+                // Pran sèlman 3 dènye yo
                 const topThree = transactionsList.slice(0, 3);
 
-                // Vide veso a anvan n mete nouvo done yo
-                activityContainer.innerHTML = '';
-
-                // 3. Boukle pou afiche yo chak
                 topThree.forEach((tx) => {
-                    // Detèmine koulè ak ikòn selon estati a (Validé, En atant, oswa Echwe)
                     let statusClass = 'status-pending';
                     let statusText = tx.status || 'En atant';
                     let statusIcon = 'fa-clock';
 
+                    // Tcheke estati tranzaksyon an
                     if (statusText.toLowerCase() === 'validé' || statusText.toLowerCase() === 'valide') {
                         statusClass = 'status-success';
                         statusIcon = 'fa-circle-check';
@@ -44,16 +49,21 @@ auth.onAuthStateChanged((user) => {
                         statusIcon = 'fa-circle-xmark';
                     }
 
-                    // Detèmine tip operasyon an (Retrè MonCash, Echanj Digicel, etc.)
+                    // Tip operasyon ak kantite kòb
                     const type = tx.type || 'Tranzaksyon';
                     const amount = tx.amount ? `${tx.amount} HTG` : '0 HTG';
-                    const dateFormatted = tx.date ? new Date(tx.date).toLocaleDateString('ht-HT', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric'
-                    }) : '';
+                    
+                    // Fòma dat la byen pwòp
+                    let dateFormatted = '';
+                    if (tx.date) {
+                        const d = new Date(tx.date);
+                        dateFormatted = !isNaN(d) ? d.toLocaleDateString('ht-HT', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        }) : tx.date;
+                    }
 
-                    // Kreye estrikti HTML HTML pou chak kat aktivite
                     const activityHTML = `
                         <div class="activity-item-pro">
                             <div class="activity-left">
@@ -75,23 +85,22 @@ auth.onAuthStateChanged((user) => {
                 });
 
             } else {
-                // Si moun lan poko janm fè okenn tranzaksyon
+                // Si moun lan pa gen okenn tranzaksyon nan database la ak UID li
                 activityContainer.innerHTML = `
-                    <p class="empty-msg-mini">Ou poko gen okenn aktivite sou kont ou.</p>
+                    <p class="empty-msg-mini">Ou poko fè okenn tranzaksyon.</p>
                 `;
             }
         }, (error) => {
-            console.error("Erè lè n ap rale done yo: ", error);
+            console.error("Erè Firebase Database:", error);
             activityContainer.innerHTML = `
                 <p class="empty-msg-mini text-danger">Erè koneksyon ak baz done a.</p>
             `;
         });
 
     } else {
-        // Si itilizatè a pa konekte
         activityContainer.innerHTML = `
             <p class="empty-msg-mini">Tanpri konekte pou w wè aktivite w yo.</p>
         `;
     }
 });
-          
+                 
