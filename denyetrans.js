@@ -130,4 +130,3 @@ auth.onAuthStateChanged((user) => {
         `;
     }
 });
-                            
