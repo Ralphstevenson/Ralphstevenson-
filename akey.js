@@ -37,6 +37,7 @@ export function initHomeCarousel() {
     }
 
     function startAutoPlay() {
+        if (intervalId) clearInterval(intervalId);
         intervalId = setInterval(() => {
             let nextIndex = (currentIndex + 1) % totalSlides;
             goToSlide(nextIndex);
@@ -121,7 +122,6 @@ export function initAkeyDone(uid) {
 
     // D. Koute 3 Dènye Tranzaksyon Yo (Dènye Aktivite)
     if (activityContainer) {
-        // Nou fè Query a kòrèkteman pou respekte Firebase Rules yo
         const queryRef = query(
             ref(db, 'transactions'),
             orderByChild('uid'),
@@ -210,6 +210,10 @@ export function initAkeyDone(uid) {
     }
 }
 
+// Globalize pou bouton ak HTML ka jwenn yo fasil
+window.initHomeCarousel = initHomeCarousel;
+window.initAkeyDone = initAkeyDone;
+
 // ==========================================
 // 3. JESTYON FAQ ACCORDION (FENÈT GLOBAL)
 // ==========================================
@@ -228,11 +232,4 @@ window.toggleFaq = function(element) {
         }
     }
 };
-
-// Demare carousel la le paj la fini chaje
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHomeCarousel);
-} else {
-    initHomeCarousel();
-                }
         
