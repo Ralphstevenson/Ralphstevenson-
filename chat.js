@@ -1,81 +1,127 @@
-/* ============================================================
-   JS ELITE V4.1 - KONPLETMAN OPTIMIZE
-   ============================================================ */
-import { auth, db } from './script.js'; 
+/**
+ * ============================================================
+ * ECHANJ PLUS - JESTYON CHAT SIPÒ (chat.js)
+ * ES Module - Depann nèt sou script.js pou Firebase v10
+ * ============================================================
+ */
+
+import { db, auth } from "./script.js";
 import { ref, push, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-let mesajKonte = 0; 
-const logoAdmin = "https://i.postimg.cc/zBs03Y9d/file-00000000171471f5a0ff5138fae23eb4.png";
+let mesajKonte = 0;
 
+// ==========================================
 // 1. INICIALIZASYON CHAT LA
-async function initChat() {
+// ==========================================
+export async function initChat(uid) {
+    if (!uid) return;
+
     const input = document.getElementById('chat-input');
     const btnSend = document.getElementById('btn-send-chat');
-    const sonNotif = document.getElementById('chat-notif');
+    const fileInput = document.getElementById('chat-file');
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            kouteMesaj(user.uid);
-            kouteStatusAdmin();
-        }
-    });
+    // Kòmanse koute mesaj ak status admin nan an tan reyèl
+    kouteMesaj(uid);
+    kouteStatusAdmin();
 
-    // Fonksyon pou voye mesaj
+    // Fonksyon pou voye mesaj tèks
     const voyeMesaj = async () => {
         const tèks = input.value.trim();
         if (tèks && auth.currentUser) {
             try {
-                await push(ref(db, `chats/${auth.currentUser.uid}/messages`), {
+                await push(ref(db, `chats/${uid}/messages`), {
                     sender: "client",
                     text: tèks,
                     status: "sent",
                     timestamp: serverTimestamp()
                 });
                 input.value = "";
-                input.focus();
+                if (input) input.focus();
             } catch (error) {
-                console.error("Erè:", error);
+                console.error("Erè voye mesaj:", error);
             }
         }
     };
 
-    if (btnSend) btnSend.onclick = voyeMesaj;
+    // Fonksyon pou voye yon imaj (an Base64 pou konpatibilite rapid san Storage)
+    const voyeImaj = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            const base64String = event.target.result;
+            try {
+                await push(ref(db, `chats/${uid}/messages`), {
+                    sender: "client",
+                    imageUrl: base64String,
+                    status: "sent",
+                    timestamp: serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Erè voye imaj:", error);
+            }
+        };
+        reader.readAsDataURL(file);
+    };
+
+    // Atache evènman yo
+    if (btnSend) {
+        btnSend.onclick = (e) => {
+            e.preventDefault();
+            voyeMesaj();
+        };
+    }
+
     if (input) {
-        input.onkeypress = (e) => { if (e.key === 'Enter') voyeMesaj(); };
+        input.onkeypress = (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                voyeMesaj();
+            }
+        };
+    }
+
+    if (fileInput) {
+        fileInput.onchange = voyeImaj;
     }
 }
 
+// ==========================================
 // 2. KOUTE MESAJ YO AN TAN REYÈL
+// ==========================================
 function kouteMesaj(uid) {
     const chatRef = ref(db, `chats/${uid}/messages`);
-    
+    const box = document.getElementById('chat-messages');
+
     onValue(chatRef, (snap) => {
-        const box = document.getElementById('chat-messages');
         if (!box) return;
         
         const done = snap.val();
         if (done) {
             const mesajLis = Object.values(done);
 
-            // Jere son notifikasyon si admin nan reponn
+            // Jere son notifikasyon si se yon nouvo mesaj admin voye
             if (mesajLis.length > mesajKonte) {
                 const dènyeMesaj = mesajLis[mesajLis.length - 1];
                 if (dènyeMesaj.sender === "admin") {
                     const son = document.getElementById('chat-notif');
-                    son?.play().catch(() => {});
+                    if (son) {
+                        son.play().catch((err) => console.log("Lektur son bloke pa navigatè a:", err));
+                    }
                 }
             }
             mesajKonte = mesajLis.length;
 
-            // Reset box la epi remete aviz sekirite a
+            // Efase kontni an epi remete aviz sekirite a fòmate byen bèl
             box.innerHTML = `
-                <div class="chat-security-notice" style="text-align:center; padding:15px; background:#fff9c4; border-radius:10px; margin-bottom:15px; font-size:11px; color:#555; border: 1px solid #fbc02d;">
-                    <i class="fa-solid fa-lock"></i> Mesaj ou yo chiffres. Pèsonn andeyò chat sa pa ka li yo.
+                <div class="chat-security-notice">
+                    <i class="fa-solid fa-lock"></i>
+                    <p>Konvèsasyon sa a chiffres ak sekirite an bout-an-bout. Pèsonn andeyò chat sa a pa ka li mesaj ou yo.</p>
                 </div>
             `;
 
-            // Afiche chak mesaj
+            // Afiche chak mesaj nan lòd
             mesajLis.forEach(m => {
                 const isMe = m.sender === "client";
                 const div = document.createElement('div');
@@ -83,18 +129,19 @@ function kouteMesaj(uid) {
                 
                 let kontni = "";
 
-                // Si se admin, nou ka mete logo a nan premye mesaj la oswa si gen imaj
-                if (!isMe && m.imageUrl) {
-                    kontni += `<img src="${m.imageUrl}" class="chat-msg-img" style="cursor:pointer" onclick="window.open('${m.imageUrl}')">`;
+                // Jere si se yon imaj
+                if (m.imageUrl) {
+                    kontni += `<img src="${m.imageUrl}" class="chat-msg-img" style="max-width: 100%; border-radius: 8px; margin-bottom: 5px; cursor: pointer;" onclick="window.open('${m.imageUrl}')">`;
                 }
 
+                // Jere si gen tèks
                 if (m.text) {
                     kontni += `<p style="margin:0">${m.text}</p>`;
                 }
 
-                // Jere lè a ak Double Check pou kliyan an
+                // Jere lè a ak doub chèk la pou kliyan an
                 const lè = m.timestamp 
-                    ? new Date(m.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
+                    ? new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
                     : "...";
                 
                 const statusIcon = isMe ? `<i class="fa-solid fa-check-double" style="margin-left:5px; color:#53bdeb; font-size:10px;"></i>` : "";
@@ -105,13 +152,24 @@ function kouteMesaj(uid) {
                 box.appendChild(div);
             });
 
-            // Scroll anba nèt
+            // Scroll otomatikman desann pou wè dènye mesaj la
             box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+        } else {
+            // Si pa gen mesaj ditou
+            box.innerHTML = `
+                <div class="chat-security-notice">
+                    <i class="fa-solid fa-lock"></i>
+                    <p>Konvèsasyon sa a chiffres ak sekirite an bout-an-bout. Pèsonn andeyò chat sa a pa ka li mesaj ou yo.</p>
+                </div>
+                <p class="empty-msg" style="text-align:center; margin-top:20px; color:#9ca3af;">Ekri premye mesaj ou pou kòmanse pale ak sipò a.</p>
+            `;
         }
     });
 }
 
+// ==========================================
 // 3. KOUTE STATUS ADMIN (ONLINE/OFFLINE)
+// ==========================================
 function kouteStatusAdmin() {
     onValue(ref(db, `status/admin`), (snap) => {
         const status = snap.val()?.state || "offline";
@@ -128,6 +186,6 @@ function kouteStatusAdmin() {
     });
 }
 
-// Lanse sistèm nan
-initChat();
-        
+// Ekspoze fonksyon an sou Window pou sekirite
+window.initChat = initChat;
+                                                                    
