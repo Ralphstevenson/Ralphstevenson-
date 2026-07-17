@@ -61,10 +61,13 @@ window.closeFeatureModalOnOverlay = function(event, modalId) {
     }
 };
 
-// 4. ATRAKASYON SOU KAT YO (Lè paj la fin pare)
+// 4. ATRAKASYON SOU KAT YO AK KONTWÒL DISPLAY SEKSYON AN
 document.addEventListener("DOMContentLoaded", () => {
     console.log("JavaScript Echanj Plus chaje ak siksè! 🚀");
 
+    const infosSection = document.getElementById('infos');
+
+    // Jere klike sou kat yo pou ti animasyon
     document.querySelectorAll('.feature-poster-card').forEach(card => {
         card.addEventListener('click', function() {
             const icon = this.querySelector('.poster-hover-hint i'); // Aliyen ak klas ki nan HTML la
@@ -81,5 +84,57 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
+    /**
+     * ============================================================
+     * OTO-KONTWÒL DISPLAY POU SEKSYON #INFOS LA
+     * ============================================================
+     * Lojik sa a ap siveye chanjman nan paj yo otomatikman. 
+     * Si yon lòt paj aktif, l ap kache `#infos` pou li pa sipèpoze.
+     */
+    if (infosSection) {
+        // Nou detekte eleman paj yo (ajiste ID sa yo si yo rele yon lòt jan nan HTML ou)
+        const lòtPajYo = [
+            document.getElementById('paj-echanj'),
+            document.getElementById('paj-retre'),
+            document.getElementById('paj-istorik'),
+            document.getElementById('paj-sipo'),
+            // Si ou gen yon veso (container) espesifik pou lòt kontni yo, ou ka ajoute l isit la
+        ].filter(el => el !== null); // Retire sa ki pa egziste yo pou evite erè
+
+        // Fonksyon ki tcheke si yon lòt paj aktif (si li pa gen klas "hidden")
+        const tchekeEpiKacheInfos = () => {
+            let genLòtPajKiLouvri = false;
+
+            lòtPajYo.forEach(paj => {
+                if (!paj.classList.contains('hidden')) {
+                    genLòtPajKiLouvri = true;
+                }
+            });
+
+            if (genLòtPajKiLouvri) {
+                infosSection.classList.add('hidden'); // Kache detay sèvis yo si lòt paj aktif
+            } else {
+                infosSection.classList.remove('hidden'); // Montre yo si nou tounen sou Akèy
+            }
+        };
+
+        // Kouri tcheke a depi paj la chaje pou premye fwa
+        tchekeEpiKacheInfos();
+
+        // Konfigure yon obsèvatè (Observer) pou siveye lè klas "hidden" ap chanje sou lòt paj yo
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    tchekeEpiKacheInfos();
+                }
+            });
+        });
+
+        // Kòmanse siveye chak lòt paj yo
+        lòtPajYo.forEach(paj => {
+            observer.observe(paj, { attributes: true });
+        });
+    }
 });
-                    
+    
