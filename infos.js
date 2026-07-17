@@ -93,16 +93,15 @@ document.addEventListener("DOMContentLoaded", () => {
      * Si yon lòt paj aktif, l ap kache `#infos` pou li pa sipèpoze.
      */
     if (infosSection) {
-        // Nou detekte eleman paj yo (ajiste ID sa yo si yo rele yon lòt jan nan HTML ou)
+        // Nou detekte tout lòt paj ki dwe kache seksyon "infos" la lè yo louvri
         const lòtPajYo = [
             document.getElementById('paj-echanj'),
             document.getElementById('paj-retre'),
-            document.getElementById('paj-istorik'),
-            document.getElementById('paj-sipo'),
-            // Si ou gen yon veso (container) espesifik pou lòt kontni yo, ou ka ajoute l isit la
+            document.getElementById('paj-istorik'), // Te manke nan premye tcheke a
+            document.getElementById('paj-sipo')     // Te manke nan premye tcheke a
         ].filter(el => el !== null); // Retire sa ki pa egziste yo pou evite erè
 
-        // Fonksyon ki tcheke si yon lòt paj aktif (si li pa gen klas "hidden")
+        // Fonksyon ki tcheke si gen yon lòt paj ki aktif (ki pa gen klas "hidden")
         const tchekeEpiKacheInfos = () => {
             let genLòtPajKiLouvri = false;
 
@@ -113,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (genLòtPajKiLouvri) {
-                infosSection.classList.add('hidden'); // Kache detay sèvis yo si lòt paj aktif
+                infosSection.classList.add('hidden'); // Kache detay sèvis yo si yon lòt paj aktif
             } else {
                 infosSection.classList.remove('hidden'); // Montre yo si nou tounen sou Akèy
             }
@@ -122,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Kouri tcheke a depi paj la chaje pou premye fwa
         tchekeEpiKacheInfos();
 
-        // Konfigure yon obsèvatè (Observer) pou siveye lè klas "hidden" ap chanje sou lòt paj yo
+        // Konfigure yon obsèvatè (Observer) pou siveye lè klas "hidden" ap chanje sou paj sa yo
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.attributeName === 'class') {
@@ -137,4 +136,4 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-    
+                             
