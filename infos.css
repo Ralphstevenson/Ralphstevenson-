@@ -17,12 +17,62 @@
     --transition-smooth: cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+/* Estil debaz pou paj la */
+body {
+    background-color: var(--dark-bg);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Bouton pou tounen sou paj prensipal la */
+.back-navigation {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.btn-back-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--glass-bg);
+    border: 1px solid var(--gold-border);
+    color: var(--gold-primary);
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    transition: all 0.3s var(--transition-smooth);
+    cursor: pointer;
+}
+
+.btn-back-main:hover {
+    background: var(--gold-primary);
+    color: var(--dark-bg);
+    box-shadow: 0 0 15px var(--gold-glow);
+    transform: translateX(-4px);
+}
+
+.infos-wrapper {
+    width: 100%;
+    max-width: 600px;
+}
+
 /* ============================================================
    STYLING SEKSYON GALRI MINI POU IMAJ MIZAJOU MULTIP
    ============================================================ */
 .echanj-features-gallery {
-    margin: 30px 0;
-    padding: 20px 16px;
+    margin: 0;
+    padding: 24px 20px;
     background: var(--glass-bg);
     border-radius: 24px;
     border: 1px solid var(--glass-border);
@@ -33,17 +83,18 @@
 
 .gallery-header {
     text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     padding-left: 4px;
 }
 
 .gallery-main-title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 800;
     color: var(--text-main);
     display: flex;
     align-items: center;
     gap: 10px;
+    margin: 0;
     letter-spacing: -0.02em;
 }
 
@@ -55,7 +106,8 @@
 .gallery-sub-title {
     font-size: 11px;
     color: var(--gold-primary);
-    margin-top: 4px;
+    margin-top: 6px;
+    margin-bottom: 0;
     font-weight: 500;
     opacity: 0.9;
     letter-spacing: 0.02em;
@@ -65,14 +117,14 @@
 .features-poster-grid {
     display: flex;
     gap: 16px;
-    overflow-x: auto; /* Pou si w ajoute plis imaj li ka glise sou telefòn */
+    overflow-x: auto;
     padding: 10px 4px 15px 4px;
     scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch; /* Glise ultra-likid sou iOS */
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
 }
 
-/* Stilize Scrollbar la sou PC */
+/* Style pou Scrollbar la sou PC */
 .features-poster-grid::-webkit-scrollbar {
     height: 5px;
 }
@@ -87,12 +139,12 @@
 
 /* KAT TI IMAJ LA (TI GWOSÈ ELEGAN) */
 .feature-poster-card {
-    flex: 0 0 105px; /* Gwosè a bloke tou piti pou l pa janm gwo */
+    flex: 0 0 105px;
     display: flex;
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    perspective: 1000px; /* Pou efè 3D sou hover */
+    perspective: 1000px;
 }
 
 .poster-img-wrapper {
@@ -112,13 +164,13 @@
 .poster-img-wrapper img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Pou imaj la ranpli espas la pwòp */
+    object-fit: cover;
     display: block;
     transform: scale(1.02);
     transition: transform 0.4s var(--transition-smooth);
 }
 
-/* Efè Hover entèlijan sou kat la */
+/* Efè Hover sou kat la */
 .feature-poster-card:hover .poster-img-wrapper {
     transform: translateY(-5px) scale(1.03);
     border-color: var(--gold-primary);
@@ -126,10 +178,10 @@
 }
 
 .feature-poster-card:hover img {
-    transform: scale(1.1); /* Zoom lejè sou imaj la lè w hover */
+    transform: scale(1.1);
 }
 
-/* Ti endikatè "Gade" a ki fennen parfe */
+/* Ti endikatè "Gade" a */
 .poster-hover-hint {
     position: absolute;
     bottom: 0;
@@ -147,7 +199,6 @@
     transition: transform 0.3s var(--transition-smooth);
 }
 
-/* Lè w hover, ti mo "Gade" a glise monte soti anba */
 .feature-poster-card:hover .poster-hover-hint {
     transform: translateY(0);
 }
@@ -178,7 +229,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(3, 7, 18, 0.8); /* Ultra nwa sekirite */
+    background: rgba(3, 7, 18, 0.85);
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
     display: flex;
@@ -189,7 +240,9 @@
     transition: opacity 0.4s var(--transition-smooth);
 }
 
+/* Klas pou kache modal la */
 .feature-overlay-modal.hidden {
+    display: none !important;
     opacity: 0;
     pointer-events: none;
 }
@@ -207,11 +260,9 @@
     text-align: left;
     color: var(--text-main);
     transform: scale(0.9) translateY(15px);
-    transition: transform 0.4s var(--transition-smooth), 
-                opacity 0.4s var(--transition-smooth);
+    transition: transform 0.4s var(--transition-smooth), opacity 0.4s var(--transition-smooth);
 }
 
-/* Lè modal la parèt */
 .feature-overlay-modal:not(.hidden) .feature-modal-card {
     transform: scale(1) translateY(0);
 }
@@ -233,6 +284,7 @@
     transition: all 0.2s ease;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
+
 .feature-close-btn:hover { 
     color: var(--text-main); 
     background: #ef4444;
@@ -281,7 +333,6 @@
     transition: transform 0.2s ease;
 }
 
-/* Yon ti efè hover entèaktif sou liy lis yo */
 .feature-modal-body ul li:hover {
     transform: translateX(4px);
 }
@@ -291,5 +342,5 @@
     margin-top: 2px;
     font-size: 13px;
     filter: drop-shadow(0 0 3px rgba(16, 185, 129, 0.2));
-   }
+       }
        
