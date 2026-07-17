@@ -1,0 +1,50 @@
+/* Veso prensipal la */
+.mini-flash-info {
+    background: #000000;
+    padding: 10px 15px;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.ticker-wrapper {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+}
+
+/* Tren k ap pote de tèks yo ansanm */
+.ticker-track {
+    display: flex;
+    width: max-content;
+    /* 20 segonn pou l mache dous, linear (san ralanti), infinite (san rete) */
+    animation: gliseEnfini 20s linear infinite;
+}
+
+/* Stil bèl polis ak koulè jòn pou tèks yo */
+.ticker-content {
+    font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #facc15;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+/* ANIMASYON KI FÈ L REKÒMANSE SAN RETE */
+@keyframes gliseEnfini {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-50%, 0, 0); /* Li deplase egzakteman mwatye nan tren an pou dezyèm lan pran plas premye a */
+    }
+}
+
+/* Lè yo pase sourit sou li, li kanpe pou yo ka li fasil */
+.mini-flash-info:hover .ticker-track {
+    animation-play-state: paused;
+    cursor: pointer;
+}
+
