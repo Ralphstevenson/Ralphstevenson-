@@ -3,6 +3,77 @@
    Koulè: Nwa Solid, Blan, Jòn (Gold)
    ============================================================ */
 
+/* 0. HEADER AK IMAJ MINIATURE (SA OU SOT AJOUTE A) */
+.premium-header {
+    text-align: center;
+    padding: 20px 15px;
+    background: #ffffff;
+    border-radius: 24px;
+    margin: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    border: 1px solid #eeeeee;
+}
+
+.header-main-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* --- KÒD POU IMAJ MINIATURE A --- */
+.header-main-box a {
+    display: block;
+    width: 100%;
+    max-width: 320px; /* Lajè maksimòm imaj la pou l pa parèt twò gwo */
+    margin: 0 auto 15px auto; /* Santre li epi bay yon ti espas anba */
+    border-radius: 16px; /* Kwen won pou l kadre ak rès sit la */
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Ti lonbray pou l parèt an riljèf */
+    transition: transform 0.3s ease;
+}
+
+.header-main-box a:hover {
+    transform: scale(1.03); /* Yon ti zoom dous lè kliyan an touche l */
+}
+
+.header-main-box a img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+/* --------------------------------- */
+
+.page-title {
+    font-size: 22px;
+    color: #000000;
+    font-weight: 900;
+    margin: 10px 0 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.subtitle-paj {
+    font-size: 13px;
+    color: #666666;
+    margin: 0 0 15px 0;
+}
+
+/* Ticker Info a (Marquee) */
+.mini-flash-info {
+    background: #000000;
+    color: #facc15;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 800;
+    overflow: hidden;
+}
+
+
 /* 1. KONTENÈ KAT REZO YO */
 .provider-container {
     display: flex;
@@ -79,6 +150,7 @@
     white-space: nowrap;
 }
 
+
 /* 2. MODAL KONFIMASYON (OVERLAY ELITE) */
 .modal-overlay {
     position: fixed;
@@ -110,7 +182,7 @@
     margin-bottom: 25px;
 }
 
-.icon-circle {
+.icon-circle-gold {
     width: 70px;
     height: 70px;
     background: #000000; /* Nwa */
@@ -131,6 +203,7 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
+
 
 /* 3. DETAY REZIME (BLACK & WHITE) */
 .summary-row {
@@ -187,6 +260,7 @@
     margin-top: 5px;
 }
 
+
 /* 4. BOUTON AKSYON (NWA & JÒN) */
 .modal-footer-pwo {
     display: flex;
@@ -206,7 +280,7 @@
     transition: 0.3s;
 }
 
-.btn-confirm-modal {
+.btn-confirm-modal-premium {
     flex: 2;
     padding: 16px;
     background: #000000; /* Nwa Solid */
@@ -219,7 +293,7 @@
     transition: 0.3s;
 }
 
-.btn-confirm-modal:active {
+.btn-confirm-modal-premium:active {
     transform: scale(0.96);
 }
 
@@ -231,20 +305,26 @@
     font-weight: 500;
 }
 
+
 /* ANIMASYON */
 @keyframes slideUpModal {
     from { transform: translateY(80px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
 
+
 /* NIGHT MODE */
+body.night-mode .premium-header,
 body.night-mode .modal-content-premium {
     background: #111111;
     border-color: #facc15;
 }
+body.night-mode .page-title,
 body.night-mode .modal-header-pwo h4, 
 body.night-mode .summary-row b,
 body.night-mode .total-row h2 {
     color: #ffffff;
-   }
-   
+}
+body.night-mode .subtitle-paj {
+    color: #aaaaaa;
+}
