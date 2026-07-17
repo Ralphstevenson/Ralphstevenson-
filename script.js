@@ -55,16 +55,33 @@ async function loadModules(uid) {
     }
 }
 
-// --- 3. STATUS CHECK & AUTH LOGIC ---
+// --- 3. STATUS CHECK & AUTH LOGIC (ANTI-FWÒD METE AJOU) ---
 onAuthStateChanged(auth, (user) => {
     const authPage = document.getElementById('auth-page');
     const homePage = document.getElementById('home-page');
+    const loginEmailInput = document.getElementById('login-email');
+
+    // Ranpli Email la otomatikman si l te deja konekte yon fwa sou aparèy la
+    const savedEmail = localStorage.getItem('echanj_saved_email');
+    if (savedEmail && loginEmailInput) {
+        loginEmailInput.value = savedEmail;
+    }
 
     if (user) {
-        authPage?.classList.add('hidden');
-        homePage?.classList.remove('hidden');
-        updateGlobalUI(user.uid);
-        loadModules(user.uid);
+        // Gade si mèt kont lan sot tape modpas li pou sesyon sa a
+        const isVerifiedThisSession = sessionStorage.getItem('echanj_session_verified');
+
+        if (isVerifiedThisSession === 'true') {
+            // Si li valide modpas li, li ka antre sou Dashboard la
+            authPage?.classList.add('hidden');
+            homePage?.classList.remove('hidden');
+            updateGlobalUI(user.uid);
+            loadModules(user.uid);
+        } else {
+            // Si se koneksyon otomatik Firebase la, nou fòse l rete sou login pou l mete modpas li obligatwa
+            authPage?.classList.remove('hidden');
+            homePage?.classList.add('hidden');
+        }
     } else {
         authPage?.classList.remove('hidden');
         homePage?.classList.add('hidden');
@@ -78,8 +95,25 @@ window.handleLogin = async () => {
     const email = document.getElementById('login-email')?.value.trim();
     const pass = document.getElementById('login-pass')?.value;
     if (!email || !pass) return alert("Antre email ak modpas ou.");
+    
     try { 
+        // Verifikasyon modpas la ak Firebase
         await signInWithEmailAndPassword(auth, email, pass); 
+        
+        // Sove Email la nèt nan aparèy la pou pwochen fwa
+        localStorage.setItem('echanj_saved_email', email);
+        
+        // Valide sesyon aktyèl la piske li sot antre bon modpas la kounye a
+        sessionStorage.setItem('echanj_session_verified', 'true');
+        
+        // Louvri Dashboard la rapid
+        document.getElementById('auth-page')?.classList.add('hidden');
+        document.getElementById('home-page')?.classList.remove('hidden');
+        
+        // Netwaye bwat modpas la pou sekirite
+        if (document.getElementById('login-pass')) {
+            document.getElementById('login-pass').value = "";
+        }
     } catch (e) { 
         alert("Email oswa Modpas enkòrèk."); 
     }
@@ -98,6 +132,10 @@ window.handleSignup = async () => {
         const userCred = await createUserWithEmailAndPassword(auth, email, pass);
         const uid = userCred.user.uid;
         
+        // Sove enfòmasyon sesyon yo otomatikman pou nouvo enskripsyon an
+        localStorage.setItem('echanj_saved_email', email);
+        sessionStorage.setItem('echanj_session_verified', 'true');
+
         // Jenerasyon kòd ARS inik ak fòma 2026
         const randomDigits = Math.floor(1000 + Math.random() * 8900); // Evite kòmanse pa 0 pou sekirite
         const arsID = `ARS-${randomDigits}-2026`;
@@ -127,11 +165,19 @@ window.toggleAuth = (mode) => {
     } else {
         signupSec?.classList.add('hidden');
         loginSec?.classList.remove('hidden');
+        
+        // Remete email la otomatikman si l te deja sove lè l tounen sou login section
+        const savedEmail = localStorage.getItem('echanj_saved_email');
+        if (savedEmail && document.getElementById('login-email')) {
+            document.getElementById('login-email').value = savedEmail;
+        }
     }
 };
 
 window.handleLogout = () => { 
     if (confirm("Èske ou vle dekonekte vrèman?")) {
+        // Efase verifikasyon an pou pwochen fwa li obligatwa pou l mete modpas
+        sessionStorage.removeItem('echanj_session_verified');
         signOut(auth); 
     }
 };
@@ -196,7 +242,7 @@ function updateGlobalUI(uid) {
 
 // --- 6. NAVIGASYON (SINGLE PAGE) ---
 window.showPage = (pageId, navElement) => {
-    const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj', 'paj-parametre'];
+    const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj', 'paj-parametre', 'infos'];
     
     sections.forEach(id => {
         const sec = document.getElementById(id);
@@ -212,4 +258,3 @@ window.showPage = (pageId, navElement) => {
     // Fèmen sidebar otomatikman sou mobil apre klike
     document.getElementById('sidebar')?.classList.remove('active');
 };
-           
