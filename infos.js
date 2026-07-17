@@ -87,53 +87,58 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /**
      * ============================================================
-     * OTO-KONTWÒL DISPLAY POU SEKSYON #INFOS LA
+     * OTO-KONTWÒL DISPLAY POU SEKSYON #INFOS LA (SEKIRIZE ✅)
      * ============================================================
-     * Lojik sa a ap siveye chanjman nan paj yo otomatikman. 
-     * Si yon lòt paj aktif, l ap kache `#infos` pou li pa sipèpoze.
+     * Lojik sa a ap siveye chanjman nan paj yo otomatikman si yo egziste.
+     * Si lòt paj sa yo pa nan dokiman an (tankou sou paj separe), li pap bay erè.
      */
     if (infosSection) {
-        // Nou detekte tout lòt paj ki dwe kache seksyon "infos" la lè yo louvri
+        // Filtre sèlman paj ki reyèlman egziste nan paj HTML kote JS la ap kouri a
         const lòtPajYo = [
             document.getElementById('paj-echanj'),
             document.getElementById('paj-retre'),
-            document.getElementById('paj-istorik'), // Te manke nan premye tcheke a
-            document.getElementById('paj-sipo')     // Te manke nan premye tcheke a
-        ].filter(el => el !== null); // Retire sa ki pa egziste yo pou evite erè
+            document.getElementById('paj-istorik'),
+            document.getElementById('paj-sipo')
+        ].filter(el => el !== null); // Evite erè "null" si yon paj pa la
 
-        // Fonksyon ki tcheke si gen yon lòt paj ki aktif (ki pa gen klas "hidden")
-        const tchekeEpiKacheInfos = () => {
-            let genLòtPajKiLouvri = false;
+        // Si gen lòt paj nan HTML la, n ap aplike sistèm siveyans lan
+        if (lòtPajYo.length > 0) {
+            const tchekeEpiKacheInfos = () => {
+                let genLòtPajKiLouvri = false;
 
+                lòtPajYo.forEach(paj => {
+                    if (!paj.classList.contains('hidden')) {
+                        genLòtPajKiLouvri = true;
+                    }
+                });
+
+                if (genLòtPajKiLouvri) {
+                    infosSection.classList.add('hidden'); // Kache detay sèvis yo si yon lòt paj aktif
+                } else {
+                    infosSection.classList.remove('hidden'); // Montre yo si nou tounen sou Akèy
+                }
+            };
+
+            // Kouri tcheke a depi paj la chaje pou premye fwa
+            tchekeEpiKacheInfos();
+
+            // Konfigure yon obsèvatè (Observer) pou siveye lè klas "hidden" ap chanje sou paj sa yo
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === 'class') {
+                        tchekeEpiKacheInfos();
+                    }
+                });
+            });
+
+            // Kòmanse siveye chak lòt paj yo
             lòtPajYo.forEach(paj => {
-                if (!paj.classList.contains('hidden')) {
-                    genLòtPajKiLouvri = true;
-                }
+                observer.observe(paj, { attributes: true });
             });
-
-            if (genLòtPajKiLouvri) {
-                infosSection.classList.add('hidden'); // Kache detay sèvis yo si yon lòt paj aktif
-            } else {
-                infosSection.classList.remove('hidden'); // Montre yo si nou tounen sou Akèy
-            }
-        };
-
-        // Kouri tcheke a depi paj la chaje pou premye fwa
-        tchekeEpiKacheInfos();
-
-        // Konfigure yon obsèvatè (Observer) pou siveye lè klas "hidden" ap chanje sou paj sa yo
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.attributeName === 'class') {
-                    tchekeEpiKacheInfos();
-                }
-            });
-        });
-
-        // Kòmanse siveye chak lòt paj yo
-        lòtPajYo.forEach(paj => {
-            observer.observe(paj, { attributes: true });
-        });
+        } else {
+            // Si nou sou paj "infos.html" separe a, asire w seksyon #infos la pa kache nan CSS la
+            infosSection.classList.remove('hidden');
+        }
     }
 });
-                             
+                        
