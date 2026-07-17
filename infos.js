@@ -5,12 +5,13 @@
  */
 
 // 1. Fonksyon pou louvri yon modal ak bèl animasyon sou senbòl yo
-function openFeatureModal(modalId) {
+window.openFeatureModal = function(modalId) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
 
     // Louvri modal la an premye
     modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // Bloke scroll dèyè a pou evite deranjman
 
     // Chèche ikòn ki nan header modal la pou n anime l
     const modalHeaderIcon = modal.querySelector('.feature-modal-header i');
@@ -42,22 +43,23 @@ function openFeatureModal(modalId) {
             fill: 'forwards'
         });
     });
-}
+};
 
 // 2. Fonksyon pou fèmen yon modal
-function closeFeatureModal(modalId) {
+window.closeFeatureModal = function(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
         modal.classList.add('hidden');
+        document.body.style.overflow = ''; // Remete scroll paj la nòmal
     }
-}
+};
 
 // 3. Fèmen modal la si itilizatè a klike nan zòn vid (overlay) la
-function closeFeatureModalOnOverlay(event, modalId) {
+window.closeFeatureModalOnOverlay = function(event, modalId) {
     if (event.target.id === modalId) {
-        closeFeatureModal(modalId);
+        window.closeFeatureModal(modalId);
     }
-}
+};
 
 // 4. ATRAKASYON SOU KAT YO (Lè paj la fin pare)
 document.addEventListener("DOMContentLoaded", () => {
@@ -65,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll('.feature-poster-card').forEach(card => {
         card.addEventListener('click', function() {
-            const icon = this.querySelector('.poster-img-wrapper i');
+            const icon = this.querySelector('.poster-hover-hint i'); // Aliyen ak klas ki nan HTML la
             if (icon) {
                 // Yon ti tranbleman ak flash rapid sou ikòn "Gade" a
                 icon.animate([
@@ -80,4 +82,4 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
-                      
+                    
