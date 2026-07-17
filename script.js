@@ -27,12 +27,12 @@ async function loadModules(uid) {
         const [akey, header, echanj, retre, istorik, chat, parennaj, paramet] = await Promise.all([
             import('./akey.js').catch((err) => { console.error("Erè akey.js:", err); return {}; }),
             import('./header.js').catch((err) => { console.error("Erè header.js:", err); return {}; }),
-            import('./echanj.js').catch(() => ({})),
-            import('./retre.js').catch(() => ({})),
-            import('./istorik.js').catch(() => ({})),
-            import('./chat.js').catch(() => ({})),
-            import('./parene.js').catch(() => ({})),
-            import('./paramet.js').catch(() => ({}))
+            import('./echanj.js').catch((err) => { console.error("Erè echanj.js:", err); return {}; }),
+            import('./retre.js').catch((err) => { console.error("Erè retre.js:", err); return {}; }),
+            import('./istorik.js').catch((err) => { console.error("Erè istorik.js:", err); return {}; }),
+            import('./chat.js').catch((err) => { console.error("Erè chat.js:", err); return {}; }),
+            import('./parene.js').catch((err) => { console.error("Erè parene.js:", err); return {}; }),
+            import('./paramet.js').catch((err) => { console.error("Erè paramet.js:", err); return {}; })
         ]);
 
         // Lanse akèy la pou kliyan sa a
@@ -78,8 +78,11 @@ window.handleLogin = async () => {
     const email = document.getElementById('login-email')?.value.trim();
     const pass = document.getElementById('login-pass')?.value;
     if (!email || !pass) return alert("Antre email ak modpas ou.");
-    try { await signInWithEmailAndPassword(auth, email, pass); } 
-    catch (e) { alert("Email oswa Modpas enkòrèk."); }
+    try { 
+        await signInWithEmailAndPassword(auth, email, pass); 
+    } catch (e) { 
+        alert("Email oswa Modpas enkòrèk."); 
+    }
 };
 
 window.handleSignup = async () => {
@@ -94,45 +97,80 @@ window.handleSignup = async () => {
     try {
         const userCred = await createUserWithEmailAndPassword(auth, email, pass);
         const uid = userCred.user.uid;
-        const arsID = "ARS-" + Math.floor(1000 + Math.random() * 8999) + "-2026";
+        
+        // Jenerasyon kòd ARS inik ak fòma 2026
+        const randomDigits = Math.floor(1000 + Math.random() * 8900); // Evite kòmanse pa 0 pou sekirite
+        const arsID = `ARS-${randomDigits}-2026`;
 
         await set(ref(db, `users/${uid}`), {
-            fullname: name, email, phone, arsID,
-            balance: 0, referredBy: sponsor || "Sistèm",
+            fullname: name,
+            email: email,
+            phone: phone || "",
+            arsID: arsID,
+            balance: 0,
+            referredBy: sponsor || "Sistèm",
             createdAt: serverTimestamp(),
-            transactionPin: "0000" // PIN pa defo
+            transactionPin: "0000" // PIN sekirite pa defo
         });
-    } catch (e) { alert("Erè: " + e.message); }
+    } catch (e) { 
+        alert("Erè nan enskripsyon an: " + e.message); 
+    }
 };
 
 window.toggleAuth = (mode) => {
-    document.getElementById('login-section')?.classList.toggle('hidden', mode === 'signup');
-    document.getElementById('signup-section')?.classList.toggle('hidden', mode === 'login');
+    const loginSec = document.getElementById('login-section');
+    const signupSec = document.getElementById('signup-section');
+    
+    if (mode === 'signup') {
+        loginSec?.classList.add('hidden');
+        signupSec?.classList.remove('hidden');
+    } else {
+        signupSec?.classList.add('hidden');
+        loginSec?.classList.remove('hidden');
+    }
 };
 
-window.handleLogout = () => { if (confirm("Dekonekte?")) signOut(auth); };
+window.handleLogout = () => { 
+    if (confirm("Èske ou vle dekonekte vrèman?")) {
+        signOut(auth); 
+    }
+};
 
 // Sidebar UI
 window.toggleSidebar = () => document.getElementById('sidebar')?.classList.toggle('active');
 
-// N.B: toggleNotifPanel ak switchNotifTab ap jere nèt anndan header.js kounye a.
-// Nou kite vèsyon "fallback" sa yo sèlman pou sekirite si modil la pran tan pou l chaje.
+// Fallback pou notifikasyon anvan modil yo fin chaje
 window.toggleNotifPanel = () => document.getElementById('notif-panel')?.classList.toggle('active');
 
 window.switchNotifTab = (tab) => {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`tab-${tab}`)?.classList.add('active');
-    document.getElementById('notif-content').innerHTML = `<p class="empty-msg">Chaje notifikasyon ${tab}...</p>`;
+    
+    const notifContent = document.getElementById('notif-content');
+    if (notifContent) {
+        notifContent.innerHTML = `<p class="empty-msg">Chaje notifikasyon ${tab}...</p>`;
+    }
 };
 
 // Modal Receipt Actions
 window.closeReceipt = () => document.getElementById('modal-receipt')?.classList.add('hidden');
 
 window.shareReceipt = () => {
-    const id = document.getElementById('rec-id').innerText;
-    const amt = document.getElementById('rec-amount').innerText;
+    const idElement = document.getElementById('rec-id');
+    const amtElement = document.getElementById('rec-amount');
+    
+    const id = idElement ? idElement.innerText : "---";
+    const amt = amtElement ? amtElement.innerText : "0.00 HTG";
+    
     const text = `✅ Echanj Plus - Tranzaksyon Reyisi\nID: ${id}\nMontan: ${amt}`;
-    navigator.share ? navigator.share({title: 'Resi', text}) : (navigator.clipboard.writeText(text), alert("Kopye!"));
+    
+    if (navigator.share) {
+        navigator.share({ title: 'Resi Echanj Plus', text })
+            .catch((err) => console.log("Erè nan pataje:", err));
+    } else {
+        navigator.clipboard.writeText(text);
+        alert("Kopye nan clipboard ou!");
+    }
 };
 
 // --- 5. UI SYNC (DASHBOARD) ---
@@ -141,11 +179,15 @@ function updateGlobalUI(uid) {
         const data = snap.val();
         if (!data) return;
 
-        document.getElementById('side-name').innerText = data.fullname || "Itilizatè";
-        document.getElementById('side-email').innerText = data.email || "";
-        document.getElementById('side-id').innerText = data.arsID || "---";
-        
+        const sideName = document.getElementById('side-name');
+        const sideEmail = document.getElementById('side-email');
+        const sideId = document.getElementById('side-id');
         const balElement = document.getElementById('header-quick-balance');
+
+        if (sideName) sideName.innerText = data.fullname || "Itilizatè";
+        if (sideEmail) sideEmail.innerText = data.email || "";
+        if (sideId) sideId.innerText = data.arsID || "---";
+        
         if (balElement) {
             balElement.innerHTML = `<b style="color:#f1c40f;">${(data.balance || 0).toFixed(2)} HTG</b>`;
         }
@@ -155,7 +197,11 @@ function updateGlobalUI(uid) {
 // --- 6. NAVIGASYON (SINGLE PAGE) ---
 window.showPage = (pageId, navElement) => {
     const sections = ['paj-akey', 'paj-echanj', 'paj-retre', 'paj-trans', 'chat-container', 'paj-parennaj', 'paj-parametre'];
-    sections.forEach(id => document.getElementById(id)?.classList.add('hidden'));
+    
+    sections.forEach(id => {
+        const sec = document.getElementById(id);
+        if (sec) sec.classList.add('hidden');
+    });
     
     const target = document.getElementById(pageId);
     if (target) target.classList.remove('hidden');
