@@ -1,53 +1,45 @@
-/* Veso prensipal la - Kounye a li p ap janm depase limit telefòn lan */
+/* Veso prensipal la - Li dwe pran 100% lajè ekran an */
 .mini-flash-info {
     background: #000000;
-    padding: 12px 15px;
-    border-radius: 14px;
-    overflow: hidden; /* Sa a bloke tout sa k vle depase fòm awondi a */
-    margin-top: 15px;
-    width: 100%;
-    box-sizing: border-box; /* Asire li pran lajè telefòn lan nèt san l pa depase */
-    border: 1px solid rgba(250, 204, 21, 0.2); /* Yon ti liy jòn fen pou l parèt pi pro */
+    padding: 10px 15px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 15px auto;
+    width: 100%; /* Ranplase 50% pa 100% */
+    box-sizing: border-box;
+    border: 1px solid rgba(250, 204, 21, 0.2);
 }
 
 .ticker-wrapper {
-    width: 100%;
+    width: 100%; /* Ranplase 50% pa 100% */
     overflow: hidden;
     display: flex;
 }
 
-/* Tren k ap pote de tèks yo ansanm */
+/* Tren k ap pote tèks yo */
 .ticker-track {
     display: flex;
     width: max-content;
     align-items: center;
-    /* 20 segonn pou l mache dous, linear (san ralanti), infinite (san rete) */
     animation: gliseEnfini 20s linear infinite;
 }
 
-/* Stil bèl polis ak koulè jòn pou tèks yo */
 .ticker-content {
     font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
-    font-size: 13px; /* Yon ti kras pi gwo pou telefòn */
+    font-size: 13px;
     font-weight: 700;
     color: #facc15;
     white-space: nowrap;
     display: inline-block;
-    padding-right: 50px; /* GWO ESPAS: Sa a enpòtan anpil pou premye tèks la pa kole ak dezyèm lan lè l ap glise */
+    padding-right: 50px;
     box-sizing: border-box;
 }
 
-/* ANIMASYON KI FÈ L REKÒMANSE SAN RETE */
 @keyframes gliseEnfini {
-    0% {
-        transform: translate3d(0, 0, 0);
-    }
-    100% {
-        transform: translate3d(-50%, 0, 0); /* Li deplase egzakteman mwatye nan tren an pou dezyèm lan pran plas premye a */
-    }
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
 }
 
-/* Lè yo pase sourit (oswa tape dwèt sou li sou telefòn), li kanpe pou yo ka li fasil */
 .mini-flash-info:hover .ticker-track,
 .mini-flash-info:active .ticker-track {
     animation-play-state: paused;
