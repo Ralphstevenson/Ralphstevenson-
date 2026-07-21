@@ -5,13 +5,13 @@
     border-radius: 14px;
     overflow: hidden; /* Sa a bloke tout sa k vle depase fòm awondi a */
     margin-top: 15px;
-    width: 50%;
+    width: 100%;
     box-sizing: border-box; /* Asire li pran lajè telefòn lan nèt san l pa depase */
     border: 1px solid rgba(250, 204, 21, 0.2); /* Yon ti liy jòn fen pou l parèt pi pro */
 }
 
 .ticker-wrapper {
-    width: 50%;
+    width: 100%;
     overflow: hidden;
     display: flex;
 }
