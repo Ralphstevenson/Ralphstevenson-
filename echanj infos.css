@@ -1,0 +1,127 @@
+/* ============================================================
+   ESTIL HEADER AK MINI FLASH INFO (FULL RESPONSIVE MOBILE)
+   ============================================================ */
+
+/* 1. KONTENÈ PRENSIPAL HEADER LA */
+.premium-header {
+    width: 100%;
+    max-width: 100%;
+    padding: 15px 12px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eeeeee;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.header-main-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+
+/* 2. IMAJ MINIATURE A (BANNER) */
+.header-main-box a {
+    display: block;
+    width: 100%;
+    max-width: 320px; /* Anpeche imaj la vin twò gwo sou gwo ekran */
+    margin: 0 auto 12px auto;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.header-main-box a img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+/* 3. TIT AK TÈKS YO */
+.page-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #111827;
+    margin: 8px 0 4px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.page-title i {
+    color: #10b981;
+}
+
+.subtitle-paj {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0 0 15px 0;
+}
+
+/* 4. TICKER ENFINI (MINI FLASH INFO) */
+.mini-flash-info {
+    background: #000000;
+    padding: 10px 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(250, 204, 21, 0.3);
+}
+
+.ticker-wrapper {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+}
+
+.ticker-track {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    animation: gliseEnfini 18s linear infinite;
+}
+
+.ticker-content {
+    font-size: 12px;
+    font-weight: 700;
+    color: #facc15; /* Jòn Gold */
+    white-space: nowrap;
+    display: inline-block;
+}
+
+/* ANIMASYON POU TÈKS LA GLISE SAN RETE */
+@keyframes gliseEnfini {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
+
+/* Lè yo touche l sou telefòn, li kanpe pou fasilite lekti */
+.mini-flash-info:hover .ticker-track,
+.mini-flash-info:active .ticker-track {
+    animation-play-state: paused;
+}
+
+/* NIGHT MODE ADJUSTMENTS */
+body.night-mode .premium-header {
+    background: #111111;
+    border-color: #222222;
+}
+
+body.night-mode .page-title {
+    color: #ffffff;
+}
+
+body.night-mode .subtitle-paj {
+    color: #9ca3af;
+}
