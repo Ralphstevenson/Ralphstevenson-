@@ -1,330 +1,502 @@
 /* ============================================================
-   STYLE SEKSYON ECHANJ & MODAL KONFIMASYON (PREMIUM VÈSYON)
-   Koulè: Nwa Solid, Blan, Jòn (Gold)
+   ESTIL SEKSYON ECHANJ - ECHANJ PLUS V4.6 (FULL RESPONSIVE MOBILE)
    ============================================================ */
 
-/* 0. HEADER AK IMAJ MINIATURE (SA OU SOT AJOUTE A) */
+/* --- RESET & LAYOUT X-OVERFLOW PREVENT --- */
+#paj-echanj {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 15px 12px 90px 12px; /* Bottom padding pou nav bar ba a */
+    box-sizing: border-box;
+    overflow-x: hidden;
+    font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: #333333;
+}
+
+#paj-echanj *, 
+#paj-echanj *:before, 
+#paj-echanj *:after {
+    box-sizing: border-box;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- PREMIUM HEADER --- */
 .premium-header {
-    text-align: center;
-    padding: 20px 15px;
-    background: #ffffff;
-    border-radius: 24px;
-    margin: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-    border: 1px solid #eeeeee;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 .header-main-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    text-align: center;
+    padding: 15px 10px;
 }
 
-/* --- KÒD POU IMAJ MINIATURE A --- */
-.header-main-box a {
-    display: block;
-    width: 100%;
-    max-width: 320px; /* Lajè maksimòm imaj la pou l pa parèt twò gwo */
-    margin: 0 auto 15px auto; /* Santre li epi bay yon ti espas anba */
-    border-radius: 16px; /* Kwen won pou l kadre ak rès sit la */
-    overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Ti lonbray pou l parèt an riljèf */
-    transition: transform 0.3s ease;
-}
-
-.header-main-box a:hover {
-    transform: scale(1.03); /* Yon ti zoom dous lè kliyan an touche l */
-}
-
-.header-main-box a img {
-    width: 100%;
+.header-main-box img {
+    max-width: 110px;
     height: auto;
-    display: block;
-    object-fit: cover;
+    margin-bottom: 10px;
 }
-/* --------------------------------- */
 
 .page-title {
-    font-size: 22px;
-    color: #000000;
-    font-weight: 900;
-    margin: 10px 0 5px 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #1b1b1b;
+    margin: 5px 0;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+}
+
+.page-title i {
+    color: #10b981;
 }
 
 .subtitle-paj {
     font-size: 13px;
     color: #666666;
-    margin: 0 0 15px 0;
+    margin: 0;
 }
 
-/* Ticker Info a (Marquee) */
+/* --- MINI FLASH INFO (TICKER ENFINI 100% MOBILE) --- */
 .mini-flash-info {
     background: #000000;
-    color: #facc15;
-    padding: 8px 12px;
+    padding: 12px 15px;
     border-radius: 12px;
-    font-size: 11px;
-    font-weight: 800;
     overflow: hidden;
+    margin: 15px 0;
+    width: 100%;
+    border: 1px solid rgba(250, 204, 21, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+.ticker-wrapper {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+}
 
-/* 1. KONTENÈ KAT REZO YO */
+.ticker-track {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    animation: gliseEnfini 20s linear infinite;
+}
+
+.ticker-content {
+    font-size: 12px;
+    font-weight: 700;
+    color: #facc15;
+    white-space: nowrap;
+    display: inline-block;
+    padding-right: 40px;
+}
+
+@keyframes gliseEnfini {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+.mini-flash-info:hover .ticker-track,
+.mini-flash-info:active .ticker-track {
+    animation-play-state: paused;
+}
+
+/* --- PROVIDER CARDS (DIGICEL / NATCOM) --- */
 .provider-container {
     display: flex;
-    gap: 15px;
-    justify-content: center;
-    padding: 25px 15px;
-    background: #f8f9fa; /* Ti background gri pal pou detache kat yo */
-    border-radius: 20px;
-    margin: 15px;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 25px;
 }
 
 .provider-card {
-    flex: 1;
-    max-width: 160px;
-    height: 190px;
-    background: #ffffff; /* Blan Solid */
-    border-radius: 22px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 12px 16px;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid #eeeeee;
-    position: relative;
+    transition: all 0.2s ease;
 }
 
 .provider-card:active {
-    transform: scale(0.92);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transform: scale(0.98);
+    background: #f9fafb;
 }
 
 .card-img-box {
-    width: 85px;
-    height: 85px;
-    background: #fdfdfd;
-    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    border: 1px solid #f1f1f1;
+    background: #f3f4f6;
+    flex-shrink: 0;
 }
 
 .card-img-box img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
 }
 
-.provider-card b {
-    font-size: 14px;
-    color: #000000; /* Nwa Solid */
-    margin-top: 15px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
+.card-info {
+    flex-grow: 1;
+    margin-left: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-/* Tag pousantaj la (Jòn sou Nwa) */
+.card-info b {
+    font-size: 16px;
+    color: #111827;
+}
+
 .rate-tag {
-    position: absolute;
-    top: -10px;
-    right: 50%;
-    transform: translateX(50%);
-    background: #000000;
-    color: #facc15; /* Jòn */
-    font-size: 10px;
-    padding: 4px 12px;
-    border-radius: 50px;
-    font-weight: 900;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    white-space: nowrap;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #d97706;
+    background: #fef3c7;
+    padding: 2px 8px;
+    border-radius: 20px;
+    width: fit-content;
 }
 
+.go-icon {
+    color: #9ca3af;
+    font-size: 14px;
+}
 
-/* 2. MODAL KONFIMASYON (OVERLAY ELITE) */
+/* --- MODAL CONFIRMATION TRANZAKSYON --- */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85); /* Nwa pi fonse pou plis fokus */
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    padding: 15px;
 }
 
 .modal-content-premium {
     background: #ffffff;
-    width: 92%;
+    width: 100%;
     max-width: 380px;
-    border-radius: 30px;
-    padding: 30px;
-    animation: slideUpModal 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
-    border: 2px solid #000000; /* Bordure nwa solid */
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    position: relative;
 }
 
 .modal-header-pwo {
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 .icon-circle-gold {
-    width: 70px;
-    height: 70px;
-    background: #000000; /* Nwa */
-    color: #facc15; /* Jòn */
+    width: 50px;
+    height: 50px;
+    background: #fef3c7;
+    color: #d97706;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 15px;
-    font-size: 28px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    font-size: 22px;
+    margin: 0 auto 10px auto;
 }
 
 .modal-header-pwo h4 {
-    font-size: 20px;
-    color: #000000;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    margin: 0;
+    font-size: 18px;
+    color: #111827;
 }
 
+.modal-header-pwo p {
+    margin: 4px 0 0 0;
+    font-size: 12px;
+    color: #6b7280;
+}
 
-/* 3. DETAY REZIME (BLACK & WHITE) */
+.modal-body {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
 .summary-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    font-size: 14px;
-    color: #444;
-}
-
-.summary-row b {
-    color: #000000;
-    font-weight: 800;
-}
-
-/* Bwat Rabè/Komisyon (Jòn Premium) */
-.rabe-box {
-    background: rgba(250, 204, 21, 0.1);
-    padding: 12px;
-    border-radius: 14px;
-    margin: 15px 0;
-    border: 1px dashed #facc15;
-    text-align: center;
-    font-weight: 700;
     font-size: 13px;
-    color: #000000;
+    margin-bottom: 8px;
+}
+
+.summary-row .label {
+    color: #4b5563;
+}
+
+.val-minit { color: #111827; }
+.val-fre { color: #ef4444; }
+.val-rabe { color: #10b981; }
+
+.rabe-box {
+    background: #ecfdf5;
+    padding: 6px 8px;
+    border-radius: 6px;
 }
 
 .divider-dashed {
-    border-top: 2px dashed #000000;
-    opacity: 0.1;
-    margin: 20px 0;
+    border-top: 1px dashed #d1d5db;
+    margin: 10px 0;
 }
 
 .total-row {
-    text-align: center;
-    padding: 15px 0;
-}
-
-.total-row span {
-    font-size: 11px;
-    color: #666;
-    font-weight: 800;
-    text-transform: uppercase;
-    display: block;
-    letter-spacing: 1px;
-}
-
-.total-row h2 {
-    font-size: 38px;
-    color: #000000; /* Montan an Nwa solid */
-    font-weight: 950;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 5px;
 }
 
+.total-label {
+    font-size: 12px;
+    font-weight: 800;
+    color: #111827;
+}
 
-/* 4. BOUTON AKSYON (NWA & JÒN) */
+.val-total {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #10b981;
+}
+
 .modal-footer-pwo {
     display: flex;
-    gap: 12px;
-    margin-top: 25px;
+    gap: 10px;
 }
 
 .btn-cancel-modal {
     flex: 1;
-    padding: 16px;
-    background: #f1f1f1;
-    color: #000;
+    background: #f3f4f6;
+    color: #374151;
     border: none;
-    border-radius: 16px;
-    font-weight: 800;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
     cursor: pointer;
-    transition: 0.3s;
 }
 
 .btn-confirm-modal-premium {
     flex: 2;
-    padding: 16px;
-    background: #000000; /* Nwa Solid */
-    color: #facc15; /* Tèks Jòn */
+    background: #10b981;
+    color: #ffffff;
     border: none;
-    border-radius: 16px;
-    font-weight: 800;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
     cursor: pointer;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .btn-confirm-modal-premium:active {
-    transform: scale(0.96);
+    background: #059669;
 }
 
 .security-note {
-    font-size: 10px;
-    color: #999;
     text-align: center;
+    font-size: 11px;
+    color: #9ca3af;
+    margin: 12px 0 0 0;
+}
+
+/* --- GALERI FEATURES & POSTERS (INFOS SECTION) --- */
+#infos {
+    width: 100%;
     margin-top: 20px;
-    font-weight: 500;
 }
 
-
-/* ANIMASYON */
-@keyframes slideUpModal {
-    from { transform: translateY(80px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+.gallery-header {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
-
-/* NIGHT MODE */
-body.night-mode .premium-header,
-body.night-mode .modal-content-premium {
-    background: #111111;
-    border-color: #facc15;
+.gallery-main-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 4px 0;
 }
-body.night-mode .page-title,
-body.night-mode .modal-header-pwo h4, 
-body.night-mode .summary-row b,
-body.night-mode .total-row h2 {
+
+.gallery-sub-title {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 0;
+}
+
+.features-poster-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 12px;
+    width: 100%;
+}
+
+.feature-poster-card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    border: 1px solid #f3f4f6;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.feature-poster-card:active {
+    transform: scale(0.96);
+}
+
+.poster-img-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* Pòtre 1:1 kare */
+    background: #e5e7eb;
+}
+
+.poster-img-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.poster-hover-hint {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: rgba(0, 0, 0, 0.6);
     color: #ffffff;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
 }
-body.night-mode .subtitle-paj {
-    color: #aaaaaa;
+
+.poster-card-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #374151;
+    margin: 8px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
+/* --- POPUPS / FEATURE OVERLAY MODALS --- */
+.feature-overlay-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.feature-modal-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 360px;
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.feature-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #9ca3af;
+    cursor: pointer;
+}
+
+.feature-modal-header {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.feature-modal-header i {
+    color: #10b981;
+}
+
+.feature-modal-body p {
+    font-size: 13px;
+    color: #4b5563;
+    line-height: 1.4;
+    margin: 0 0 10px 0;
+}
+
+.feature-modal-body ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-modal-body li {
+    font-size: 12px;
+    color: #374151;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.feature-modal-body li i {
+    color: #10b981;
+    margin-top: 2px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+   }
+   
