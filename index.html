@@ -130,19 +130,33 @@
 
             
 
-
-            <section id="paj-akey">
+    <section id="paj-akey">
     
     <div id="header-flash-info" class="flash-info-bar"></div>
    
+    <!-- BALANS ITILIZATÈ A -->
     <div class="balance-card-pro">
         <p class="balance-title">Balans ou disponib</p>
         <h1><span id="user-balance">0.00</span> <span style="font-size: 18px; color: rgba(255,255,255,0.8); font-weight:700;">HTG</span></h1>
     </div>
 
+    <!-- KAT TO ACHTE AK TO VANT AN TAN REYÈL -->
+    <div class="rates-display-container" style="display: flex; gap: 10px; margin: 15px 0;">
+        <div class="rate-box" style="flex: 1; background: #1e293b; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
+            <span style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">To Achte</span>
+            <strong id="display-rate-buy" style="font-size: 16px; color: #22c55e;">0.00 HTG</strong>
+        </div>
+        <div class="rate-box" style="flex: 1; background: #1e293b; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
+            <span style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">To Vant</span>
+            <strong id="display-rate-sell" style="font-size: 16px; color: #3b82f6;">0.00 HTG</strong>
+        </div>
+    </div>
+
+    <!-- CAROUSEL BANNER -->
     <div class="carousel-container-pro" style="padding: 0; min-height: auto; background: transparent; box-shadow: none;">
         <div class="carousel-container" style="width: 100%; margin: 0 auto;">
-            <div class="slides" id="carousel-slider" style="width: 500%;"> <div class="slide">
+            <div class="slides" id="carousel-slider" style="width: 500%;">
+                <div class="slide">
                     <img src="https://i.postimg.cc/V0yt4nQr/1783633053417.png" alt="Nouvo Banner 1">
                 </div>
                 <div class="slide">
@@ -169,6 +183,7 @@
         </div>
     </div>
 
+    <!-- BOUTON AKSYON RAPID YO -->
     <div class="quick-actions-grid">
         <div class="action-item-pro" onclick="showPage('paj-echanj', document.querySelector('.nav-item:nth-child(2)'))">
             <div class="action-icon-circle">
@@ -199,6 +214,7 @@
         </div>
     </div>
 
+    <!-- STATI SÈVIS PÒTAY YO -->
     <div class="system-status-card">
         <div class="gateway-status">
             <span id="moncash-dot" class="dot-online">●</span> MonCash: <b id="moncash-status" style="color: #16a34a;">Operasyonèl</b>
@@ -208,6 +224,7 @@
         </div>
     </div>
 
+    <!-- NOUVÈL AK SÈVIS YO -->
     <div class="news-section-pro">
         <div class="news-header-pro">
             <h3>Latest News & Analytics</h3>
@@ -233,6 +250,7 @@
         </div>
     </div>
 
+    <!-- DÈNYE AKTIVITE YO -->
     <div class="news-section-pro">
         <div class="news-header-pro">
             <h3><i class="fa-solid fa-clock-rotate-left"></i> Dènye Aktivite</h3>
@@ -242,6 +260,7 @@
         </div>
     </div>
 
+    <!-- FAQ SECTION -->
     <div class="news-section-pro">
         <div class="news-header-pro">
             <h3><i class="fa-solid fa-circle-question"></i> Sant Èd / FAQ</h3>
@@ -268,13 +287,21 @@
         </div>
     </div>
 
+    <!-- KONSÈY AK SEKIRITE -->
     <div class="security-tip-box">
         <div class="sec-icon-shield"><i class="fa-solid fa-shield-halved"></i></div>
         <p><b>🔐 Konsèy ARS:</b> Pa janm pataje PIN tranzaksyon ou oswa modpas ou ak pèsonn, menm ak yon administratè Echanj Plus.</p>
     </div>
 
-    </section>
-    
+    <!-- ECRAN MÒD ANTRETYEN (SI ADMIN AN AKTIVE L) -->
+    <div id="maintenance-screen" class="hidden" style="position: fixed; inset: 0; background: #0f172a; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ffffff; text-align: center; padding: 20px;">
+        <i class="fa-solid fa-wrench" style="font-size: 3.5rem; color: #f59e0b; margin-bottom: 20px;"></i>
+        <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 10px;">Sistèm nan an antretyen</h2>
+        <p style="font-size: 14px; color: #94a3b8; max-width: 300px;">N ap fè ti amelyorasyon rapid sou platfòm nan. Tanpri retounen yon ti tan ankò!</p>
+    </div>
+
+</section>
+
             
 
             
