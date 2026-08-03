@@ -1,3 +1,4 @@
+   
 /**
  * ============================================================
  * ECHANJ PLUS - JESTYON PAJ AKÈY (akey.js - ES MODULE)
@@ -85,16 +86,52 @@ export function initAkeyDone(uid) {
         console.error("Erè lekti balans:", error);
     });
 
-    // B. Koute Flash Info Bar la
-    onValue(ref(db, 'settings/flash_message'), (snapshot) => {
-        if (flashBar) {
-            if (snapshot.exists() && snapshot.val().trim() !== "") {
-                flashBar.style.display = 'block';
-                flashBar.innerHTML = `<div class="flash-info-scroll"><i class="fa-solid fa-bullhorn"></i> ${snapshot.val()}</div>`;
+    // B. Koute Paramèt Sistèm yo (To Achte, To Vant, Frè, Antretyen & Flash Info)
+    onValue(ref(db, 'settings'), (snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+
+            // 1. Flash Info Bar
+            if (flashBar) {
+                if (data.flash_message && data.flash_message.trim() !== "") {
+                    flashBar.style.display = 'block';
+                    flashBar.innerHTML = `<div class="flash-info-scroll"><i class="fa-solid fa-bullhorn"></i> ${data.flash_message}</div>`;
+                } else {
+                    flashBar.style.display = 'none';
+                }
+            }
+
+            // 2. Afiche To Achte ak To Vant nan UI la si w gen eleman sa yo nan Akèy HTML
+            const displayBuyRate = document.getElementById('display-rate-buy');
+            const displaySellRate = document.getElementById('display-rate-sell');
+
+            if (displayBuyRate && data.rateBuy !== undefined) {
+                displayBuyRate.textContent = `${data.rateBuy} HTG`;
+            }
+            if (displaySellRate && data.rateSell !== undefined) {
+                displaySellRate.textContent = `${data.rateSell} HTG`;
+            }
+
+            // 3. Stoke to yo nan varyab global pou tout aplikasyon an ak kalkilatris yo ka sèvi avèk yo
+            window.currentRateBuy = data.rateBuy || 0;
+            window.currentRateSell = data.rateSell || 0;
+            window.currentSystemFee = data.systemFee !== undefined ? data.systemFee : 16.5;
+
+            // 4. Mòd Antretyen (Maintenance Mode)
+            if (data.maintenanceMode) {
+                const maintenanceOverlay = document.getElementById('maintenance-screen');
+                if (maintenanceOverlay) {
+                    maintenanceOverlay.classList.remove('hidden');
+                }
             } else {
-                flashBar.style.display = 'none';
+                const maintenanceOverlay = document.getElementById('maintenance-screen');
+                if (maintenanceOverlay) {
+                    maintenanceOverlay.classList.add('hidden');
+                }
             }
         }
+    }, (error) => {
+        console.error("Erè lekti settings:", error);
     });
 
     // C. Koute Pòtay Peman yo (Gateways Status)
@@ -155,7 +192,7 @@ export function initAkeyDone(uid) {
                     let statusText = tx.status || 'En atant';
                     let statusIcon = 'fa-clock';
 
-                    if (statusText.toLowerCase() === 'validé' || statusText.toLowerCase() === 'valide') {
+                    if (statusText.toLowerCase() === 'validé' || statusText.toLowerCase() === 'valide' || statusText.toLowerCase() === 'success') {
                         statusClass = 'status-success';
                         statusIcon = 'fa-circle-check';
                     } else if (statusText.toLowerCase() === 'echwe' || statusText.toLowerCase() === 'failed') {
@@ -164,7 +201,7 @@ export function initAkeyDone(uid) {
                     }
 
                     const type = tx.type || 'Tranzaksyon';
-                    const amount = tx.amount ? `${tx.amount} HTG` : '0.00 HTG';
+                    const amount = tx.amount ? `${tx.amount} HTG` : (tx.montant ? `${tx.montant} HTG` : '0.00 HTG');
                     
                     let dateFormatted = '';
                     if (tx.date) {
@@ -232,4 +269,4 @@ window.toggleFaq = function(element) {
         }
     }
 };
-        
+                      
