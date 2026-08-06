@@ -1,10 +1,9 @@
 /* ============================================================
-   STYLE SEKSYON ECHANJ & MODAL KONFIMASYON (PREMIUM GOLD VÈSYON)
-   Projet: ECHANJ PLUS
-   Koulè: Nwa Solid (#000), Blan (#FFF), Jòn Gold (#FACC15)
+   ECHANJ PLUS - DESIGN SYSTEM (DARK & GOLD PREMIUM)
+   Tout eleman yo santre ak yon aliyman pafè pou mobil/web.
    ============================================================ */
 
-/* --- RESET & LAYOUT CONTAINER --- */
+/* --- 1. RESET & CONTAINERS --- */
 #paj-echanj {
     width: 100%;
     max-width: 100%;
@@ -14,7 +13,8 @@
     overflow-x: hidden;
     font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
     color: #333333;
-    -webkit-tap-highlight-color: transparent; /* Retire okenn kare ble lè w klike sou mobil */
+    text-align: center; /* Santre tout tèks pa defo */
+    -webkit-tap-highlight-color: transparent;
 }
 
 #paj-echanj *, 
@@ -27,9 +27,7 @@
     display: none !important;
 }
 
-/* ============================================================
-   1. KONTENÈ KAT REZO YO (DIGICEL & NATCOM)
-   ============================================================ */
+/* --- 2. KONTENÈ KAT REZO YO (DIGICEL & NATCOM) --- */
 .provider-container {
     display: flex;
     gap: 15px;
@@ -38,8 +36,9 @@
     padding: 25px 15px 15px 15px;
     background: #f8f9fa;
     border-radius: 24px;
-    margin: 10px 0 20px 0;
+    margin: 10px auto 20px auto;
     border: 1px solid #eaeaea;
+    max-width: 400px;
 }
 
 .provider-card {
@@ -59,6 +58,7 @@
     border: 1.5px solid #eeeeee;
     position: relative;
     user-select: none;
+    text-align: center;
 }
 
 .provider-card:hover {
@@ -83,6 +83,7 @@
     padding: 8px;
     border: 1px solid #f0f0f0;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    margin: 0 auto;
 }
 
 .card-img-box img {
@@ -97,9 +98,11 @@
     margin-top: 14px;
     font-weight: 800;
     letter-spacing: 0.3px;
+    text-align: center;
+    display: block;
 }
 
-/* Tag pousantaj la (Jòn sou Nwa) */
+/* Tag pousantaj (Jòn sou Nwa) */
 .rate-tag {
     position: absolute;
     top: -12px;
@@ -114,15 +117,14 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     white-space: nowrap;
     letter-spacing: 0.5px;
+    text-align: center;
 }
 
 .go-icon {
-    display: none; /* Cache ikon vye chevrons si pa gen bezwen l */
+    display: none;
 }
 
-/* ============================================================
-   2. MODAL KONFIMASYON (OVERLAY ELITE)
-   ============================================================ */
+/* --- 3. MODAL KONFIMASYON (OVERLAY ELITE) --- */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -149,6 +151,7 @@
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
     border: 2px solid #000000;
     position: relative;
+    text-align: center;
 }
 
 .modal-header-pwo {
@@ -165,7 +168,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 10px;
+    margin: 0 auto 10px auto;
     font-size: 24px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
@@ -177,23 +180,24 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin: 0;
+    text-align: center;
 }
 
 .modal-header-pwo p {
     font-size: 12px;
     color: #666666;
     margin: 4px 0 0 0;
+    text-align: center;
 }
 
-/* ============================================================
-   3. DETAY REZIME (BLACK & GOLD)
-   ============================================================ */
+/* --- 4. DETAY REZIME TRANSAKSYON --- */
 .modal-body {
     background: #f9fafb;
     border-radius: 18px;
     padding: 16px;
     margin-bottom: 15px;
     border: 1px solid #f0f0f0;
+    text-align: center;
 }
 
 .summary-row {
@@ -205,12 +209,17 @@
     color: #555555;
 }
 
+.summary-row .label {
+    text-align: left;
+}
+
 .summary-row b {
     color: #000000;
     font-weight: 800;
+    text-align: right;
 }
 
-/* Bwat Rabè/Komisyon (Jòn Premium) */
+/* Bwat Rabè/Komisyon */
 .rabe-box {
     background: rgba(250, 204, 21, 0.15);
     padding: 10px 12px;
@@ -218,6 +227,7 @@
     margin: 10px 0;
     border: 1px dashed #facc15;
     text-align: center;
+    justify-content: center;
     font-weight: 700;
     font-size: 12px;
     color: #000000;
@@ -240,6 +250,7 @@
     text-transform: uppercase;
     display: block;
     letter-spacing: 1px;
+    text-align: center;
 }
 
 .total-row h2 {
@@ -248,15 +259,16 @@
     font-weight: 900;
     margin: 4px 0 0 0;
     letter-spacing: -0.5px;
+    text-align: center;
 }
 
-/* ============================================================
-   4. BOUTON AKSYON (NWA & JÒN)
-   ============================================================ */
+/* --- 5. BOUTON AKSYON YO --- */
 .modal-footer-pwo {
     display: flex;
     gap: 10px;
     margin-top: 18px;
+    justify-content: center;
+    align-items: center;
 }
 
 .btn-cancel-modal {
@@ -269,6 +281,7 @@
     font-weight: 800;
     font-size: 13px;
     cursor: pointer;
+    text-align: center;
     transition: background 0.2s ease;
 }
 
@@ -291,6 +304,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    text-align: center;
     transition: transform 0.15s ease, background 0.2s ease;
 }
 
@@ -311,12 +325,11 @@
     gap: 5px;
 }
 
-/* ============================================================
-   5. GALERI FEATURES & POPUPS (INFOS SECTION)
-   ============================================================ */
+/* --- 6. GALERI FEATURES & POPUPS (INFOS SECTION) --- */
 #infos {
     width: 100%;
     margin-top: 25px;
+    text-align: center;
 }
 
 .gallery-header {
@@ -329,19 +342,23 @@
     font-weight: 800;
     color: #000000;
     margin: 0 0 4px 0;
+    text-align: center;
 }
 
 .gallery-sub-title {
     font-size: 12px;
     color: #666666;
     margin: 0;
+    text-align: center;
 }
 
 .features-poster-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Force 3 kolòn presi pou mobil */
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
 .feature-poster-card {
@@ -362,7 +379,7 @@
 .poster-img-wrapper {
     position: relative;
     width: 100%;
-    padding-top: 100%; /* Square ratio */
+    padding-top: 100%;
     background: #f3f4f6;
 }
 
@@ -395,11 +412,10 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: center;
 }
 
-/* ============================================================
-   6. MODAL / POPUPS POU DETAIL FEATURES
-   ============================================================ */
+/* --- 7. POPUPS DETAIL FEATURES --- */
 .feature-overlay-modal {
     position: fixed;
     top: 0;
@@ -426,6 +442,7 @@
     border: 2px solid #000000;
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     animation: slideUpModal 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    text-align: center;
 }
 
 .feature-close-btn {
@@ -449,10 +466,12 @@
     font-weight: 800;
     color: #000000;
     margin-bottom: 12px;
-    padding-right: 20px;
+    padding-right: 15px;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    text-align: center;
 }
 
 .feature-modal-header i {
@@ -464,12 +483,14 @@
     color: #444444;
     line-height: 1.45;
     margin: 0 0 12px 0;
+    text-align: center;
 }
 
 .feature-modal-body ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    text-align: left; /* Tèks pwenti yo ap gen aliyman gòch pou pi bon lekti */
 }
 
 .feature-modal-body li {
@@ -487,9 +508,7 @@
     margin-top: 2px;
 }
 
-/* ============================================================
-   7. ANIMASYON AK NIGHT MODE
-   ============================================================ */
+/* --- 8. ANIMASYON AK NIGHT MODE --- */
 @keyframes slideUpModal {
     from { 
         transform: translateY(40px) scale(0.96); 
@@ -561,5 +580,5 @@ body.night-mode .btn-cancel-modal {
 
 body.night-mode .feature-close-btn {
     color: #aaaaaa;
-                                }
+   }
    
