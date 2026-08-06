@@ -78,6 +78,10 @@ window.openDialer = function(operator) {
     document.getElementById('sum-fre').innerText = `-${freHTG.toFixed(2)} HTG`;
     document.getElementById('sum-total').innerText = `${totalToReceive.toFixed(2)} HTG`;
 
+    // Netwaye ti bwat input PIN an anvan nou ouvè modal la
+    const pinInput = document.getElementById('input-pin-echanj');
+    if (pinInput) pinInput.value = '';
+
     // Storke done tanporè yo
     window.currentPendingExchange = {
         amount: amount,
@@ -97,6 +101,10 @@ window.openDialer = function(operator) {
 window.femenModalEchanj = function() {
     const modal = document.getElementById('modal-confirm-echanj');
     if (modal) modal.classList.add('hidden');
+    
+    // Netwaye PIN la lè modal la fèmen
+    const pinInput = document.getElementById('input-pin-echanj');
+    if (pinInput) pinInput.value = '';
 };
 
 // FONKSYON POU KREYE TRANSAKSYON NAN FIREBASE
@@ -107,8 +115,15 @@ async function fèEchanjFinal(db, currentUser) {
         return;
     }
 
-    const pinInput = prompt("Antre PIN sekirite ou pou konfime echanj la:");
-    if (!pinInput) return;
+    // Li PIN an depi nan bwat input ki nan modal la
+    const pinInputEl = document.getElementById('input-pin-echanj');
+    const pinInput = pinInputEl ? pinInputEl.value.trim() : "";
+
+    if (!pinInput || pinInput.length < 4) {
+        alert("❌ Tanpri antre PIN sekirite 4 chif ou an nan bwat la!");
+        if (pinInputEl) pinInputEl.focus();
+        return;
+    }
 
     // 1. Verifye PIN nan baz done a
     try {
@@ -123,7 +138,6 @@ async function fèEchanjFinal(db, currentUser) {
 
         const data = window.currentPendingExchange;
         const txRef = push(ref(db, 'transactions'));
-        const txID = txRef.key;
 
         const newTransaction = {
             uid: currentUser.uid,
@@ -140,6 +154,7 @@ async function fèEchanjFinal(db, currentUser) {
 
         await set(txRef, newTransaction);
 
+        // Netwaye epi fèmen modal
         window.femenModalEchanj();
         alert(`✅ Demann echanj ${data.amount} HTG anrejistre ak siksè!\n\nKounye a, nou pral redireksyone w pou fè transfè minit an sou nimewo ${data.recipientNumber}.`);
 
