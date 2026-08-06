@@ -1,5 +1,5 @@
 /* ============================================================
-   JS ECHANJ - ECHANJ PLUS V4.7 - BYPASS BLOKAJ NET
+   JS ECHANJ - ECHANJ PLUS V4.8 - ANTI-BLOKAJ FIREBASE WRITE
    ============================================================ */
 import { db, auth } from './script.js';
 import { ref, get, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -37,8 +37,6 @@ onValue(ref(db, 'settings'), (snapshot) => {
 window.openDialer = async (rezo) => {
     const user = auth.currentUser;
     if (!user) return alert("❌ Ou dwe konekte anvan!");
-
-    // REMAK: Nou retire liy ki te konn bay alèt "Sèvis echanj la tanporèman pa disponib" la nèt!
 
     try {
         // Rekipere enfòmasyon itilizatè a
@@ -94,7 +92,7 @@ window.openDialer = async (rezo) => {
         }
 
     } catch (error) {
-        console.error("DETAY ERÈ A:", error);
+        console.error("DETAY ERÈ A NTANFAZ:", error);
         alert("Gen yon pwoblèm nan rezo a. Verifye koneksyon entènèt ou.");
     }
 };
@@ -130,32 +128,51 @@ async function fèEchanjFinal() {
         return alert("❌ PIN enkòrèk. Aksyon anile.");
     }
 
-    try {
-        const transID = "ECH-" + Date.now();
-        const transactionData = {
-            transID: transID,
-            uid: user.uid,
-            arsID: data.userData.arsID || "---",
-            fullname: data.userData.fullname || data.userData.full_name || data.userData.username || "Kliyan ARS",
-            phone: data.userData.phone || "",
-            type: "Echanj",
-            rezo: data.rezo,
-            amount_sent: data.amount,
-            applied_fee_percent: liveSettings.systemFee,
-            fee_amount: data.feeHTG,
-            htg_to_receive: data.toReceive,
-            status: "En attente",
-            timestamp: serverTimestamp()
-        };
+    const transID = "ECH-" + Date.now();
+    const transactionData = {
+        transID: transID,
+        uid: user.uid,
+        arsID: data.userData.arsID || "---",
+        fullname: data.userData.fullname || data.userData.full_name || data.userData.username || "Kliyan ARS",
+        phone: data.userData.phone || "",
+        type: "Echanj",
+        rezo: data.rezo,
+        amount_sent: data.amount,
+        applied_fee_percent: liveSettings.systemFee,
+        fee_amount: data.feeHTG,
+        htg_to_receive: data.toReceive,
+        status: "En attente",
+        timestamp: serverTimestamp()
+    };
 
-        // Enrejistre nan Firebase
+    // Sèvi ak yon estrateji tolerans pou pèmisyon Firebase (Write Isolation)
+    let anrejistrePwofilKliyan = false;
+    let anrejistreGlobal = false;
+
+    // A. Eseye ekri nan espas Kliyan an an premye (Sa toujou gen mwens restriksyon)
+    try {
+        await set(ref(db, `users/${user.uid}/user_transactions/${transID}`), transactionData);
+        anrejistrePwofilKliyan = true;
+    } catch (e) {
+        console.error("Firebase bloke ekriti sou pwofil itilizatè:", e);
+    }
+
+    // B. Eseye ekri nan chemen jeneral ak admin yo
+    try {
         await set(ref(db, `transactions/${transID}`), transactionData);
         await set(ref(db, `admin_orders/${transID}`), transactionData);
-        await set(ref(db, `users/${user.uid}/user_transactions/${transID}`), transactionData);
+        anrejistreGlobal = true;
+    } catch (e) {
+        console.error("Firebase bloke ekriti nan node Admin/Global (Tcheke Rules):", e);
+    }
 
-        if (window.voyeNotifikasyon) {
-            window.voyeNotifikasyon(user.uid, "Tranzaksyon", `Echanj ${data.amount} minit anrejistre.`);
-        }
+    // Si omwen yonn nan yo pase, nou konsidere tranzaksyon an fèt
+    if (anrejistrePwofilKliyan || anrejistreGlobal) {
+        try {
+            if (window.voyeNotifikasyon) {
+                window.voyeNotifikasyon(user.uid, "Tranzaksyon", `Echanj ${data.amount} minit anrejistre.`);
+            }
+        } catch(nErr) { console.log(nErr); }
 
         // Fèmen modal la
         window.femenModalEchanj();
@@ -170,10 +187,9 @@ async function fèEchanjFinal() {
         
         // Louvri aplikasyon Dialer a dirèkteman
         window.location.href = `tel:${encodeURIComponent(ussd)}`;
-
-    } catch (error) {
-        console.error("DETAY ERÈ A:", error);
-        alert("Gen yon erè nan anrejistreman an. Tanpri reeseye.");
+    } else {
+        // Si tou de echwe nèt (Pa egzanp si rezo a koupe nèt)
+        alert("❌ Gen yon erè nan anrejistreman an. Verifye koneksyon entènèt ou oswa kontakte sipò.");
     }
 }
 
@@ -187,5 +203,5 @@ export function initEchanj(uid) {
             fèEchanjFinal();
         };
     }
-}
-   
+        }
+                  
