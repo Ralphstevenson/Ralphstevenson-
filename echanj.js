@@ -1,31 +1,33 @@
 /* ============================================================
-   JS ECHANJ - ECHANJ PLUS V4.6 - REALTIME SETTINGS INTEGRATED
+   JS ECHANJ - ECHANJ PLUS V4.6 - FIXED ACTIVE BY DEFAULT
    ============================================================ */
 import { db, auth } from './script.js';
 import { ref, get, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// Varyab pou gade paramèt sistèm yo an tan reyèl
+// Sèvis la mete sou TRUE pa defo pou evite blokaj si Firebase vid
 let liveSettings = {
     rateBuy: 0,
     rateSell: 0,
     systemFee: 16.5,
-    exchangeActive: true,
+    exchangeActive: true, // Tou ouvè pa defo kounye a!
     digicelNumber: "50947111123",
     natcomNumber: "32160708"
 };
 
-// Koute paramèt ak to yo otomatikman nan Firebase Realtime Database
+// Koute paramèt yo nan Firebase Realtime Database
 onValue(ref(db, 'settings'), (snapshot) => {
     if (snapshot.exists()) {
         const data = snapshot.val();
         liveSettings.rateBuy = data.rateBuy || 0;
         liveSettings.rateSell = data.rateSell || 0;
         liveSettings.systemFee = data.systemFee !== undefined ? parseFloat(data.systemFee) : 16.5;
+        
+        // Si admin an pa defini l eksplititman, li rete true otomatikman
         liveSettings.exchangeActive = data.exchangeActive !== undefined ? data.exchangeActive : true;
         liveSettings.digicelNumber = data.digicelNumber || "50947111123";
         liveSettings.natcomNumber = data.natcomNumber || "32160708";
 
-        // Mizajou afichaj frè an tan reyèl sou paj la
+        // Mizajou afichaj frè yo sou paj la
         document.querySelectorAll('.live-fee-tag').forEach(el => {
             el.innerText = `${liveSettings.systemFee}% Frè`;
         });
@@ -35,13 +37,13 @@ onValue(ref(db, 'settings'), (snapshot) => {
     }
 });
 
-// 1. FONKSYON LÈ KLIKEL SOU DIGICEL OWA NATCOM (LOUVRI MODAL LA)
+// 1. FONKSYON LÈ KLIKEL SOU DIGICEL OWA NATCOM
 window.openDialer = async (rezo) => {
     const user = auth.currentUser;
     if (!user) return alert("❌ Ou dwe konekte anvan!");
 
-    // Tcheke si Admin an dezaktive sèvis Echanj la (ON / OFF)
-    if (!liveSettings.exchangeActive) {
+    // Tcheke switch sekirite a
+    if (liveSettings.exchangeActive === false || liveSettings.exchangeActive === "false") {
         return alert("⚠️ Sèvis echanj la tanporèman pa disponib pou kounye a. Tanpri retounen pita!");
     }
 
@@ -65,12 +67,12 @@ window.openDialer = async (rezo) => {
             return alert("❌ Minimòm echanj se 10 HTG.");
         }
 
-        // Kalkil Frè ak To an tan reyèl
+        // Kalkil Frè sistèm an pousantaj (16.5% pa defo)
         const pousantajSistem = liveSettings.systemFee / 100;
         const freSistem = mVal * pousantajSistem;
         const montanPouResevwa = mVal - freSistem;
 
-        // Afiche Done yo anndan Modal Konfimasyon an (HTML)
+        // Afiche Done yo nan Modal la
         const sumMinitEl = document.getElementById('sum-minit');
         const sumFreEl = document.getElementById('sum-fre');
         const sumTotalEl = document.getElementById('sum-total');
@@ -79,9 +81,9 @@ window.openDialer = async (rezo) => {
         if (sumMinitEl) sumMinitEl.innerText = `${mVal.toFixed(2)} HTG`;
         if (sumFreEl) sumFreEl.innerText = `-${freSistem.toFixed(2)} HTG`;
         if (sumTotalEl) sumTotalEl.innerText = `${montanPouResevwa.toFixed(2)} HTG`;
-        if (pinInputEl) pinInputEl.value = ''; // Vid input PIN an
+        if (pinInputEl) pinInputEl.value = ''; 
 
-        // Storke done tanporè yo pou konfimasyon
+        // Sove done yo tanporèman pou lè yo klike konfime
         window.currentPendingExchange = {
             rezo: rezo,
             amount: mVal,
@@ -100,7 +102,7 @@ window.openDialer = async (rezo) => {
 
     } catch (error) {
         console.error("DETAY ERÈ A:", error);
-        alert("Gen yon pwoblèm ak koneksyon Database la. Verifye entènet ou.");
+        alert("Gen yon pwoblèm nan rezo a. Verifye koneksyon entènèt ou.");
     }
 };
 
@@ -115,14 +117,12 @@ window.femenModalEchanj = function() {
     if (pinInputEl) pinInputEl.value = '';
 };
 
-// 3. KREYE TRANSAKSYON AK OUVRI DIALER AUTOMATIKMAN LÈ YO KLIKE SOU "KONFIME AK PIN"
+// 3. KREYE TRANSAKSYON AK OUVRI DIALER AUTOMATIKMAN
 async function fèEchanjFinal() {
     const user = auth.currentUser;
     if (!user || !window.currentPendingExchange) return;
 
     const data = window.currentPendingExchange;
-
-    // Li PIN an depi nan bwat input nan modal la
     const pinInputEl = document.getElementById('input-pin-echanj');
     const pinAntre = pinInputEl ? pinInputEl.value.trim() : "";
 
@@ -132,7 +132,7 @@ async function fèEchanjFinal() {
         return;
     }
 
-    // Tcheke PIN
+    // Validasyon PIN
     if (pinAntre.toString() !== data.userPIN.toString()) {
         return alert("❌ PIN enkòrèk. Aksyon anile.");
     }
@@ -155,20 +155,19 @@ async function fèEchanjFinal() {
             timestamp: serverTimestamp()
         };
 
-        // SOVE NAN FIREBASE (Transactions, Admin Orders, ak Node User a)
+        // Enrejistre nan Firebase
         await set(ref(db, `transactions/${transID}`), transactionData);
         await set(ref(db, `admin_orders/${transID}`), transactionData);
         await set(ref(db, `users/${user.uid}/user_transactions/${transID}`), transactionData);
 
-        // Notifikasyon
         if (window.voyeNotifikasyon) {
             window.voyeNotifikasyon(user.uid, "Tranzaksyon", `Echanj ${data.amount} minit anrejistre.`);
         }
 
-        // Fèmen modal la nèt
+        // Fèmen modal la
         window.femenModalEchanj();
 
-        // 4. Genère USSD ak nimewo ki soti nan Admin lan
+        // Jenerasyon kòd USSD
         const targetNumber = (data.rezo === 'digicel') ? liveSettings.digicelNumber : liveSettings.natcomNumber;
         const ussd = (data.rezo === 'digicel') 
             ? `*128*${targetNumber}*${data.amount}#` 
@@ -176,19 +175,18 @@ async function fèEchanjFinal() {
 
         alert("✅ Bravo! Tranzaksyon anrejistre.\n\nKlike sou OK pou w ireksyonnen sou aplikasyon telefòn lan pou voye minit yo.");
         
-        // Ouvè aplikasyon apèl la (Dialer APK) otomatikman ak tout kòd la pare
+        // Louvri aplikasyon Dialer a dirèkteman
         window.location.href = `tel:${encodeURIComponent(ussd)}`;
 
     } catch (error) {
         console.error("DETAY ERÈ A:", error);
-        alert("Gen yon pwoblèm nan anrejistreman an. Reeseye ankò.");
+        alert("Gen yon erè nan anrejistreman an. Tanpri reeseye.");
     }
 }
 
-// FONKSYON POU INISYALIZE BOTON YO
+// INISYALIZE BOTON YO
 export function initEchanj(uid) {
     console.log("Echanj Ready ✅");
-
     const btnKonfime = document.getElementById('btn-konfime-final');
     if (btnKonfime) {
         btnKonfime.onclick = (e) => {
@@ -196,5 +194,5 @@ export function initEchanj(uid) {
             fèEchanjFinal();
         };
     }
-   }
-       
+        }
+           
