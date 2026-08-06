@@ -1,127 +1,169 @@
 /* ============================================================
-   JS ECHANJ - ECHANJ PLUS V4.6 - REALTIME SETTINGS INTEGRATED
+   ECHANJ PLUS - CLIENT ECHANJ CORE
    ============================================================ */
-import { db, auth } from './script.js';
-import { ref, get, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { ref, get, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// Varyab pou gade paramèt sistèm yo an tan reyèl
-let liveSettings = {
-    rateBuy: 0,
-    rateSell: 0,
-    systemFee: 16.5,
-    exchangeActive: true,
-    digicelNumber: "50947111123",
-    natcomNumber: "32160708"
-};
+// Global Variables
+let currentSystemFee = 16.5; // Pa defo 16.5%
+let isExchangeActive = true;
+let selectedOperator = '';
+let recipientDigicelNumber = "50947111123";
+let recipientNatcomNumber = "32160708";
 
-// Koute paramèt ak to yo otomatikman nan Firebase
-onValue(ref(db, 'settings'), (snapshot) => {
-    if (snapshot.exists()) {
-        const data = snapshot.val();
-        liveSettings.rateBuy = data.rateBuy || 0;
-        liveSettings.rateSell = data.rateSell || 0;
-        liveSettings.systemFee = data.systemFee !== undefined ? data.systemFee : 16.5;
-        liveSettings.exchangeActive = data.exchangeActive !== undefined ? data.exchangeActive : true;
-        liveSettings.digicelNumber = data.digicelNumber || "50947111123";
-        liveSettings.natcomNumber = data.natcomNumber || "32160708";
+export function initEchanjKliyan(db, currentUser) {
+    if (!db) return;
 
-        // Mizajou afichaj frè an tan reyèl sou paj la
+    // 1. Chaje ak koute paramèt nan Firebase
+    listenToSettings(db);
+
+    // 2. Bouton Konfime ak PIN anndan Modal Echanj
+    const btnKonfime = document.getElementById('btn-konfime-final');
+    if (btnKonfime) {
+        btnKonfime.onclick = () => {
+            fèEchanjFinal(db, currentUser);
+        };
+    }
+}
+
+// KOUTE PARAMÈT FOUNISE DEPI NAN FIREBASE
+function listenToSettings(db) {
+    onValue(ref(db, 'settings'), (snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            currentSystemFee = data.systemFee !== undefined ? parseFloat(data.systemFee) : 16.5;
+            isExchangeActive = data.exchangeActive !== undefined ? data.exchangeActive : true;
+            recipientDigicelNumber = data.digicelNumber || "50947111123";
+            recipientNatcomNumber = data.natcomNumber || "32160708";
+        } else {
+            // Si settings yo vide, mete pa defo sou active
+            isExchangeActive = true;
+            currentSystemFee = 16.5;
+        }
+
+        // Mizajou baliz UI Frè nan paj la
         document.querySelectorAll('.live-fee-tag').forEach(el => {
-            el.innerText = `${liveSettings.systemFee}% Frè`;
+            el.innerText = `${currentSystemFee}% Frè`;
         });
         
-        const sumFeePercent = document.getElementById('sum-fee-percent');
-        if (sumFeePercent) sumFeePercent.innerText = liveSettings.systemFee;
-    }
-});
+        const sumFeeEl = document.getElementById('sum-fee-percent');
+        if (sumFeeEl) sumFeeEl.innerText = currentSystemFee;
+    });
+}
 
-// Nou mete l an deyò pou l toujou disponib
-window.openDialer = async (rezo) => {
-    const user = auth.currentUser;
-    if (!user) return alert("Ou dwe konekte anvan!");
-
-    // 0. Tcheke si Admin an dezaktive sèvis Echanj la (ON / OFF)
-    if (!liveSettings.exchangeActive) {
-        return alert("⚠️ Sèvis echanj la tanporèman pa disponib pou kounye a. Tanpri retounen pita!");
+// FONKSYON KI OUVÈ DIALER AN LÈ KLIYAN KLIKE SOU DIGICEL / NATCOM
+window.openDialer = function(operator) {
+    if (!isExchangeActive) {
+        alert("⚠️ Sèvis echanj la tanporèman pa disponib pou kounye a. Tanpri retounen pita!");
+        return;
     }
 
-    try {
-        // 1. Rekipere enfòmasyon itilizatè a
-        const userSnap = await get(ref(db, `users/${user.uid}`));
-        const userData = userSnap.val();
+    selectedOperator = operator;
+    const numberToCall = (operator === 'digicel') ? recipientDigicelNumber : recipientNatcomNumber;
 
-        if (!userData || !userData.transactionPin) {
-            alert("🔴 Ou dwe kreye yon PIN nan Paramètres anvan ou fè yon echanj.");
-            if (window.showPage) window.showPage('paj-parametre');
-            return;
-        }
+    const amountStr = prompt(`Antre kantite minit (${operator.toUpperCase()}) w ap voye pou echanje:`);
+    if (!amountStr) return;
 
-        // 2. Mande montan minit
-        const montanMinit = prompt(`Konbyen minit w ap vann (${rezo.toUpperCase()})?`);
-        if (!montanMinit) return; // Si l anile
-
-        const mVal = parseFloat(montanMinit);
-        if (isNaN(mVal) || mVal < 100) {
-            return alert("❌ Minimòm echanj se 100 HTG.");
-        }
-
-        // 3. Kalkil Frè ak To an tan reyèl
-        const pousantajSistem = liveSettings.systemFee / 100;
-        const freSistem = mVal * pousantajSistem;
-        let montanPouResevwa = mVal - freSistem;
-
-        // 4. Chèk PIN
-        const pinAntre = prompt("Antre PIN 4 chif ou an pou konfime:");
-        if (!pinAntre) return;
-        if (pinAntre !== userData.transactionPin) {
-            return alert("❌ PIN enkòrèk. Aksyon anile.");
-        }
-
-        // 5. Kreye Tranzaksyon
-        const transID = "ECH-" + Date.now();
-        const transactionData = {
-            transID: transID,
-            uid: user.uid,
-            arsID: userData.arsID || "---",
-            fullname: userData.fullname || userData.username || "Kliyan",
-            phone: userData.phone || "",
-            type: "Echanj",
-            rezo: rezo,
-            amount_sent: mVal,
-            applied_fee_percent: liveSettings.systemFee,
-            fee_amount: parseFloat(freSistem.toFixed(2)),
-            htg_to_receive: parseFloat(montanPouResevwa.toFixed(2)),
-            status: "En attente",
-            timestamp: serverTimestamp()
-        };
-
-        // SAVE NAN FIREBASE (Transactions, Admin Orders, ak Node User a pou Istorik)
-        await set(ref(db, `transactions/${transID}`), transactionData);
-        await set(ref(db, `admin_orders/${transID}`), transactionData);
-        await set(ref(db, `users/${user.uid}/user_transactions/${transID}`), transactionData);
-
-        // 6. Notifikasyon
-        if (window.voyeNotifikasyon) {
-            window.voyeNotifikasyon(user.uid, "Tranzaksyon", `Echanj ${mVal} minit anrejistre.`);
-        }
-
-        // 7. Genère USSD ak nimewo ki soti nan Admin lan
-        const targetNumber = (rezo === 'digicel') ? liveSettings.digicelNumber : liveSettings.natcomNumber;
-        const ussd = (rezo === 'digicel') 
-            ? `*128*${targetNumber}*${mVal}#` 
-            : `*123*88888888*${targetNumber}*${mVal}#`;
-            
-        alert("Bravo! Tranzaksyon anrejistre. Klike OK pou w voye minit yo.");
-        window.location.href = `tel:${encodeURIComponent(ussd)}`;
-
-    } catch (error) {
-        console.error("DETAY ERÈ A:", error);
-        alert("Gen yon pwoblèm ak koneksyon Database la. Verifye entènèt ou.");
+    const amount = parseFloat(amountStr);
+    if (isNaN(amount) || amount <= 0) {
+        alert("❌ Tanpri antre yon montan ki valab!");
+        return;
     }
+
+    // Kalkil Frè ak Total pou Resevwa
+    const freHTG = (amount * currentSystemFee) / 100;
+    const totalToReceive = amount - freHTG;
+
+    // Montre rezime a nan Modal la
+    document.getElementById('sum-minit').innerText = `${amount.toFixed(2)} HTG`;
+    document.getElementById('sum-fre').innerText = `-${freHTG.toFixed(2)} HTG`;
+    document.getElementById('sum-total').innerText = `${totalToReceive.toFixed(2)} HTG`;
+
+    // Storke done tanporè yo
+    window.currentPendingExchange = {
+        amount: amount,
+        feePercent: currentSystemFee,
+        feeHTG: freHTG,
+        toReceive: totalToReceive,
+        rezo: operator,
+        recipientNumber: numberToCall
+    };
+
+    // Ouvè Modal Konfimasyon an
+    const modal = document.getElementById('modal-confirm-echanj');
+    if (modal) modal.classList.remove('hidden');
 };
 
-// Fonksyon pou inisyalize
-export function initEchanj(uid) {
-    console.log("Echanj Ready ✅");
+// FONKSYON POU FÈMEN MODAL ECHANJ
+window.femenModalEchanj = function() {
+    const modal = document.getElementById('modal-confirm-echanj');
+    if (modal) modal.classList.add('hidden');
+};
+
+// FONKSYON POU KREYE TRANSAKSYON NAN FIREBASE
+async function fèEchanjFinal(db, currentUser) {
+    if (!window.currentPendingExchange) return;
+    if (!currentUser) {
+        alert("❌ Ou dwe konekte pou w reyalize operasyon sa a!");
+        return;
     }
-    
+
+    const pinInput = prompt("Antre PIN sekirite ou pou konfime echanj la:");
+    if (!pinInput) return;
+
+    // 1. Verifye PIN nan baz done a
+    try {
+        const userSnap = await get(ref(db, `users/${currentUser.uid}`));
+        if (userSnap.exists()) {
+            const userData = userSnap.val();
+            if (userData.pin && userData.pin.toString() !== pinInput.toString()) {
+                alert("❌ Kòd PIN sa a pa egzak!");
+                return;
+            }
+        }
+
+        const data = window.currentPendingExchange;
+        const txRef = push(ref(db, 'transactions'));
+        const txID = txRef.key;
+
+        const newTransaction = {
+            uid: currentUser.uid,
+            fullname: userSnap.exists() ? (userSnap.val().full_name || userSnap.val().fullname || 'Kliyan ARS') : 'Kliyan ARS',
+            ars_id: userSnap.exists() ? (userSnap.val().arsID || userSnap.val().ars_id || 'N/A') : 'N/A',
+            amount: data.amount,
+            fee: data.feeHTG,
+            to_receive: data.toReceive,
+            rezo: data.rezo,
+            type: "echanj",
+            status: "pending",
+            timestamp: Date.now()
+        };
+
+        await set(txRef, newTransaction);
+
+        window.femenModalEchanj();
+        alert(`✅ Demann echanj ${data.amount} HTG anrejistre ak siksè!\n\nKounye a, nou pral redireksyone w pou fè transfè minit an sou nimewo ${data.recipientNumber}.`);
+
+        // Redireksyon sou telefòn pou kòd USSD transfè a
+        window.location.href = `tel:${data.recipientNumber}`;
+
+    } catch (err) {
+        alert("❌ Erè nan anrejistreman echanj la: " + err.message);
+    }
+}
+
+// POPUPS DETAY FEATURES (Kalkilatris, Parennaj, Resi)
+window.openFeatureModal = function(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.remove('hidden');
+};
+
+window.closeFeatureModal = function(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.add('hidden');
+};
+
+window.closeFeatureModalOnOverlay = function(event, id) {
+    if (event.target.id === id) {
+        window.closeFeatureModal(id);
+    }
+};
