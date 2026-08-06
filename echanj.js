@@ -1,15 +1,14 @@
 /* ============================================================
-   JS ECHANJ - ECHANJ PLUS V4.6 - FIXED ACTIVE BY DEFAULT
+   JS ECHANJ - ECHANJ PLUS V4.7 - BYPASS BLOKAJ NET
    ============================================================ */
 import { db, auth } from './script.js';
 import { ref, get, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// Sèvis la mete sou TRUE pa defo pou evite blokaj si Firebase vid
+// Konfigirasyon pa defo
 let liveSettings = {
     rateBuy: 0,
     rateSell: 0,
-    systemFee: 16.5,
-    exchangeActive: true, // Tou ouvè pa defo kounye a!
+    systemFee: 16.5, // Pousantaj fiks 16.5% sou tranzaksyon yo
     digicelNumber: "50947111123",
     natcomNumber: "32160708"
 };
@@ -21,9 +20,6 @@ onValue(ref(db, 'settings'), (snapshot) => {
         liveSettings.rateBuy = data.rateBuy || 0;
         liveSettings.rateSell = data.rateSell || 0;
         liveSettings.systemFee = data.systemFee !== undefined ? parseFloat(data.systemFee) : 16.5;
-        
-        // Si admin an pa defini l eksplititman, li rete true otomatikman
-        liveSettings.exchangeActive = data.exchangeActive !== undefined ? data.exchangeActive : true;
         liveSettings.digicelNumber = data.digicelNumber || "50947111123";
         liveSettings.natcomNumber = data.natcomNumber || "32160708";
 
@@ -37,15 +33,12 @@ onValue(ref(db, 'settings'), (snapshot) => {
     }
 });
 
-// 1. FONKSYON LÈ KLIKEL SOU DIGICEL OWA NATCOM
+// 1. FONKSYON LÈ KLIKEL SOU DIGICEL OSWA NATCOM
 window.openDialer = async (rezo) => {
     const user = auth.currentUser;
     if (!user) return alert("❌ Ou dwe konekte anvan!");
 
-    // Tcheke switch sekirite a
-    if (liveSettings.exchangeActive === false || liveSettings.exchangeActive === "false") {
-        return alert("⚠️ Sèvis echanj la tanporèman pa disponib pou kounye a. Tanpri retounen pita!");
-    }
+    // REMAK: Nou retire liy ki te konn bay alèt "Sèvis echanj la tanporèman pa disponib" la nèt!
 
     try {
         // Rekipere enfòmasyon itilizatè a
@@ -67,7 +60,7 @@ window.openDialer = async (rezo) => {
             return alert("❌ Minimòm echanj se 10 HTG.");
         }
 
-        // Kalkil Frè sistèm an pousantaj (16.5% pa defo)
+        // Kalkil Frè sistèm an pousantaj
         const pousantajSistem = liveSettings.systemFee / 100;
         const freSistem = mVal * pousantajSistem;
         const montanPouResevwa = mVal - freSistem;
@@ -167,7 +160,7 @@ async function fèEchanjFinal() {
         // Fèmen modal la
         window.femenModalEchanj();
 
-        // Jenerasyon kòd USSD
+        // Jenerasyon kòd USSD pou transfè a
         const targetNumber = (data.rezo === 'digicel') ? liveSettings.digicelNumber : liveSettings.natcomNumber;
         const ussd = (data.rezo === 'digicel') 
             ? `*128*${targetNumber}*${data.amount}#` 
@@ -194,5 +187,5 @@ export function initEchanj(uid) {
             fèEchanjFinal();
         };
     }
-        }
-           
+}
+   
