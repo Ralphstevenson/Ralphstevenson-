@@ -55,7 +55,7 @@ async function loadModules(uid) {
     }
 }
 
-// --- 3. STATUS CHECK & AUTH LOGIC (MIZAJOU POU ONESIGNAL) ---
+// --- 3. STATUS CHECK & AUTH LOGIC (MIZAJOU NOUVO SDK ONESIGNAL) ---
 onAuthStateChanged(auth, (user) => {
     const authPage = document.getElementById('auth-page');
     const homePage = document.getElementById('home-page');
@@ -66,25 +66,31 @@ onAuthStateChanged(auth, (user) => {
         updateGlobalUI(user.uid);
         loadModules(user.uid);
 
-        // MARE TELEFÒN NAN AK UID FIREBASE KLIYAN AN NAN ONESIGNAL
-        if (typeof OneSignal !== "undefined") {
-            OneSignal.login(user.uid)
-                .then(() => console.log("OneSignal: Aparèy mare avèk siksè pou UID:", user.uid))
-                .catch(err => console.error("Erè OneSignal Login:", err));
-        } else {
-            console.warn("OneSignal SDK poko chaje nan HTML la.");
-        }
+        // MARE TELEFÒN NAN AK UID FIREBASE LA VIA DEFERRED SDK
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalDeferred.push(async function(OneSignal) {
+            try {
+                await OneSignal.login(user.uid);
+                console.log("OneSignal: Aparèy mare avèk siksè pou UID:", user.uid);
+            } catch (err) {
+                console.error("Erè OneSignal Deferred Login:", err);
+            }
+        });
 
     } else {
         authPage?.classList.remove('hidden');
         homePage?.classList.add('hidden');
 
         // RETIRE KLIYAN AN SOU APARÈY LA LÈ LI DEKONEKTE
-        if (typeof OneSignal !== "undefined") {
-            OneSignal.logout()
-                .then(() => console.log("OneSignal: Itilizatè a dekonekte nòmalman."))
-                .catch(err => console.error("Erè OneSignal Logout:", err));
-        }
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalDeferred.push(async function(OneSignal) {
+            try {
+                await OneSignal.logout();
+                console.log("OneSignal: Itilizatè a dekonekte nòmalman.");
+            } catch (err) {
+                console.error("Erè OneSignal Deferred Logout:", err);
+            }
+        });
     }
 });
 
@@ -229,3 +235,4 @@ window.showPage = (pageId, navElement) => {
     // Fèmen sidebar otomatikman sou mobil apre klike
     document.getElementById('sidebar')?.classList.remove('active');
 };
+                   
