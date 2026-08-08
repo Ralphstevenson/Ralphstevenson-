@@ -31,22 +31,25 @@
    })();
 </script>
 
+
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
-  window.OneSignal = window.OneSignal || [];
-  OneSignal.push(function() {
-    OneSignal.init({
-      ONESIGNAL_APP_ID: "53388648-9930-407e-a1be-c5e71da81b7a",
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "53388648-9930-407e-a1be-c5e71da81b7a",
       notifyButton: {
-        enable: false
+        enable: false // Sa ap kache ti klòch k ap lwen anba a
       }
     });
-    
-    // Mande pèmisyon natif byen pwòp apre 5 segonn
-    setTimeout(() => {
-       OneSignal.showNativePrompt();
+
+    // Mande pèmizyon natif byen pwòp apre 5 segonn sou APK a
+    setTimeout(async () => {
+      await OneSignal.Notifications.requestPermission();
     }, 5000);
   });
-</script>
+               </script>
+    
     
 
     
