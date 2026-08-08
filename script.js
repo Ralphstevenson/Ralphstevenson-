@@ -55,7 +55,7 @@ async function loadModules(uid) {
     }
 }
 
-// --- 3. STATUS CHECK & AUTH LOGIC ---
+// --- 3. STATUS CHECK & AUTH LOGIC (MIZAJOU POU ONESIGNAL) ---
 onAuthStateChanged(auth, (user) => {
     const authPage = document.getElementById('auth-page');
     const homePage = document.getElementById('home-page');
@@ -65,9 +65,26 @@ onAuthStateChanged(auth, (user) => {
         homePage?.classList.remove('hidden');
         updateGlobalUI(user.uid);
         loadModules(user.uid);
+
+        // MARE TELEFÒN NAN AK UID FIREBASE KLIYAN AN NAN ONESIGNAL
+        if (typeof OneSignal !== "undefined") {
+            OneSignal.login(user.uid)
+                .then(() => console.log("OneSignal: Aparèy mare avèk siksè pou UID:", user.uid))
+                .catch(err => console.error("Erè OneSignal Login:", err));
+        } else {
+            console.warn("OneSignal SDK poko chaje nan HTML la.");
+        }
+
     } else {
         authPage?.classList.remove('hidden');
         homePage?.classList.add('hidden');
+
+        // RETIRE KLIYAN AN SOU APARÈY LA LÈ LI DEKONEKTE
+        if (typeof OneSignal !== "undefined") {
+            OneSignal.logout()
+                .then(() => console.log("OneSignal: Itilizatè a dekonekte nòmalman."))
+                .catch(err => console.error("Erè OneSignal Logout:", err));
+        }
     }
 });
 
@@ -212,4 +229,3 @@ window.showPage = (pageId, navElement) => {
     // Fèmen sidebar otomatikman sou mobil apre klike
     document.getElementById('sidebar')?.classList.remove('active');
 };
-           
