@@ -5,7 +5,7 @@
  * ============================================================
  */
 
-import { db } from "./script.js";
+import { db, handleLogout } from "./script.js";
 import { ref, onValue, query, orderByChild, equalTo, limitToLast } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // Done lokal pou notifikasyon yo
@@ -13,13 +13,28 @@ let koneksyonLogs = [];
 let transakLogs = [];
 let activeTab = "koneksyon"; // Tab pa defo
 
-// ==========================================
-// 1. KOUTE DONE NOTIFIKASYON YO (FIREBASE)
-// ==========================================
+/**
+ * Fonksyon prensipal pou chaje tout done Header ak Notifikasyon yo
+ */
 export function initNotifikasyon(uid) {
     if (!uid) return;
 
-    // A. Koute Istorik Koneksyon yo (Pran 5 dènye yo)
+    // 1. KOUTE DONE ENFÒMASYON AK BALANS ITILIZATÈ A (QUICK BALANCE)
+    const userRef = ref(db, `users/${uid}`);
+    onValue(userRef, (snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            const balElement = document.getElementById('header-quick-balance');
+            if (balElement) {
+                const balance = data.balance ? Number(data.balance).toFixed(2) : "0.00";
+                balElement.innerHTML = `<b style="color:#f1c40f;">${balance} HTG</b>`;
+            }
+        }
+    }, (error) => {
+        console.error("Erè nan lekti done itilizatè nan header:", error);
+    });
+
+    // 2. KOUTE ISTORIK KONEKSYON YO (Pran 5 dènye yo)
     const connRef = query(ref(db, `logs/connections/${uid}`), limitToLast(5));
     onValue(connRef, (snapshot) => {
         koneksyonLogs = [];
@@ -36,7 +51,7 @@ export function initNotifikasyon(uid) {
         console.error("Erè lekti koneksyon logs:", error);
     });
 
-    // B. Koute Tranzaksyon yo pou Notifikasyon (Pran 5 dènye yo)
+    // 3. KOUTE TRANZAKSYON YO POU NOTIFIKASYON (Pran 5 dènye yo)
     const transQuery = query(
         ref(db, 'transactions'),
         orderByChild('uid'),
@@ -63,9 +78,9 @@ export function initNotifikasyon(uid) {
     });
 }
 
-// ==========================================
-// 2. METE DESIGN NOTIFIKASYON AN AJOU (UI)
-// ==========================================
+/**
+ * Mete atenn ak kontni Notifikasyon yo ajou sou ekran an
+ */
 function updateNotifUI() {
     const notifContent = document.getElementById('notif-content');
     const badge = document.getElementById('notif-badge');
@@ -121,17 +136,19 @@ function updateNotifUI() {
             let statusText = tx.status || 'En atant';
             let statusIcon = 'fa-clock';
 
-            if (statusText.toLowerCase() === 'validé' || statusText.toLowerCase() === 'valide') {
+            const statusLower = statusText.toLowerCase();
+            if (statusLower === 'validé' || statusLower === 'valide' || statusLower === 'siksè') {
                 statusClass = 'status-success';
                 statusIcon = 'fa-circle-check';
-            } else if (statusText.toLowerCase() === 'echwe' || statusText.toLowerCase() === 'failed') {
+            } else if (statusLower === 'echwe' || statusLower === 'failed' || statusLower === 'anile') {
                 statusClass = 'status-failed';
                 statusIcon = 'fa-circle-xmark';
             }
 
             const type = tx.type || 'Echanj';
-            const amount = tx.amount ? `${tx.amount} HTG` : '0.00 HTG';
-            const dateStr = tx.date ? new Date(tx.date).toLocaleDateString('ht-HT') : '---';
+            const amount = tx.amount ? `${Number(tx.amount).toFixed(2)} HTG` : '0.00 HTG';
+            const dateVal = tx.timestamp || tx.date;
+            const dateStr = dateVal ? new Date(dateVal).toLocaleDateString('ht-HT') : '---';
 
             const html = `
                 <div class="notif-item">
@@ -150,7 +167,7 @@ function updateNotifUI() {
 }
 
 // ==========================================
-// 3. EKSPÒTE FONKSYON YO SOU WINDOW POU HTML
+// EKSPÒTE FONKSYON SOU WINDOW POU HTML
 // ==========================================
 
 // Louvri / Fèmen panèl notifikasyon an
@@ -178,4 +195,7 @@ window.switchNotifTab = function(tab) {
     // Rafrechi lis la imedyatman
     updateNotifUI();
 };
-                             
+
+// Dekoneksyon sou header a
+window.handleLogout = handleLogout;
+
