@@ -1,5 +1,5 @@
-here/* ============================================================
-   PAJ PRENSIPAL - HEADER AVANSE & MINIMALIST (PI PITI)
+/* ============================================================
+   PAJ PRENSIPAL - HEADER AVANSE & MINIMALIST
    ============================================================ */
 
 .main-header {
@@ -8,64 +8,74 @@ here/* ============================================================
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    max-width: 450px; /* Kenbe aliyman pafè sou ekran mobil */
-    height: 48px; /* Wotè redui pou l pi fen ak elegant */
-    background: rgba(255, 255, 255, 0.80);
-    backdrop-filter: blur(16px); /* Ogmante flou a pou yon efè glas pi dous */
+    max-width: 450px;
+    height: 52px; /* Wotè optimize pou tout eleman yo respirer */
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 14px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Liy anba trè fen */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.01);
+    justify-content: space-between; /* Distribiye eleman yo byen sou liy lan */
+    gap: 8px;
+    padding: 0 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
     z-index: 9998;
     box-sizing: border-box;
     transition: all 0.3s ease;
 }
 
-/* Ikòn Meni an */
+/* 1. Ikòn 3 ti ba (Meni) */
 .main-header .fa-bars-staggered {
-    font-size: 16px; /* Pi piti e pi diskrè */
+    font-size: 18px;
     color: var(--text-main, #0f172a);
     cursor: pointer;
-    opacity: 0.9;
-    transition: transform 0.2s;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, opacity 0.2s;
 }
 
-.main-header .fa-bars-staggered:hover {
-    transform: scale(1.1);
+.main-header .fa-bars-staggered:active {
+    transform: scale(0.9);
+    opacity: 0.7;
 }
 
-/* Tèks Logo "ECHANJ PLUS" */
+/* 2. Logo Text */
 .logo-text {
-    font-size: 14px; /* Redui pou l pa parèt twò gwo */
+    font-size: 13px;
     font-weight: 900;
     color: var(--primary, #097969);
-    letter-spacing: 0.8px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
-/* Bwat Balans Rapid la (Quick Balance Chip) */
+/* 3. Bwat Balans Rapid (Quick Balance Chip) */
 .quick-balance {
-    font-size: 11px; /* Tèks pi piti e pwofesyonèl */
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 800;
     color: var(--primary, #097969);
-    background: rgba(9, 121, 105, 0.08); /* Fondasyon vèt pal trè transparan */
-    padding: 3px 10px;
-    border-radius: 20px; /* Fòm pil (pill shape) */
-    border: 1px solid rgba(9, 121, 105, 0.15);
-    letter-spacing: 0.3px;
+    background: rgba(9, 121, 105, 0.08);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(9, 121, 105, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
-/* KONTÈ KLÒCH NOTIFIKASYON LA */
+/* 4. Klòch Notifikasyon */
 .notif-wrapper {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     cursor: pointer;
     transition: background 0.2s, transform 0.2s;
@@ -73,30 +83,30 @@ here/* ============================================================
 
 .notif-wrapper:active {
     transform: scale(0.92);
-    background: rgba(0, 0, 0, 0.04);
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .main-header .fa-bell {
-    font-size: 16px; /* Pi piti */
+    font-size: 17px;
     color: var(--text-main, #0f172a);
 }
 
 /* Ti Badge Wouj la */
 .notif-badge {
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: 3px;
+    right: 3px;
     background: #ef4444;
     color: #ffffff;
-    font-size: 8px; /* Ti font ultra-net */
+    font-size: 8px;
     font-weight: 900;
-    min-width: 13px;
-    height: 13px;
+    min-width: 14px;
+    height: 14px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1.5px solid #ffffff; /* Liy separasyon blan pi fen */
+    border: 1.5px solid #ffffff;
 }
 
 .notif-badge.hidden {
@@ -104,19 +114,19 @@ here/* ============================================================
 }
 
 /* ============================================================
-   PANÈL NOTIFIKASYON (NOTIF PANEL & MIZAJOU ENTERYÈ)
+   PANÈL NOTIFIKASYON & TI KWA POU FÈMEN AN
    ============================================================ */
 
 .notif-panel {
     position: absolute;
-    top: 52px; /* Desann li jis anba liy header a */
+    top: 56px;
     right: 10px;
     width: calc(100% - 20px);
     max-width: 360px;
     background: #ffffff;
-    border-radius: 12px;
+    border-radius: 14px;
     border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.15);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -130,7 +140,8 @@ here/* ============================================================
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    background: rgba(0, 0, 0, 0.01);
 }
 
 .notif-header h4 {
@@ -143,22 +154,34 @@ here/* ============================================================
     gap: 6px;
 }
 
+/* Style sou Ti Kwa pou Fèmen Panèl la */
 .notif-header .close-notif {
     font-size: 14px;
     color: #64748b;
     cursor: pointer;
-    padding: 4px;
-    transition: color 0.2s;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
 }
 
 .notif-header .close-notif:hover {
-    color: #ef4444;
+    color: #ffffff;
+    background: #ef4444; /* Vinn wouj lè w pase sourit la/klike */
+}
+
+.notif-header .close-notif:active {
+    transform: scale(0.88);
 }
 
 /* Tabs Notifikasyon (Koneksyon / Tranzaksyon) */
 .notif-tabs {
     display: flex;
-    background: rgba(0, 0, 0, 0.02);
+    background: rgba(0, 0, 0, 0.03);
     padding: 4px;
     gap: 4px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -166,13 +189,13 @@ here/* ============================================================
 
 .tab-btn {
     flex: 1;
-    padding: 6px 0;
+    padding: 7px 0;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     color: #64748b;
     background: transparent;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -180,7 +203,7 @@ here/* ============================================================
 .tab-btn.active {
     background: #ffffff;
     color: var(--primary, #097969);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 /* Kontni Panèl la */
@@ -198,7 +221,7 @@ here/* ============================================================
     font-style: italic;
 }
 
-/* Anba Panèl la (Footer ak Baf Dekonekte) */
+/* Anba Panèl la (Footer / Dekonekte) */
 .notif-footer {
     padding: 10px 16px;
     background: rgba(0, 0, 0, 0.01);
@@ -211,7 +234,7 @@ here/* ============================================================
     justify-content: center;
     gap: 8px;
     width: 100%;
-    padding: 8px 0;
+    padding: 9px 0;
     font-size: 12px;
     font-weight: 700;
     color: #ef4444;
@@ -228,35 +251,32 @@ here/* ============================================================
 }
 
 /* ============================================================
-   AJISTEMAN POU MOD NWIT (DARK MODE)
+   MOD NWIT (DARK MODE)
    ============================================================ */
 [data-theme="dark"] .main-header {
-    background: rgba(1, 22, 26, 0.80);
-    border-bottom-color: rgba(255, 255, 255, 0.05);
+    background: rgba(1, 22, 26, 0.85);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 [data-theme="dark"] .quick-balance {
     background: rgba(18, 163, 143, 0.12);
     color: #12a38f;
-    border-color: rgba(18, 163, 143, 0.2);
+    border-color: rgba(18, 163, 143, 0.25);
 }
 
 [data-theme="dark"] .notif-badge {
     border-color: #01161a;
 }
 
-[data-theme="dark"] .notif-wrapper:active {
-    background: rgba(255, 255, 255, 0.05);
-}
-
 [data-theme="dark"] .notif-panel {
     background: #01161a;
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
 }
 
 [data-theme="dark"] .notif-header {
-    border-bottom-color: rgba(255, 255, 255, 0.05);
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
 }
 
 [data-theme="dark"] .notif-header h4 {
@@ -265,11 +285,17 @@ here/* ============================================================
 
 [data-theme="dark"] .notif-header .close-notif {
     color: #94a3b8;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .notif-header .close-notif:hover {
+    color: #ffffff;
+    background: #ef4444;
 }
 
 [data-theme="dark"] .notif-tabs {
-    background: rgba(255, 255, 255, 0.02);
-    border-bottom-color: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom-color: rgba(255, 255, 255, 0.06);
 }
 
 [data-theme="dark"] .tab-btn {
@@ -283,7 +309,7 @@ here/* ============================================================
 
 [data-theme="dark"] .notif-footer {
     background: rgba(255, 255, 255, 0.01);
-    border-top-color: rgba(255, 255, 255, 0.05);
+    border-top-color: rgba(255, 255, 255, 0.06);
 }
 
 [data-theme="dark"] .logout-btn-elite {
