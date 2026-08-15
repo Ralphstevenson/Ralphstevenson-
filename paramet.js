@@ -1,5 +1,5 @@
 /* ============================================================
-   JS PARAMÈT RESEVWA V4.6 - KOREKSYON JADEN PIN (FINAL)
+   JS PARAMÈT RESEVWA V4.8 - SYNC OTOMATIK AK ECHANJ PIN
    ============================================================ */
 import { auth, db } from './script.js';
 import { ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -33,9 +33,10 @@ export function initParamet(uid) {
         }
         if (settArsId) settArsId.innerText = data.arsID || "---";
 
-        // B. KOREKSYON: Nou chanje transactionPin pou l vin 'pin' nèt
-        window.userAppData.hasPin = !!data.pin;
-        window.userAppData.currentPin = data.pin || "";
+        // B. KOREKSYON PIN: Nou detekte ni 'pin' ni 'transactionPin'
+        const activePin = data.pin || data.transactionPin || "";
+        window.userAppData.hasPin = !!activePin;
+        window.userAppData.currentPin = activePin;
 
         // C. Jere Switch Gmail la
         const gmailToggle = document.getElementById('gmail-notif-toggle');
@@ -74,7 +75,7 @@ const btnSavePin = document.getElementById('btn-save-pin');
 if (btnSavePin) {
     btnSavePin.onclick = async () => {
         const pinInput = document.getElementById('pin-input');
-        const pinVal = pinInput.value;
+        const pinVal = pinInput ? pinInput.value.trim() : "";
 
         if (pinVal.length !== 4 || isNaN(pinVal)) {
             alert("❌ PIN nan dwe gen 4 chif egzak.");
@@ -85,15 +86,23 @@ if (btnSavePin) {
         btnSavePin.disabled = true;
 
         try {
-            const uid = auth.currentUser.uid;
+            const uid = auth.currentUser ? auth.currentUser.uid : null;
+            if (!uid) throw new Error("Ou pa konekte!");
             
-            // KOREKSYON FINAL: Nou ekri 'pin' nan plas 'transactionPin' 
-            // pou l ka pase san blokaj nan Rules yo
-            await update(ref(db, `users/${uid}`), { pin: pinVal });
+            // Ekri 'pin' ak 'transactionPin' an menm tan pou evite blokaj nan okenn modil
+            await update(ref(db, `users/${uid}`), { 
+                pin: pinVal,
+                transactionPin: pinVal 
+            });
             
-            alert("✅ PIN sove ak siksè!");
-            pinInput.value = "";
+            // Mizajou dirèk an memwa lokal pou senkronizasyon an tan reyèl
+            window.userAppData.hasPin = true;
+            window.userAppData.currentPin = pinVal;
+
+            alert("✅ PIN sove ak siksè! Ou ka retounen fè echanj ou kounye a.");
+            if (pinInput) pinInput.value = "";
             window.closeModal('modal-pin');
+
         } catch (error) {
             alert("Erè: " + error.message);
         } finally {
@@ -148,4 +157,5 @@ if (darkToggle) {
         document.body.classList.toggle('dark-theme', isDark);
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
-       }
+}
+
