@@ -1,5 +1,5 @@
 /* ============================================================
-   JS ECHANJ - ECHANJ PLUS V4.8 - ANTI-BLOKAJ FIREBASE WRITE
+   JS ECHANJ - ECHANJ PLUS V4.8 - DETEKSYON PIN OTOMATIK
    ============================================================ */
 import { db, auth } from './script.js';
 import { ref, get, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -39,13 +39,28 @@ window.openDialer = async (rezo) => {
     if (!user) return alert("❌ Ou dwe konekte anvan!");
 
     try {
-        // Rekipere enfòmasyon itilizatè a
+        // Rekipere enfòmasyon itilizatè a nan Firebase
         const userSnap = await get(ref(db, `users/${user.uid}`));
-        const userData = userSnap.val();
+        const userData = userSnap.val() || {};
 
-        if (!userData || (!userData.transactionPin && !userData.pin)) {
-            alert("🔴 Ou dwe kreye yon PIN nan Paramètres anvan ou fè yon echanj.");
-            if (window.showPage) window.showPage('paj-parametre');
+        // VÈSIFYASYON PIN: Si itilizatè a poko kreye PIN, ireksyonnen l dirèkteman nan Paramètres
+        const userPin = userData.pin || userData.transactionPin;
+        if (!userPin) {
+            alert("⚠️ Ou poko gen yon PIN sekirite. N ap voye w nan Paramètres pou w kreye yon PIN 4 chif anvan w fè echanj.");
+            
+            // Louvri paj Paramètres an otomatikman
+            if (typeof window.showPage === 'function') {
+                window.showPage('paj-parametre');
+            } else {
+                // Si gen yon lòt fonksyon navige nan UI w la
+                const paramBtn = document.querySelector('[data-page="paj-parametre"]') || document.getElementById('nav-parametre');
+                if (paramBtn) paramBtn.click();
+            }
+
+            // Ouvri modal pou kreye PIN lan si fonksyon an disponib nan paramet.js
+            if (typeof window.openPinManager === 'function') {
+                setTimeout(() => window.openPinManager(), 500);
+            }
             return;
         }
 
@@ -80,7 +95,7 @@ window.openDialer = async (rezo) => {
             amount: mVal,
             feeHTG: parseFloat(freSistem.toFixed(2)),
             toReceive: parseFloat(montanPouResevwa.toFixed(2)),
-            userPIN: userData.transactionPin || userData.pin,
+            userPIN: userPin,
             userData: userData
         };
 
@@ -117,13 +132,21 @@ async function fèEchanjFinal() {
     const pinInputEl = document.getElementById('input-pin-echanj');
     const pinAntre = pinInputEl ? pinInputEl.value.trim() : "";
 
+    // Tcheke ankò si pwofil la te san PIN
+    if (!data.userPIN) {
+        alert("❌ Ou dwe kreye yon PIN nan Paramètres anvan.");
+        window.femenModalEchanj();
+        if (typeof window.showPage === 'function') window.showPage('paj-parametre');
+        return;
+    }
+
     if (!pinAntre || pinAntre.length < 4) {
         alert("❌ Tanpri antre PIN sekirite 4 chif ou an!");
         if (pinInputEl) pinInputEl.focus();
         return;
     }
 
-    // Validasyon PIN
+    // Validasyon PIN (kraze okenn mismatch nan fòma string/number)
     if (pinAntre.toString() !== data.userPIN.toString()) {
         return alert("❌ PIN enkòrèk. Aksyon anile.");
     }
@@ -149,7 +172,7 @@ async function fèEchanjFinal() {
     let anrejistrePwofilKliyan = false;
     let anrejistreGlobal = false;
 
-    // A. Eseye ekri nan espas Kliyan an an premye (Sa toujou gen mwens restriksyon)
+    // A. Eseye ekri nan espas Kliyan an an premye
     try {
         await set(ref(db, `users/${user.uid}/user_transactions/${transID}`), transactionData);
         anrejistrePwofilKliyan = true;
@@ -163,7 +186,7 @@ async function fèEchanjFinal() {
         await set(ref(db, `admin_orders/${transID}`), transactionData);
         anrejistreGlobal = true;
     } catch (e) {
-        console.error("Firebase bloke ekriti nan node Admin/Global (Tcheke Rules):", e);
+        console.error("Firebase bloke ekriti nan node Admin/Global:", e);
     }
 
     // Si omwen yonn nan yo pase, nou konsidere tranzaksyon an fèt
@@ -188,7 +211,6 @@ async function fèEchanjFinal() {
         // Louvri aplikasyon Dialer a dirèkteman
         window.location.href = `tel:${encodeURIComponent(ussd)}`;
     } else {
-        // Si tou de echwe nèt (Pa egzanp si rezo a koupe nèt)
         alert("❌ Gen yon erè nan anrejistreman an. Verifye koneksyon entènèt ou oswa kontakte sipò.");
     }
 }
@@ -203,5 +225,5 @@ export function initEchanj(uid) {
             fèEchanjFinal();
         };
     }
-        }
-                  
+}
+
