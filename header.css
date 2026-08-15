@@ -1,4 +1,4 @@
-/* ============================================================
+here/* ============================================================
    PAJ PRENSIPAL - HEADER AVANSE & MINIMALIST (PI PITI)
    ============================================================ */
 
@@ -33,6 +33,10 @@
     transition: transform 0.2s;
 }
 
+.main-header .fa-bars-staggered:hover {
+    transform: scale(1.1);
+}
+
 /* Tèks Logo "ECHANJ PLUS" */
 .logo-text {
     font-size: 14px; /* Redui pou l pa parèt twò gwo */
@@ -64,7 +68,7 @@
     height: 32px;
     border-radius: 50%;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.2s;
 }
 
 .notif-wrapper:active {
@@ -95,29 +99,195 @@
     border: 1.5px solid #ffffff; /* Liy separasyon blan pi fen */
 }
 
-/* Ajisteman pou Panèl Notifikasyon an pou l kolé pi byen ak nouvo wotè a */
-.notif-panel {
-    top: 52px; /* Desann li jis anba liy header a */
-    right: 10px;
-    width: calc(100% - 20px);
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+.notif-badge.hidden {
+    display: none;
 }
 
 /* ============================================================
-   AJISTEMAN REKÒMANDE POU MOD NWIT (DARK MODE)
+   PANÈL NOTIFIKASYON (NOTIF PANEL & MIZAJOU ENTERYÈ)
+   ============================================================ */
+
+.notif-panel {
+    position: absolute;
+    top: 52px; /* Desann li jis anba liy header a */
+    right: 10px;
+    width: calc(100% - 20px);
+    max-width: 360px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+    transition: all 0.3s ease;
+}
+
+/* Antèt Panèl la */
+.notif-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.notif-header h4 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-main, #0f172a);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.notif-header .close-notif {
+    font-size: 14px;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s;
+}
+
+.notif-header .close-notif:hover {
+    color: #ef4444;
+}
+
+/* Tabs Notifikasyon (Koneksyon / Tranzaksyon) */
+.notif-tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.02);
+    padding: 4px;
+    gap: 4px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 6px 0;
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+    background: #ffffff;
+    color: var(--primary, #097969);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Kontni Panèl la */
+.notif-content {
+    padding: 16px;
+    max-height: 250px;
+    overflow-y: auto;
+    font-size: 12px;
+}
+
+.empty-msg {
+    margin: 0;
+    text-align: center;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+/* Anba Panèl la (Footer ak Baf Dekonekte) */
+.notif-footer {
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.01);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.logout-btn-elite {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.logout-btn-elite:active {
+    transform: scale(0.98);
+    background: rgba(239, 68, 68, 0.15);
+}
+
+/* ============================================================
+   AJISTEMAN POU MOD NWIT (DARK MODE)
    ============================================================ */
 [data-theme="dark"] .main-header {
     background: rgba(1, 22, 26, 0.80);
     border-bottom-color: rgba(255, 255, 255, 0.05);
 }
+
 [data-theme="dark"] .quick-balance {
     background: rgba(18, 163, 143, 0.12);
     color: #12a38f;
     border-color: rgba(18, 163, 143, 0.2);
 }
+
 [data-theme="dark"] .notif-badge {
     border-color: #01161a;
 }
+
 [data-theme="dark"] .notif-wrapper:active {
     background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .notif-panel {
+    background: #01161a;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .notif-header {
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .notif-header h4 {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .notif-header .close-notif {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .notif-tabs {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .tab-btn {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .tab-btn.active {
+    background: #022c33;
+    color: #12a38f;
+}
+
+[data-theme="dark"] .notif-footer {
+    background: rgba(255, 255, 255, 0.01);
+    border-top-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .logout-btn-elite {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.25);
+    color: #f87171;
 }
