@@ -23,7 +23,6 @@ export const db = getDatabase(app);
 // --- 2. ENPÒTE MODIL SEKSYON YO ---
 async function loadModules(uid) {
     try {
-        // Tout modil yo aliyen parfe nan lòd kounye a (8 modil total)
         const [akey, header, echanj, retre, istorik, chat, parennaj, paramet] = await Promise.all([
             import('./akey.js').catch((err) => { console.error("Erè akey.js:", err); return {}; }),
             import('./header.js').catch((err) => { console.error("Erè header.js:", err); return {}; }),
@@ -35,14 +34,11 @@ async function loadModules(uid) {
             import('./paramet.js').catch((err) => { console.error("Erè paramet.js:", err); return {}; })
         ]);
 
-        // Lanse akèy la pou kliyan sa a
         if (akey.initAkeyDone) akey.initAkeyDone(uid);
         if (akey.initHomeCarousel) akey.initHomeCarousel();
 
-        // Lanse sistèm notifikasyon yo depi nan header.js
         if (header.initNotifikasyon) header.initNotifikasyon(uid);
 
-        // Lanse rès modil yo
         if (echanj.initEchanj) echanj.initEchanj(uid);
         if (retre.initRetre) retre.initRetre(uid);
         if (istorik.initIstorik) istorik.initIstorik(uid);
@@ -55,7 +51,7 @@ async function loadModules(uid) {
     }
 }
 
-// --- 3. STATUS CHECK & AUTH LOGIC (MIZAJOU NOUVO SDK ONESIGNAL) ---
+// --- 3. STATUS CHECK & AUTH LOGIC ---
 onAuthStateChanged(auth, (user) => {
     const authPage = document.getElementById('auth-page');
     const homePage = document.getElementById('home-page');
@@ -66,7 +62,6 @@ onAuthStateChanged(auth, (user) => {
         updateGlobalUI(user.uid);
         loadModules(user.uid);
 
-        // MARE TELEFÒN NAN AK UID FIREBASE LA VIA DEFERRED SDK
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         window.OneSignalDeferred.push(async function(OneSignal) {
             try {
@@ -81,7 +76,6 @@ onAuthStateChanged(auth, (user) => {
         authPage?.classList.remove('hidden');
         homePage?.classList.add('hidden');
 
-        // RETIRE KLIYAN AN SOU APARÈY LA LÈ LI DEKONEKTE
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         window.OneSignalDeferred.push(async function(OneSignal) {
             try {
@@ -96,7 +90,6 @@ onAuthStateChanged(auth, (user) => {
 
 // --- 4. EKSPÒTE FONKSYON POU HTML ---
 
-// Auth Actions
 window.handleLogin = async () => {
     const email = document.getElementById('login-email')?.value.trim();
     const pass = document.getElementById('login-pass')?.value;
@@ -121,8 +114,7 @@ window.handleSignup = async () => {
         const userCred = await createUserWithEmailAndPassword(auth, email, pass);
         const uid = userCred.user.uid;
         
-        // Jenerasyon kòd ARS inik ak fòma 2026
-        const randomDigits = Math.floor(1000 + Math.random() * 8900); // Evite kòmanse pa 0 pou sekirite
+        const randomDigits = Math.floor(1000 + Math.random() * 8900);
         const arsID = `ARS-${randomDigits}-2026`;
 
         await set(ref(db, `users/${uid}`), {
@@ -133,7 +125,7 @@ window.handleSignup = async () => {
             balance: 0,
             referredBy: sponsor || "Sistèm",
             createdAt: serverTimestamp(),
-            transactionPin: "0000" // PIN sekirite pa defo
+            transactionPin: "0000"
         });
     } catch (e) { 
         alert("Erè nan enskripsyon an: " + e.message); 
@@ -161,19 +153,6 @@ window.handleLogout = () => {
 
 // Sidebar UI
 window.toggleSidebar = () => document.getElementById('sidebar')?.classList.toggle('active');
-
-// Fallback pou notifikasyon anvan modil yo fin chaje
-window.toggleNotifPanel = () => document.getElementById('notif-panel')?.classList.toggle('active');
-
-window.switchNotifTab = (tab) => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`tab-${tab}`)?.classList.add('active');
-    
-    const notifContent = document.getElementById('notif-content');
-    if (notifContent) {
-        notifContent.innerHTML = `<p class="empty-msg">Chaje notifikasyon ${tab}...</p>`;
-    }
-};
 
 // Modal Receipt Actions
 window.closeReceipt = () => document.getElementById('modal-receipt')?.classList.add('hidden');
@@ -232,7 +211,5 @@ window.showPage = (pageId, navElement) => {
     document.querySelectorAll('.nav-item, .menu-item').forEach(el => el.classList.remove('active'));
     if (navElement) navElement.classList.add('active');
 
-    // Fèmen sidebar otomatikman sou mobil apre klike
     document.getElementById('sidebar')?.classList.remove('active');
 };
-                   
