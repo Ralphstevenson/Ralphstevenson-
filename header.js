@@ -43,45 +43,44 @@ export function initNotifikasyon(uid) {
             for (let key in data) {
                 koneksyonLogs.push({ id: key, ...data[key] });
             }
-            // Triye pa dat ki pi resan
-            koneksyonLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            koneksyonLogs.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
         }
         updateNotifUI();
     }, (error) => {
         console.error("Erè lekti koneksyon logs:", error);
+        updateNotifUI();
     });
 
     // 3. KOUTE TRANZAKSYON YO POU NOTIFIKASYON (Pran 5 dènye yo)
-    const transQuery = query(
-        ref(db, 'transactions'),
-        orderByChild('uid'),
-        equalTo(uid),
-        limitToLast(5)
-    );
-    onValue(transQuery, (snapshot) => {
+    const transRef = ref(db, 'transactions');
+    onValue(transRef, (snapshot) => {
         transakLogs = [];
         if (snapshot.exists()) {
             const data = snapshot.val();
             for (let key in data) {
-                transakLogs.push({ id: key, ...data[key] });
+                const tx = data[key];
+                if (tx.uid === uid) {
+                    transakLogs.push({ id: key, ...tx });
+                }
             }
-            // Triye pa dat ki pi resan
             transakLogs.sort((a, b) => {
-                const dateA = a.timestamp ? new Date(a.timestamp) : new Date(a.date);
-                const dateB = b.timestamp ? new Date(b.timestamp) : new Date(b.date);
+                const dateA = a.timestamp ? new Date(a.timestamp) : (a.date ? new Date(a.date) : 0);
+                const dateB = b.timestamp ? new Date(b.timestamp) : (b.date ? new Date(b.date) : 0);
                 return dateB - dateA;
             });
+            transakLogs = transakLogs.slice(0, 5);
         }
         updateNotifUI();
     }, (error) => {
         console.error("Erè lekti tranzaksyon logs:", error);
+        updateNotifUI();
     });
 }
 
 /**
  * Mete atenn ak kontni Notifikasyon yo ajou sou ekran an
  */
-function updateNotifUI() {
+export function updateNotifUI() {
     const notifContent = document.getElementById('notif-content');
     const badge = document.getElementById('notif-badge');
     if (!notifContent) return;
@@ -170,7 +169,6 @@ function updateNotifUI() {
 // EKSPÒTE FONKSYON SOU WINDOW POU HTML
 // ==========================================
 
-// Louvri / Fèmen panèl notifikasyon an
 window.toggleNotifPanel = function() {
     const panel = document.getElementById('notif-panel');
     if (panel) {
@@ -178,11 +176,9 @@ window.toggleNotifPanel = function() {
     }
 };
 
-// Chanje ant tab "Koneksyon" ak "Tranzaksyon"
 window.switchNotifTab = function(tab) {
     activeTab = tab;
     
-    // Mete klas active sou bouton tab yo
     document.querySelectorAll('.notif-tabs .tab-btn').forEach(btn => {
         btn.classList.remove('active');
     });
@@ -192,10 +188,7 @@ window.switchNotifTab = function(tab) {
         activeBtn.classList.add('active');
     }
 
-    // Rafrechi lis la imedyatman
     updateNotifUI();
 };
 
-// Dekoneksyon sou header a
 window.handleLogout = handleLogout;
-
