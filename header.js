@@ -43,6 +43,7 @@ export function initNotifikasyon(uid) {
             for (let key in data) {
                 koneksyonLogs.push({ id: key, ...data[key] });
             }
+            // Triye pa dat ki pi resan
             koneksyonLogs.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
         }
         updateNotifUI();
@@ -63,6 +64,7 @@ export function initNotifikasyon(uid) {
                     transakLogs.push({ id: key, ...tx });
                 }
             }
+            // Triye pa dat ki pi resan
             transakLogs.sort((a, b) => {
                 const dateA = a.timestamp ? new Date(a.timestamp) : (a.date ? new Date(a.date) : 0);
                 const dateB = b.timestamp ? new Date(b.timestamp) : (b.date ? new Date(b.date) : 0);
@@ -169,16 +171,28 @@ export function updateNotifUI() {
 // EKSPÒTE FONKSYON SOU WINDOW POU HTML
 // ==========================================
 
-window.toggleNotifPanel = function() {
+// Louvri / Bascule panèl notifikasyon an
+window.toggleNotifPanel = function(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
     const panel = document.getElementById('notif-panel');
     if (panel) {
         panel.classList.toggle('active');
     }
 };
 
+// Fèmen panèl notifikasyon an nèt (Espesyal pou tikwa la)
+window.closeNotifPanel = function() {
+    const panel = document.getElementById('notif-panel');
+    if (panel) {
+        panel.classList.remove('active');
+    }
+};
+
+// Chanje ant tab "Koneksyon" ak "Tranzaksyon"
 window.switchNotifTab = function(tab) {
     activeTab = tab;
     
+    // Mete klas active sou bouton tab yo
     document.querySelectorAll('.notif-tabs .tab-btn').forEach(btn => {
         btn.classList.remove('active');
     });
@@ -188,7 +202,9 @@ window.switchNotifTab = function(tab) {
         activeBtn.classList.add('active');
     }
 
+    // Rafrechi lis la imedyatman
     updateNotifUI();
 };
 
+// Dekoneksyon sou header a
 window.handleLogout = handleLogout;
